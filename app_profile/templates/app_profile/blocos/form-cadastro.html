@@ -1,0 +1,59 @@
+<form action="{% url 'app_profile:registrar' %}" method="POST" autocomplete="off">
+  {% load static %}
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="nome" class="form-label">Nome</label>
+    <input type="text" class="form-control" id="nome" aria-describedby="nomeHelp" name="nome" required />
+  </div>
+  <div class="mb-3">
+    <label for="whatsapp" class="form-label">WhatsApp</label>
+    <input type="tel" class="form-control" id="id_telefone" aria-describedby="whatsappHelp" name="whatsapp" required />
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">E-mail</label>
+    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" required />
+  </div>
+  <div class="mb-4">
+    <label for="password" class="form-label">Senha</label>
+    <input type="password" class="form-control" id="password" name="password" required />
+  </div>
+  <button type="submit" class="btn btn-primary w-100 fs-4 mb-4">Registrar</button>
+  <div class="d-flex align-items-center justify-content-center">
+    <p class="fs-4 mb-0 fw-bold">Já tem uma conta?</p>
+    <a class="text-primary fw-bold ms-2" href="{% url 'app_profile:authenticacao' %}">Entrar</a>
+  </div>
+</form>
+<div>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      function formatField(inputElement, format) {
+        if (inputElement !== null) {
+          inputElement.addEventListener('input', function () {
+            let value = this.value.replace(/\D/g, '') // Remove todos os caracteres não numéricos
+            let formattedValue = ''
+    
+            for (let i = 0; i < format.length && value.length > 0; i++) {
+              if (format[i] === '#') {
+                formattedValue += value[0]
+                value = value.slice(1)
+              } else {
+                formattedValue += format[i]
+              }
+            }
+    
+            this.value = formattedValue
+          })
+        }
+      }
+    
+      // Usando a função formatField para formatar o campo "cep"
+      formatField(document.getElementById('cep'), '#####-####')
+    
+      // Usando a função formatField para formatar o campo "id_cep"
+      formatField(document.querySelector('#id_cep'), '#####-####')
+    
+      // Usando a função formatField para formatar o campo "id_telefone"
+      formatField(document.querySelector('#id_telefone'), '(##) #####-####')
+    })
+  </script>
+</div>

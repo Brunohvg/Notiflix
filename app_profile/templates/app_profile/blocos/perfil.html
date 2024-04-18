@@ -1,0 +1,68 @@
+{% extends 'pages/index.html' %}
+{% block TituloConteudoFluido %}
+  <h5 class="card-title fw-semibold mb-4">Meu Perfil</h5>
+{% endblock %}
+{% block ConteudoFluido %}
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <form class="row g-3" method="POST">
+          {% csrf_token %}
+          <div class="col-lg-12">
+            <div class="card-header position-relative">
+              <h6>Meus Dados</h6>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="inputEmail4" class="form-label">Identificador</label>
+            <input type="text" class="form-control" id="inputEmail4" value="{{ user.profile.id }}" />
+          </div>
+          <div class="col-md-4">
+            <label for="inputNome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="inputNome" name="inputNome" value="{{ user.profile.nome }}" />
+          </div>
+          <div class="col-md-6">
+            <label for="inputEmail" class="form-label">E-mail</label>
+            <input type="email" class="form-control disabled" id="inputEmail" value="{{ user.email }}" disabled />
+          </div>
+          <div class="col-12">
+            <label for="inputTelefone" class="form-label">Telefone/Celular</label>
+            <input type="tel" class="form-control" id="inputTelefone" name="inputTelefone" value="{{ user.profile.whatsapp }}" maxlength="15" />
+          </div>
+          <div class="col-lg-12">
+            <div class="card-header position-relative">
+              <h6>Dados da minha loja</h6>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="inputCpfCnpj" class="form-label">CPF/CNPJ</label>
+            <input type="text" class="form-control" id="inputCpfCnpj" value="{{ user.loja.doc }}" />
+          </div>
+          <div class="col-md-4">
+            <label for="inputRazaoSocial" class="form-label">Nome / Razão Social</label>
+            <input type="text" class="form-control" id="inputRazaoSocial" value="{{ user.loja.nome }}" />
+          </div>
+          <div class="col-md-4">
+            <label for="inputEmailLoja" class="form-label">E-mail</label>
+            <input type="text" class="form-control" id="inputEmailLoja" value="{{ user.loja.email }}" />
+          </div>
+          <div class="col-md-6">
+            <label for="inputToken" class="form-label">Token</label>
+            <input type="text" class="form-control" id="inputToken" value="{{ user.loja.autorization_token }}" disabled />
+          </div>
+          <div class="col-md-4">
+            <label for="inputEstado" class="form-label">Estado</label>
+            <input type="text" class="form-control" id="inputEstado" value="{{ user.loja.whatsapp_phone_number }}" />
+          </div>
+          <div class="col-md-2">
+            <label for="inputCep" class="form-label">Id Loja</label>
+            <input type="text" class="form-control" id="inputCep" value="{{ user.loja.id }}" disabled />
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-success">Atualizar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
