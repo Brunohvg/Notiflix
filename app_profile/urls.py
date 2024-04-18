@@ -5,8 +5,8 @@ from . import views
 app_name = "app_profile"
 
 urlpatterns = [
-    path("login/", views.authenticacao, name="authenticacao"),
-    path("deslogar/", views.deslogar, name="deslogar"),
-    path("registre-se/", views.cadastrar_usuario, name="registrar"),
-    path("profile/", views.visualizar_perfil, name="profile"),
+    path("login/", views.autenticar_usuario, name="authenticacao"),
+    path("deslogar/", views.deslogar_usuario, name="deslogar"),
+    path("registre-se/", views.registrar_usuario, name="registrar"),
+    path("profile/", views.exibir_perfil, name="profile"),
 ]

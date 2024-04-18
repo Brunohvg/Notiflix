@@ -1,18 +1,11 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.views.decorators.http import require_POST
-
-from django.contrib.auth.signals import user_logged_out
-from django.core.cache import cache
 from .models import Profile
 
-from django.views.decorators.csrf import csrf_exempt
 
-
-@csrf_exempt
-def authenticacao(request):
+def autenticar_usuario(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -22,66 +15,47 @@ def authenticacao(request):
             return redirect("nuvemshop_app:integracao")
         else:
             messages.error(request, "Usuário ou senha inválido")
-            return render(request, "app_profile/login.html")
-
-    else:
-        return render(request, "app_profile/login.html")
+    return render(request, "app_profile/login.html")
 
 
-@csrf_exempt
-def cadastrar_usuario(request):
+def registrar_usuario(request):
     if request.method == "POST":
         nome = request.POST.get("nome").capitalize()
         email = request.POST.get("email")
         senha = request.POST.get("password")
         whatsapp = request.POST.get("whatsapp")
 
-        try:
-            user = User.objects.get(email=email)
+        if User.objects.filter(email=email).exists():
             messages.error(request, "Já existe um usuário com o mesmo e-mail")
-            return render(request, "app_profile/login.html")
-        except User.DoesNotExist:
-            novo_usuario, criado = User.objects.get_or_create(
-                username=email, email=email, defaults={"password": senha}
+        else:
+            novo_usuario = User.objects.create_user(
+                username=email, email=email, password=senha
             )
-            if criado:
-                novo_usuario.set_password(senha)
-                novo_usuario.save()
-                # nome = nome.capitalize()
-                user_perfil = Profile.objects.create(
-                    nome=nome, whatsapp=whatsapp, user=novo_usuario
-                )
-                user_perfil.save()
-                user = authenticate(request, username=email, password=senha)
-                if user is not None:
-                    login(request, user)
-                    return redirect("nuvemshop_app:integracao")
-                else:
-                    messages.error(request, "Falha ao autenticar usuário")
-                    return redirect("app_profile:authenticacao")
+            novo_usuario.save()
+            perfil = Profile.objects.create(
+                nome=nome, whatsapp=whatsapp, user=novo_usuario
+            )
+            perfil.save()
+            user = authenticate(request, username=email, password=senha)
+            if user is not None:
+                login(request, user)
+                return redirect("nuvemshop_app:integracao")
             else:
-                messages.error(request, "Já existe um usuário com o mesmo e-mail")
-                return render(request, "app_profile/login.html")
-    else:
-        return render(request, "app_profile/registrar.html")
+                messages.error(request, "Falha ao autenticar usuário")
+
+    return render(request, "app_profile/registrar.html")
 
 
-@csrf_exempt
-def deslogar(request):
+def deslogar_usuario(request):
     logout(request)
-    return redirect("app_profile:authenticacao")
+    return redirect("autenticar_usuario")
 
 
-def visualizar_perfil(request):
-    if request.method == "POST":
-        nome = request.POST.get("inputNome")
-        telefone = request.POST.get("inputTelefone")
-        if nome and telefone:
-            return atualizar_usuario(request, nome, telefone)
-
-    return render(request, "app_profile/blocos/perfil.html")
+def exibir_perfil(request):
+    # Código para exibir perfil aqui
+    pass
 
 
-def atualizar_usuario(request, nome, telefone):
-    # TODO
-    ...
+def atualizar_perfil_usuario(request):
+    # Código para atualizar perfil aqui
+    pass
