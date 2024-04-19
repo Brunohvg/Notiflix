@@ -51,6 +51,12 @@ def deslogar_usuario(request):
     return redirect("autenticar_usuario")
 
 
+def redefinir_senha(request):
+    return render(request, "app_profile/redefinir.html")
+    # Código para redefinir senha aqui
+    pass
+
+
 def exibir_perfil(request):
     # Código para exibir perfil aqui
     pass

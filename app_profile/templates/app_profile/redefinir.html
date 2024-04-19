@@ -1,0 +1,28 @@
+{% extends 'pages/html/authentication-login.html' %}
+{% block Formulario %}
+  <div class="card-body" bis_skin_checked="1">
+    <a href="../main/index.html" class="">
+      <img src="../assets/images/logos/logo-dark.svg" class="light-logo" alt="Logo-Dark" style="display: none;" />
+      <img src="../assets/images/logos/logo-light.svg" class="dark-logo" alt="Logo-light" />
+    </a>
+    <div class="row align-items-center justify-content-around pt-6 pb-5" bis_skin_checked="1">
+      <div class="col-lg-6 col-xl-5 d-none d-lg-block" bis_skin_checked="1">
+        <div class="text-center text-lg-start" bis_skin_checked="1">
+          <img src="../assets/images/backgrounds/login-security.png" alt="spike-img" class="img-fluid" />
+        </div>
+      </div>
+      <div class="col-lg-6 col-xl-5" bis_skin_checked="1">
+        <h2 class="mb-6 fs-8 fw-bolder">Forgot your password?</h2>
+        <p class="text-dark fs-4 mb-7">Please enter the email address associated with your account and We will email you a link to reset your password.</p>
+        <form>
+          <div class="mb-7" bis_skin_checked="1">
+            <label for="exampleInputEmail1" class="form-label fw-bold">Email address</label>
+            <input type="email" class="form-control py-6" id="exampleInputEmail1" aria-describedby="emailHelp" />
+          </div>
+          <a href="javascript:void(0)" class="btn btn-primary w-100 mb-3 rounded-pill">Forgot Password</a>
+          <a href="../main/authentication-login.html" class="btn bg-primary-subtle text-primary w-100 rounded-pill">Back to Login</a>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
