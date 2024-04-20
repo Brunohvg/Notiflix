@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Profile
+from django.contrib.auth.decorators import login_required
 
 
 def autenticar_usuario(request):
@@ -46,22 +47,28 @@ def registrar_usuario(request):
     return render(request, "app_profile/registrar.html")
 
 
+def redefinir_senha(request):
+    if request.method == "POST":
+        email = request.POST.get("emailRedefinir")
+        if User.objects.filter(email=email).exists():
+            print(email)
+        print(f"nao existe esse {email}")
+    return render(request, "app_profile/redefinir.html")
+
+
+@login_required
 def deslogar_usuario(request):
     logout(request)
     return redirect("autenticar_usuario")
 
 
-def redefinir_senha(request):
-    return render(request, "app_profile/redefinir.html")
-    # Código para redefinir senha aqui
-    pass
-
-
+@login_required
 def exibir_perfil(request):
     # Código para exibir perfil aqui
     pass
 
 
+@login_required
 def atualizar_perfil_usuario(request):
     # Código para atualizar perfil aqui
     pass

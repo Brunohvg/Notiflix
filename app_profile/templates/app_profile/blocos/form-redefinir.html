@@ -1,0 +1,14 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <p>
+    Por favor, insira o endereço de e-mail associado à sua conta e<br />enviaremos um e-mail com um link para redefinir sua senha.
+  </p>
+</div>
+<form action="{% url 'app_profile:redefinir' %}" method="POST">
+  {% csrf_token %}
+  <div class="mb-3" bis_skin_checked="1">
+    <label for="exampleInputEmail1" class="form-label">E-mail</label>
+    <input type="email" class="form-control" name="emailRedefinir" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="joaodasilva@gmail.com" aria-placeholder="Insira seu endereço de e-mail" required autofocus />
+  </div>
+  <button type="submit" class="btn btn-primary w-100 fs-4 mb-4">Esqueci minha senha</button>
+  <a href="{% url 'app_profile:authenticacao' %}" class="btn bg-primary-subtle text-primary w-100 rounded-pill">Volte ao login</a>
+</form>

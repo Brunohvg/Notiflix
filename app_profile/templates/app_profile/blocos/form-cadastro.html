@@ -3,19 +3,19 @@
   {% csrf_token %}
   <div class="mb-3">
     <label for="nome" class="form-label">Nome</label>
-    <input type="text" class="form-control" id="nome" aria-describedby="nomeHelp" name="nome" required />
+    <input type="text" class="form-control" id="nome" aria-describedby="nomeHelp" name="nome" placeholder="Joao da Silva" autocomplete="false" autofocus required />
   </div>
   <div class="mb-3">
     <label for="whatsapp" class="form-label">WhatsApp</label>
-    <input type="tel" class="form-control" id="id_telefone" aria-describedby="whatsappHelp" name="whatsapp" required />
+    <input type="tel" class="form-control" id="id_telefone" aria-describedby="whatsappHelp" name="whatsapp" placeholder="31 9999-1234" autocomplete="off" required />
   </div>
   <div class="mb-3">
     <label for="email" class="form-label">E-mail</label>
-    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" required />
+    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Joaodasilva@gmail.com" required />
   </div>
   <div class="mb-4">
     <label for="password" class="form-label">Senha</label>
-    <input type="password" class="form-control" id="password" name="password" required />
+    <input type="password" class="form-control" id="password" name="password" required autocomplete="off" />
   </div>
   <button type="submit" class="btn btn-primary w-100 fs-4 mb-4">Registrar</button>
   <div class="d-flex align-items-center justify-content-center">
