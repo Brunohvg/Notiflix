@@ -16,126 +16,160 @@
 
       <aside class="left-sidebar">
         <!-- Sidebar scroll -->
-        <div class="scroll-sidebar" data-simplebar>
-          <div class="d-flex mb-4 align-items-center justify-content-between">
-            <a href="index.html" class="text-nowrap logo-img ms-0 ms-md-1"><img src="{% static 'assets/images/logos/dark-logo.svg' %}" width="180" alt="" /></a>
-            <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-              <i class="ti ti-x fs-8"></i>
+        <div class="scroll-sidebar" data-simplebar="init">
+          <div class="simplebar-wrapper" style="margin: -20px;">
+            <div class="simplebar-height-auto-observer-wrapper">
+              <div class="simplebar-height-auto-observer"></div>
             </div>
-          </div>
-          <!-- Sidebar navigation -->
-          <nav class="sidebar-nav">
-            <ul id="sidebarnav" class="mb-4 pb-2">
-              <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
-                <span class="hide-menu">Home</span>
-              </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link primary-hover-bg" href="./index.html" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-primary rounded-3"><i class="ti ti-layout-dashboard fs-7 text-primary"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Dashboard</span>
-                </a>
-              </li>
-              <!--                                             Main wrapper
-              <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
-                <span class="hide-menu">UI Componenst</span>
-              </li>
-                                                           -->
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link warning-hover-bg" href="#" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-warning rounded-3"><i class="ti ti-article fs-7 text-warning"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Notificações</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link danger-hover-bg" href="./ui-alerts.html" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-danger rounded-3"><i class="ti ti-alert-circle fs-7 text-danger"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Alerts</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link success-hover-bg" href="./ui-card.html" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-success rounded-3"><i class="ti ti-cards fs-7 text-success"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Card</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link primary-hover-bg" href="./ui-forms.html" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-primary rounded-3"><i class="ti ti-file-description fs-7 text-primary"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Forms</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link indigo-hover-bg" href="{% url 'nuvemshop_app:integracao' %}" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-indigo rounded-3"><i class="ti ti-puzzle fs-7 text-indigo"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Integração</span>
-                </a>
-              </li>
-              <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
-                <span class="hide-menu">Auth</span>
-              </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link warning-hover-bg" href="./authentication-login.html" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-warning rounded-3"><i class="ti ti-login fs-7 text-warning"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Login</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link danger-hover-bg" href="./authentication-register.html" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-danger rounded-3"><i class="ti ti-user-plus fs-7 text-danger"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Register</span>
-                </a>
-              </li>
-              <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
-                <span class="hide-menu">Extra</span>
-              </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link success-hover-bg" href="./icon-tabler.html" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-success rounded-3"><i class="ti ti-mood-happy fs-7 text-success"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Icons</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a class="sidebar-link sidebar-link primary-hover-bg" href="./sample-page.html" aria-expanded="false">
-                  <span class="aside-icon p-2 bg-light-primary rounded-3"><i class="ti ti-aperture fs-7 text-primary"></i></span>
-                  <span class="hide-menu ms-2 ps-1">Sample Page</span>
-                </a>
-              </li>
-            </ul>
-            <div class="pb-3 options text-nowrap">
-              <div class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
-                <span class="hide-menu">More options</span>
-              </div>
+            <div class="simplebar-mask">
+              <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;">
+                  <div class="simplebar-content" style="padding: 20px;">
+                    <div class="d-flex mb-4 align-items-center justify-content-between">
+                      <a href="index.html" class="text-nowrap logo-img ms-0 ms-md-1"><img src="{% static 'assets/images/logos/dark-logo.svg' %}" width="180" alt="" /></a>
+                      <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                        <i class="ti ti-x fs-8"></i>
+                      </div>
+                    </div>
+                    <!-- Sidebar navigation -->
+                    <nav class="sidebar-nav">
+                      <ul id="sidebarnav" class="mb-4 pb-2 in">
+                        <li class="nav-small-cap">
+                          <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
+                          <span class="hide-menu">Home</span>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link sidebar-link primary-hover-bg" href="./index.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-primary rounded-3"><i class="ti ti-layout-dashboard fs-7 text-primary"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Dashboard</span>
+                          </a>
+                        </li>
+                        <li class="nav-small-cap">
+                          <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
+                          <span class="hide-menu">UI Componenst</span>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link sidebar-link warning-hover-bg" href="./ui-buttons.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-warning rounded-3"><i class="ti ti-article fs-7 text-warning"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Buttons</span>
+                          </a>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link sidebar-link danger-hover-bg" href="./ui-alerts.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-danger rounded-3"><i class="ti ti-alert-circle fs-7 text-danger"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Alerts</span>
+                          </a>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link sidebar-link success-hover-bg" href="./ui-card.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-success rounded-3"><i class="ti ti-cards fs-7 text-success"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Card</span>
+                          </a>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link sidebar-link primary-hover-bg" href="./ui-forms.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-primary rounded-3"><i class="ti ti-file-description fs-7 text-primary"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Forms</span>
+                          </a>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link sidebar-link indigo-hover-bg" href="./ui-typography.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-indigo rounded-3"><i class="ti ti-typography fs-7 text-indigo"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Typography</span>
+                          </a>
+                        </li>
+                        <li class="nav-small-cap">
+                          <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
+                          <span class="hide-menu">Auth</span>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link sidebar-link warning-hover-bg" href="./authentication-login.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-warning rounded-3"><i class="ti ti-login fs-7 text-warning"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Login</span>
+                          </a>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link sidebar-link danger-hover-bg" href="./authentication-register.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-danger rounded-3"><i class="ti ti-user-plus fs-7 text-danger"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Register</span>
+                          </a>
+                        </li>
+                        <li class="nav-small-cap">
+                          <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
+                          <span class="hide-menu">Extra</span>
+                        </li>
+                        <li class="sidebar-item">
+                          <a class="sidebar-link sidebar-link success-hover-bg" href="./icon-tabler.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-success rounded-3"><i class="ti ti-mood-happy fs-7 text-success"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Icons</span>
+                          </a>
+                        </li>
+                        <li class="sidebar-item selected">
+                          <a class="sidebar-link sidebar-link primary-hover-bg active" href="./sample-page.html" aria-expanded="false">
+                            <span class="aside-icon p-2 bg-light-primary rounded-3"><i class="ti ti-aperture fs-7 text-primary"></i></span>
+                            <span class="hide-menu ms-2 ps-1">Sample Page</span>
+                          </a>
+                        </li>
+                      </ul>
+                      <div class="pb-3 options text-nowrap">
+                        <div class="nav-small-cap">
+                          <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
+                          <span class="hide-menu">More options</span>
+                        </div>
 
-              <ul class="sidebar-list">
-                <li class="sidebar-list-item">
-                  <i class="ti ti-circle text-primary fs-4"></i>
-                  <span class="hide-menu ms-2">Applications</span>
-                </li>
-                <li class="sidebar-list-item">
-                  <i class="ti ti-circle text-danger fs-4"></i>
-                  <span class="hide-menu ms-2">Form Options</span>
-                </li>
-                <li class="sidebar-list-item">
-                  <i class="ti ti-circle text-warning fs-4"></i>
-                  <span class="hide-menu ms-2">Table Variations</span>
-                </li>
-                <li class="sidebar-list-item">
-                  <i class="ti ti-circle text-success fs-4"></i>
-                  <span class="hide-menu ms-2">Charts Selection</span>
-                </li>
-                <li class="sidebar-list-item">
-                  <i class="ti ti-circle text-indigo fs-4"></i>
-                  <span class="hide-menu ms-2">Widgets</span>
-                </li>
-              </ul>
+                        <ul class="sidebar-list">
+                          <li class="sidebar-list-item">
+                            <i class="ti ti-circle text-primary fs-4"></i>
+                            <span class="hide-menu ms-2">Applications</span>
+                          </li>
+                          <li class="sidebar-list-item">
+                            <i class="ti ti-circle text-danger fs-4"></i>
+                            <span class="hide-menu ms-2">Form Options</span>
+                          </li>
+                          <li class="sidebar-list-item">
+                            <i class="ti ti-circle text-warning fs-4"></i>
+                            <span class="hide-menu ms-2">Table Variations</span>
+                          </li>
+                          <li class="sidebar-list-item">
+                            <i class="ti ti-circle text-success fs-4"></i>
+                            <span class="hide-menu ms-2">Charts Selection</span>
+                          </li>
+                          <li class="sidebar-list-item">
+                            <i class="ti ti-circle text-indigo fs-4"></i>
+                            <span class="hide-menu ms-2">Widgets</span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="mt-5 blocks-card sidebar-ad">
+                        <div class="card bg-light-primary">
+                          <div class="card-body">
+                            <div class="text-center">
+                              <img src="{% static 'assets/images/backgrounds/education-blocks.png' %}" width="136" height="136" class="mt-n9" alt="" />
+
+                              <h5>Are you<br /> satisfied ?</h5>
+
+                              <div class="mt-4">
+                                <a href="" target="_blank" class="btn btn-primary buynow-link w-100 px-2">Buy Now</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </nav>
+                    <!-- End Sidebar navigation -->
+                  </div>
+                </div>
+              </div>
             </div>
-          </nav>
-          <!-- End Sidebar navigation -->
+            <div class="simplebar-placeholder" style="width: auto; height: 1603px;"></div>
+          </div>
+          <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+            <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+          </div>
+          <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+            <div class="simplebar-scrollbar" style="height: 358px; transform: translate3d(0px, 400px, 0px); display: block;"></div>
+          </div>
         </div>
         <!-- End Sidebar scroll -->
       </aside>
@@ -162,13 +196,15 @@
                   {% if user.is_authenticated %}
                     Olá,
                     {{ request.user.profile.nome }}
+                  {% else %}
+                    Olá tudo bem
                   {% endif %}
                 </div>
                 <li class="nav-item dropdown">
                   <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false"><img src="{% static 'assets/images/profile/user1.jpg' %}" alt="" width="35" height="35" class="rounded-circle" /></a>
                   <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                     <div class="message-body">
-                      <a href="{% url 'app_profile:perfil' %}" class="d-flex align-items-center gap-2 dropdown-item">
+                      <a href="#" class="d-flex align-items-center gap-2 dropdown-item">
                         <i class="ti ti-user fs-6"></i>
                         <p class="mb-0 fs-3">My Profile</p>
                       </a>
@@ -189,19 +225,20 @@
           </nav>
         </header>
         <!-- Header End -->
-
-        <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
-              {% block TituloConteudoFluido %}
-                <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-              {% endblock %}
-              {% block ConteudoFluido %}
-                <p class="mb-0">This is a sample page</p>
-              {% endblock %}
+        {% block Dashboard %}
+          <div class="container-fluid">
+            <div class="card">
+              <div class="card-body">
+                {% block TituloConteudoFluido %}
+                  <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
+                {% endblock %}
+                {% block ConteudoFluido %}
+                  <p class="mb-0">This is a sample page</p>
+                {% endblock %}
+              </div>
             </div>
           </div>
-        </div>
+        {% endblock %}
       </div>
     </div>
     <script src="{% static 'assets/libs/jquery/dist/jquery.min.js' %}"></script>

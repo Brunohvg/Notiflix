@@ -85,10 +85,12 @@ class NuvemShop:
         # Lidar com o erro da maneira que for apropriada para o seu aplicativo
         return None
 
-
+"""
 nuvem_shop = NuvemShop()
 print(
     nuvem_shop._get_clientes(
         code=" b5d95086a6a48ff8e58e20487fdd39b044bb339b ", store_id="2685706"
     )
 )
+
+"""
