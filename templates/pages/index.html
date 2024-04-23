@@ -192,12 +192,9 @@
             </ul>
             <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
               <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-                <div class="btn btn-primary">
+                <div>
                   {% if user.is_authenticated %}
-                    Olá,
-                    {{ request.user.profile.nome }}
-                  {% else %}
-                    Olá tudo bem
+                    {{ request.user.email }}
                   {% endif %}
                 </div>
                 <li class="nav-item dropdown">

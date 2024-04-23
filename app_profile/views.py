@@ -13,7 +13,7 @@ def autenticar_usuario(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("nuvemshop_app:integracao")
+            return redirect("app_dashboard:dashboard")
         else:
             messages.error(request, "Usuário ou senha inválido")
     return render(request, "app_profile/login.html")
@@ -40,7 +40,7 @@ def registrar_usuario(request):
             user = authenticate(request, username=email, password=senha)
             if user is not None:
                 login(request, user)
-                return redirect("nuvemshop_app:integracao")
+                return redirect("app_dashboard:dashboard")
             else:
                 messages.error(request, "Falha ao autenticar usuário")
 
