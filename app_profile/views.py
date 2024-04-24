@@ -64,6 +64,7 @@ def deslogar_usuario(request):
 
 @login_required
 def exibir_perfil(request):
+    return render(request, "app_profile/perfil.html")
     # Código para exibir perfil aqui
     pass
 

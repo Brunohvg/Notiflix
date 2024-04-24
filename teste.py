@@ -11,3 +11,4 @@ CLIENT_SECRET=4263cfda2bc47a702f62d74784d7abcd97a237e1e5c3875b
 
 
 dominio=ngrok http --domain=goblin-romantic-imp.ngrok-free.app 8000"""
+# https://bootstrapmade.com/demo/NiceAdmin/
