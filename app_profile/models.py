@@ -6,6 +6,9 @@ class Profile(models.Model):
     nome = models.CharField(max_length=125)
     whatsapp = models.CharField(max_length=15)
     user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
+    notificacao_whatsapp = models.BooleanField(default=True)
+    notificacao_email = models.BooleanField(default=True)
+
     # email financeiro
     # cep
     # Endereço
