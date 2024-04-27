@@ -41,7 +41,7 @@ def integracao(request):
     if code is not None:
         return autorizar(request, code=code)
     else:
-        return render(request, "nuvemshop_app/integracao.html", {"nova_loja": lojas})
+        return render(request, "app_integracao/integracao.html", {"nova_loja": lojas})
 
 
 @login_required
@@ -58,12 +58,12 @@ def autorizar(request, code):
         email = ocultar_email(email=id_existe.usuario.email)
 
         messages.error(request, f"Esta loja já está em uso com outro email {email}")
-        return redirect("nuvemshop_app:integracao")
+        return redirect("app_integracao:integracao")
 
     if access_token and user_id:
         return loja_integrada(request, access_token, user_id)
 
-    return render(request, "nuvemshop_app/integracao.html", {"autorizado": autorizado})
+    return render(request, "app_integracao/integracao.html", {"autorizado": autorizado})
 
 
 """@login_required
@@ -136,7 +136,7 @@ def loja_integrada(request, access_token, user_id):
             usuario=usuario,
         )
         messages.success(request, "Loja integrada com sucesso")
-    return redirect("nuvemshop_app:integracao")
+    return redirect("app_integracao:integracao")
 
 
 def desativar_integracao(request):
@@ -149,4 +149,4 @@ def desativar_integracao(request):
     else:
         messages.error(request, "Você não tem permissão para desinstalar esta loja")
 
-    return redirect("nuvemshop_app:integracao")
+    return redirect("app_integracao:integracao")
