@@ -12,6 +12,7 @@ class LojaIntegrada(models.Model):
     autorization_token = models.CharField(max_length=200)
     usuario = models.OneToOneField(User, related_name="loja", on_delete=models.CASCADE)
     ativa = models.BooleanField(default=True)
+    url = models.CharField(max_length=100)
 
     def __str__(self) -> str:
         return self.nome

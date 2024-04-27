@@ -4,8 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Profile
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 
+@csrf_exempt
 def autenticar_usuario(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -19,6 +21,7 @@ def autenticar_usuario(request):
     return render(request, "app_profile/login.html")
 
 
+@csrf_exempt
 def registrar_usuario(request):
     if request.method == "POST":
         nome = request.POST.get("nome").capitalize()

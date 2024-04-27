@@ -108,23 +108,15 @@ def loja_integrada(request, access_token, user_id):
     loja_existente = LojaIntegrada.objects.filter(id=id).first()
 
     if loja_existente:
-        if loja_existente.ativa == True:
+        if loja_existente.ativa:
             messages.error(request, "Esta loja já está integrada")
         else:
-            # Integrar a loja
-            nova_loja = LojaIntegrada.objects.create(
-                id=id,
-                nome=lj_integrada.get("nome"),
-                whatsapp_phone_number=lj_integrada.get("whatsapp_phone_number"),
-                contact_email=lj_integrada.get("contact_email"),
-                email=lj_integrada.get("email"),
-                doc=lj_integrada.get("doc"),
-                autorization_token=access_token,
-                usuario=usuario,
-            )
-            messages.success(request, "Loja integrada com sucesso")
+            # Atualizar a loja existente
+            loja_existente.ativa = True
+            loja_existente.save()
+            messages.success(request, "Loja reativada com sucesso")
     else:
-        # Integrar a loja
+        # Criar uma nova loja
         nova_loja = LojaIntegrada.objects.create(
             id=id,
             nome=lj_integrada.get("nome"),
@@ -136,6 +128,7 @@ def loja_integrada(request, access_token, user_id):
             usuario=usuario,
         )
         messages.success(request, "Loja integrada com sucesso")
+
     return redirect("app_integracao:integracao")
 
 
@@ -144,6 +137,8 @@ def desativar_integracao(request):
 
     # Verifica se o ID da loja na URL corresponde ao ID da loja do usuário
     if int(loja.id) == int(request.user.loja.id):
+        # loja.ativa = False
+        # loja.save()
         loja.delete()
         messages.info(request, "Sua loja foi desinstalada com sucesso")
     else:

@@ -9,6 +9,11 @@
 
 {% block Dashboard %}
   {% load static %}
+
+  {% for messages in messages %}
+    <div class="alert alert-success" role="alert">{{ messages }}</div>
+  {% endfor %}
+
   <div class="container-fluid">
     <div class="col-lg-12 col-xl-12" bis_skin_checked="1">
       <div class="card" bis_skin_checked="1">

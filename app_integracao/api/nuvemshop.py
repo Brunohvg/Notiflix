@@ -85,6 +85,7 @@ class NuvemShop:
         # Lidar com o erro da maneira que for apropriada para o seu aplicativo
         return None
 
+
 """
 nuvem_shop = NuvemShop()
 print(

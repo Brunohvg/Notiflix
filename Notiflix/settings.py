@@ -27,7 +27,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "goblin-romantic-imp.ngrok-free.app"]
 
 
 # Application definition
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "app_profile",
     "app_dashboard",
-    "app_integracao"
+    "app_integracao",
 ]
 
 MIDDLEWARE = [
