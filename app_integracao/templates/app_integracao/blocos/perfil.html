@@ -1,0 +1,51 @@
+<div class="col-md-12">
+  <div class="card">
+    <div class="card-header position-relative">
+      <div class="position-absolute top--2 end-0"></div>Perfil
+    </div>
+
+    <div class="card-body">
+      <form class="row g-3">
+        <div class="col-md-6">
+          <label for="inputEmail4" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="inputEmail4" value="{{ user.profile.nome }}" />
+        </div>
+        <div class="col-md-6">
+          <label for="inputPassword4" class="form-label">E-mail</label>
+          <input type="email" class="form-control disabled" id="inputPassword4" value="{{ user.email }}" disabled />
+        </div>
+        <div class="col-12">
+          <label for="inputAddress" class="form-label">Telefone/Celular</label>
+          <input type="tel" class="form-control" id="inputAddress" value="{{ user.profile.whatsapp }}" maxlength="15" />
+        </div>
+        <div class="col-4">
+          <label for="inputAddress2" class="form-label">Address 2</label>
+          <input type="text" class="form-control" id="inputAddress2" value="{{ user.loja.nome }}" />
+        </div>
+        <div class="col-8">
+          <label for="inputAddress2" class="form-label">Address 2</label>
+          <input type="text" class="form-control" id="inputAddress2" value="{{ user.loja.email }}" />
+        </div>
+        <div class="col-md-6">
+          <label for="inputCity" class="form-label">City</label>
+          <input type="text" class="form-control" id="inputCity" value="{{ user.loja.autorization_token }}" />
+        </div>
+        <div class="col-md-4">
+          <label for="inputState" class="form-label">State</label>
+          <select id="inputState" class="form-select">
+            <option selected>Choose...</option>
+            <option>...</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="inputZip" class="form-label">Zip</label>
+          <input type="text" class="form-control" id="inputZip" />
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Atualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

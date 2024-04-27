@@ -1,0 +1,15 @@
+{% extends 'pages/index.html' %}
+
+{% block TituloConteudoFluido %}
+  <h5 class="card-title fw-semibold mb-4">Central de Integrações</h5>
+  {% for messages in messages %}
+    <div class="alert alert-success" role="alert">{{ messages }}</div>
+  {% endfor %}
+{% endblock %}
+
+{% block ConteudoFluido %}
+  <div class="row p-3">
+    {% include 'nuvemshop_app/blocos/card-nuvemshop.html' %}
+    {% include 'nuvemshop_app/blocos/excluir.html' %}
+  </div>
+{% endblock %}
