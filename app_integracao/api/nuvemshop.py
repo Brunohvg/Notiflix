@@ -68,6 +68,7 @@ class NuvemShop:
             url (str): O URL da API específico para a solicitação.
             code (str): O código de autenticação da API.
             store_id (str): O ID da loja.
+            metodo (str): O metodo a solicitação (GET POST DELETE )
 
         Returns:
             dict or None: Os dados da resposta JSON da API, ou None se ocorrer um erro.
