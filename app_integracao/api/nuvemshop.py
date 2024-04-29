@@ -21,7 +21,7 @@ class NuvemShop:
             headers = {"Content-Type": "application/json"}
             response = requests.post(url, json=data, headers=headers)
 
-            response.raise_for_status()  # Levanta HTTPError para respostas ruins
+            response.raise_for_status()  # Levanta HTTPError para respostas ru ins
 
             date = response.json()
             print(date)
@@ -61,6 +61,52 @@ class NuvemShop:
         # Lidar com o erro da maneira que for apropriada para o seu aplicativo
         return None
 
+    def _make_api_request(self, url, code ,store_id):
+        """Faz uma solicitação HTTP para a API da Nuvemshop.
+
+        Args:
+            url (str): O URL da API específico para a solicitação.
+            code (str): O código de autenticação da API.
+            store_id (str): O ID da loja.
+
+        Returns:
+            dict or None: Os dados da resposta JSON da API, ou None se ocorrer um erro.
+        """
+        if code and store_id:
+            headers = {
+                "Authentication": f"bearer {code}",
+                "User-Agent": "CloudStore (cloudstore@email.com)",
+            }
+            try:
+                response = requests.get(url, headers=headers)
+                response.raise_for_status()  # Lança uma exceção para códigos de status HTTP fora do intervalo 2xx
+                data = response.json()
+
+                return data
+
+            except requests.exceptions.HTTPError as http_err:
+                logging.error(f"Erro HTTP: {http_err}")
+            except requests.exceptions.RequestException as req_err:
+                logging.error(f"Erro na solicitação HTTP: {req_err}")
+            except Exception as e:
+                logging.error(f"Erro inesperado: {e}")
+
+        # Lidar com o erro da maneira que for apropriada para o seu aplicativo
+        return None
+
+    def _get_clientes(self, code, store_id):
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/customers?per_page=1800&q=Sem%20nome"
+        return self._make_api_request(url, code, store_id)
+
+    def _get_pedidos(self, code, store_id):
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/products"
+        return self._make_api_request(url, code, store_id)
+    
+
+
+
+    
+    """
     def _get_clientes(self, code, store_id):
         if code and store_id:
             url = f"https://api.nuvemshop.com.br/v1/{store_id}/customers?per_page=1800&q=Sem%20nome"
@@ -85,13 +131,13 @@ class NuvemShop:
         # Lidar com o erro da maneira que for apropriada para o seu aplicativo
         return None
 
-
+ 
 """
-nuvem_shop = NuvemShop()
+"""nuvem_shop = NuvemShop()
 print(
     nuvem_shop._get_clientes(
-        code=" b5d95086a6a48ff8e58e20487fdd39b044bb339b ", store_id="2685706"
+        code=" bc544d10a6eef47e5462ebb7b9bdc32972ff3bd3 ", store_id="2686287"
     )
 )
-
 """
+

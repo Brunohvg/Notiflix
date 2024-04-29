@@ -4,9 +4,8 @@
 {% endblock %}
 
 {% block Dashboard %}
-{% load static %}
+  {% load static %}
   <div class="container-fluid">
-
     <div class="col-lg-12 col-xl-12" bis_skin_checked="1">
       <div class="card" bis_skin_checked="1">
         <div class="card-body position-relative" bis_skin_checked="1">
@@ -17,11 +16,10 @@
               {% endif %}
             </h4>
             <p class="card-subtitle mb-3 pb-1">
-              seja bem vindo a sua pagina de perfil <br>
-              Aqui voce pode alterar suas Informações. <br>
+              seja bem vindo a sua pagina de perfil <br />
+              Aqui voce pode alterar suas Informações. <br />
               Não se preocupe cuidaremos muito bem dos seus dados.
             </p>
-            
           </div>
           <!-- Mover a imagem para dentro do card -->
           <style>
@@ -43,7 +41,6 @@
         </div>
       </div>
     </div>
-
 
     <div class="row">
       <div class="col-sm-8">
@@ -71,14 +68,14 @@
               </div>
               <div class="col-6" style="margin-top: 43px;">
                 <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="notificacao_whatsapp" {% if request.user.profile.notificacao_whatsapp == 1 %} checked {% else %}  {% endif %} />
+                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="notificacao_whatsapp" value="{{ request.user.notificacao_whatsapp }}" />
                   <label class="form-check-label" for="flexSwitchCheckDefault">Notificações no WhatsApp</label>
                 </div>
 
                 <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="notificacao_email" />
+                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="notificacao_email" value="{{ request.user.notificacao_email }}" />
                   <label class="form-check-label" for="flexSwitchCheckChecked">Notificações no Email</label>
-                </div>  
+                </div>
               </div>
               <div class="col-12">
                 <label for="inputCnpjCpf" class="form-label">CNPJ/CPF</label>
@@ -100,20 +97,23 @@
             <form class="row g-3">
               <div class="col-md-4">
                 <label for="inputIdLoja" class="form-label">ID</label>
-                <input type="text" class="form-control" id="inputIdLoja" />
+                <input type="text" class="form-control" id="inputIdLoja" value="{{ request.user.loja.pk }}" disabled />
               </div>
               <div class="col-md-8">
                 <label for="inputNomeLoja" class="form-label">Nome/Razão Social</label>
-                <input type="text" class="form-control" id="inputNomeLoja" />
+                <input type="text" class="form-control" id="inputNomeLoja" value="{{ request.user.loja.nome }}" disabled />
               </div>
               <div class="col-md-12">
                 <label for="inputEmailLoja" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="inputEmailLoja" />
+                <input type="email" class="form-control" id="inputEmailLoja" value="{{ request.user.loja.email }}" disabled />
               </div>
-             
-              <div class="col-12">
+              <div class="col-6">
                 <label for="inputToken" class="form-label">CPF/CNPJ</label>
-                <input type="text" class="form-control" id="inputToken" placeholder="1234 Main St" />
+                <input type="text" class="form-control" id="inputToken" placeholder="1234 Main St" value="{{ request.user.loja.doc }}" />
+              </div>
+              <div class="col-6">
+                <label for="inputToken" class="form-label">WhatsApp</label>
+                <input type="text" class="form-control" id="inputToken" placeholder="1234 Main St" value="{{ request.user.loja.whatsapp_phone_number }}" />
               </div>
               <div class="col-12" style="margin-bottom: 5px;">
                 <a class="btn btn-info rounded-pill" href="https://www.bibelo.com.br" target="_blank">Visitar minha loja</a>
@@ -125,5 +125,3 @@
     </div>
   </div>
 {% endblock %}
-
-
