@@ -61,7 +61,7 @@ class NuvemShop:
         # Lidar com o erro da maneira que for apropriada para o seu aplicativo
         return None
 
-    def _make_api_request(self, url, code ,store_id):
+    def _make_api_request(self, url, code, store_id):
         """Faz uma solicitação HTTP para a API da Nuvemshop.
 
         Args:
@@ -102,11 +102,7 @@ class NuvemShop:
     def _get_pedidos(self, code, store_id):
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/products"
         return self._make_api_request(url, code, store_id)
-    
 
-
-
-    
     """
     def _get_clientes(self, code, store_id):
         if code and store_id:
@@ -134,11 +130,11 @@ class NuvemShop:
 
  
 """
-"""nuvem_shop = NuvemShop()
+
+
+nuvem_shop = NuvemShop()
 print(
     nuvem_shop._get_clientes(
         code=" bc544d10a6eef47e5462ebb7b9bdc32972ff3bd3 ", store_id="2686287"
     )
 )
-"""
-
