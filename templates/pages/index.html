@@ -7,6 +7,7 @@
     <title>CloudStore</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'assets/images/logos/favicon.png' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/styles.min.css' %}" />
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.5/datatables.min.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -49,9 +50,9 @@
                           <span class="hide-menu">UI Componenst</span>
                         </li>
                         <li class="sidebar-item">
-                          <a class="sidebar-link sidebar-link warning-hover-bg" href="./ui-buttons.html" aria-expanded="false">
+                          <a class="sidebar-link sidebar-link warning-hover-bg" href="{% url 'app_pedido:pedidos' %}" aria-expanded="false">
                             <span class="aside-icon p-2 bg-light-warning rounded-3"><i class="ti ti-article fs-7 text-warning"></i></span>
-                            <span class="hide-menu ms-2 ps-1">Buttons</span>
+                            <span class="hide-menu ms-2 ps-1">Pedidos</span>
                           </a>
                         </li>
                         <li class="sidebar-item">
@@ -246,5 +247,9 @@
     <script src="{% static 'assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
     <script src="{% static 'assets/js/dashboard.js' %}"></script>
     <script src="{% static 'assets/js/formatar_imput.js' %}"></script>
+
+    {% block scripts %}
+
+    {% endblock %}
   </body>
 </html>

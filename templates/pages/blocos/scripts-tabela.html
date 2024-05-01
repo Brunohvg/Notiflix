@@ -1,0 +1,36 @@
+<script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.5/datatables.min.js"></script>
+<script>
+  new DataTable('#example', {
+    language: {
+      info: 'Mostrando página de _PAGE_ à _PAGES_',
+      infoEmpty: 'No records available',
+      infoFiltered: '(filtrada from _MAX_ total registros)',
+      lengthMenu: 'Paginas _MENU_',
+      zeroRecords: 'Nada encontrado - desculpe'
+    }
+  })
+  
+  document.getElementById('contact-check-all').addEventListener('click', function () {
+    var checkboxes = document.querySelectorAll('.contact-chkbox')
+    checkboxes.forEach(function (checkbox) {
+      checkbox.checked = document.getElementById('contact-check-all').checked
+    })
+  })
+  
+  // Array com os seletores das tabelas que você deseja inicializar
+  var tabelas = ['#example1', '#example2', '#example3']
+  
+  // Loop para percorrer cada seletor da tabela
+  tabelas.forEach(function (seletor) {
+    // Inicialize a DataTable para a tabela correspondente ao seletor atual
+    new DataTable(seletor, {
+      language: {
+        info: 'Mostrando página de _PAGE_ à _PAGES_',
+        infoEmpty: 'No records available',
+        infoFiltered: '(filtrada from _MAX_ total registros)',
+        lengthMenu: 'Paginas _MENU_',
+        zeroRecords: 'Nada encontrado - desculpe'
+      }
+    })
+  })
+</script>

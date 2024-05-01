@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "app_profile",
     "app_dashboard",
     "app_integracao",
+    "app_pedido"
 ]
 
 MIDDLEWARE = [
