@@ -8,6 +8,7 @@ import requests
 import json
 import logging
 
+
 class NuvemShop:
     def __init__(self) -> None:
         self.CLIENT_ID = config("CLIENT_ID")
@@ -65,7 +66,7 @@ class NuvemShop:
         # Lidar com o erro da maneira que for apropriada para o seu aplicativo
         return None
 
-    def _make_api_request(self, url, code, store_id, method='GET', payload=None):
+    def _make_api_request(self, url, code, store_id, method="GET", payload=None):
         """Faz uma solicitação HTTP para a API da Nuvemshop.
 
         Args:
@@ -85,18 +86,18 @@ class NuvemShop:
                 "Content-Type": "application/json",  # Definindo explicitamente o tipo de conteúdo como JSON
             }
             try:
-                if method == 'GET':
+                if method == "GET":
                     response = requests.get(url, headers=headers)
-                elif method == 'POST':
+                elif method == "POST":
                     response = requests.post(url, json=payload, headers=headers)
-                elif method == 'PUT':
+                elif method == "PUT":
                     response = requests.post(url, json=payload, headers=headers)
-                elif method == 'DELETE':
+                elif method == "DELETE":
                     response = requests.delete(url, headers=headers)
                 else:
                     # Adicione suporte para outros métodos conforme necessário
                     pass
-                
+
                 response.raise_for_status()  # Lança uma exceção para códigos de status HTTP fora do intervalo 2xx
                 data = response.json()
 
@@ -112,30 +113,63 @@ class NuvemShop:
         # Lidar com o erro da maneira que for apropriada para o seu aplicativo
         return None
 
-    def _post_create_webhook(self, code, store_id):
+    def _post_create_webhook(self, code, store_id, url_webhook, event):
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/webhooks"
         payload = {
-            "url": "https://webhook.site/5d190770-e7b4-4693-8877-188b7b556450",
-            "event": "order/created",
+            "url": url_webhook,
+            "event": event,
         }
-        return self._make_api_request(url, code, store_id, method='POST', payload=payload)
+        return self._make_api_request(
+            url, code, store_id, method="POST", payload=payload
+        )
 
-"""# Exemplo de uso:
-nuvem_shop = NuvemShop()
+    def _post_modificar_webhook(self, code, store_id):
+        payload = {
+            "id": "16955277",
+            "url": "https://goblin-romantic-imp.ngrok-free.app/webhook",
+            "event": "order/paid",
+        }
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/webhooks/"
+        return self._make_api_request(
+            url, code, store_id, method="PUT", payload=payload
+        )
+
+    def _get_webhook(self, code, store_id):
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/webhooks/"
+        return self._make_api_request(url, code, store_id, method="GET")
+
+    def _deletar_webhook(self, code, store_id, id_webhook):
+
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/webhooks/{id_webhook}"
+        return self._make_api_request(url, code, store_id, method="DELETE")
+
+    def _get_pedidos(self, code, store_id, id_pedido):
+
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/orders/{id_pedido}"
+        return self._make_api_request(url, code, store_id, method="GET")
+
+    def _get_pedido(self, code, store_id):
+
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/orders/"
+        return self._make_api_request(url, code, store_id, method="GET")
+
+
+# Exemplo de uso:
+"""nuvem_shop = NuvemShop()
 print(
     nuvem_shop._post_create_webhook(
-        code=" bc544d10a6eef47e5462ebb7b9bdc32972ff3bd3 ", store_id="2686287"
+        code=" bc544d10a6eef47e5462ebb7b9bdc32972ff3bd3 ",
+        store_id="2686287",
+        url_webhook="https://goblin-romantic-imp.ngrok-free.app/pedido_pago/",
+        event="order/paid",
     )
 )"""
 
-
-""""
-{
-  "created_at": "2013-04-07T09:11:51-03:00",
-  "event": "category/created",
-  "id": 5670,
-  "updated_at": "2013-04-08T11:11:51-03:00",
-  "url": "https://myapp.com/category_created_hook"
-}
-
+"""nuvem_shop = NuvemShop()
+print(
+    nuvem_shop._get_webhook(
+        code=" bc544d10a6eef47e5462ebb7b9bdc32972ff3bd3 ",
+        store_id="2686287",
+    )
+)
 """

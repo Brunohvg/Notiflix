@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "goblin-romantic-imp.ngrok-free.app"]
 
-APPEND_SLASH=False
+# APPEND_SLASH=False
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "app_dashboard",
     "app_integracao",
     "app_pedido",
-    "app_webhook"
+    "app_webhook",
 ]
 
 MIDDLEWARE = [
