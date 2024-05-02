@@ -8,7 +8,10 @@
         <div class="action-btn show-btn" style="display: block;">
           <a href="javascript:void(0)" class="delete-multiple bg-danger-subtle btn me-2 text-danger d-flex align-items-center"><i class="ti ti-trash me-1 fs-5"></i> Deletar pedido</a>
         </div>
-        <a href="javascript:void(0)" id="btn-add-contact" class="btn btn-primary d-flex align-items-center"><i class="ti ti-users text-white me-1 fs-5"></i> Sincronizar</a>
+        <form method="post" action="{% url 'app_pedido:sincronizar_pedidos' %}" id="form-sincronizar">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary d-flex align-items-center"><i class="ti ti-users text-white me-1 fs-5"></i> Sincronizar</button>
+        </form>
       </div>
     </div>
   </div>
@@ -37,39 +40,40 @@
           </tr>
         </thead>
         <tbody>
-          <!-- start row -->
-          <tr class="search-items">
-            <td>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox1" />
-                <label class="form-check-label" for="checkbox1"></label>
-              </div>
-            </td>
-            <td>
-              <span class="usr-email-addr" data-venda="venda">#1001</span>
-            </td>
-            <td>
-              <span class="usr-data" data-data="data">14 maio</span>
-            </td>
-            <td>
-              <span class="usr-cliente" data-cliente="cliente">Bruno Vidal</span>
-            </td>
-            <td>
-              <span class="usr-total" data-total="total">R$ 1200,50</span>
-            </td>
-            <td>
-              <span class="usr-status-pagamento" data-status-pagamento="status-pagamento">pagamento</span>
-            </td>
-            <td>
-              <span class="usr-status-envio" data-status-envio="status-envio">Enviado</span>
-            </td>
-            <td>
-              <div class="action-btn">
-                <a href="javascript:void(0)" class="text-primary edit"><i class="ti ti-eye fs-5"></i></a>
-                <a href="javascript:void(0)" class="text-dark delete ms-2"><i class="ti ti-trash fs-5"></i></a>
-              </div>
-            </td>
-          </tr>
+          {% for pedido in pedidos %}
+            <tr class="search-items">
+              <td>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox{{ forloop.counter }}" />
+                  <label class="form-check-label" for="checkbox{{ forloop.counter }}"></label>
+                </div>
+              </td>
+              <td>
+                <span class="usr-email-addr" data-venda="venda">{{ pedido.id_venda }}</span>
+              </td>
+              <td>
+                <span class="usr-data" data-data="data">{{ pedido.data_pedido }}</span>
+              </td>
+              <td>
+                <span class="usr-cliente" data-cliente="cliente">{{ pedido.cliente.contact_name }}</span>
+              </td>
+              <td>
+                <span class="usr-total" data-total="total">{{ pedido.valor_formatado }}</span>
+              </td>
+              <td>
+                <span class="usr-status-pagamento" data-status-pagamento="status-pagamento">{{ pedido.status_pagamento }}</span>
+              </td>
+              <td>
+                <span class="usr-status-envio" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+              </td>
+              <td>
+                <div class="action-btn">
+                  <a href="javascript:void(0)" class="text-primary edit"><i class="ti ti-eye fs-5"></i></a>
+                  <a href="javascript:void(0)" class="text-dark delete ms-2"><i class="ti ti-trash fs-5"></i></a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>

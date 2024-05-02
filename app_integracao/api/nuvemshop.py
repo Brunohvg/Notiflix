@@ -4,6 +4,10 @@ from requests.exceptions import RequestException
 import logging
 
 
+import requests
+import json
+import logging
+
 class NuvemShop:
     def __init__(self) -> None:
         self.CLIENT_ID = config("CLIENT_ID")
@@ -21,13 +25,13 @@ class NuvemShop:
             headers = {"Content-Type": "application/json"}
             response = requests.post(url, json=data, headers=headers)
 
-            response.raise_for_status()  # Levanta HTTPError para respostas ru ins
+            response.raise_for_status()  # Levanta HTTPError para respostas ruins
 
             date = response.json()
             print(date)
             return date
 
-        except RequestException as e:
+        except requests.exceptions.HTTPError as e:
             return f"Erro na solicitação: {e}"
 
     def store_nuvem(self, code, store_id):
@@ -61,14 +65,15 @@ class NuvemShop:
         # Lidar com o erro da maneira que for apropriada para o seu aplicativo
         return None
 
-    def _make_api_request(self, url, code, store_id):
+    def _make_api_request(self, url, code, store_id, method='GET', payload=None):
         """Faz uma solicitação HTTP para a API da Nuvemshop.
 
         Args:
             url (str): O URL da API específico para a solicitação.
             code (str): O código de autenticação da API.
             store_id (str): O ID da loja.
-            metodo (str): O metodo a solicitação (GET POST DELETE )
+            method (str): O método da solicitação HTTP (GET, POST, DELETE, etc.).
+            payload (dict): Os dados a serem enviados na solicitação, se houver.
 
         Returns:
             dict or None: Os dados da resposta JSON da API, ou None se ocorrer um erro.
@@ -77,9 +82,21 @@ class NuvemShop:
             headers = {
                 "Authentication": f"bearer {code}",
                 "User-Agent": "CloudStore (cloudstore@email.com)",
+                "Content-Type": "application/json",  # Definindo explicitamente o tipo de conteúdo como JSON
             }
             try:
-                response = requests.get(url, headers=headers)
+                if method == 'GET':
+                    response = requests.get(url, headers=headers)
+                elif method == 'POST':
+                    response = requests.post(url, json=payload, headers=headers)
+                elif method == 'PUT':
+                    response = requests.post(url, json=payload, headers=headers)
+                elif method == 'DELETE':
+                    response = requests.delete(url, headers=headers)
+                else:
+                    # Adicione suporte para outros métodos conforme necessário
+                    pass
+                
                 response.raise_for_status()  # Lança uma exceção para códigos de status HTTP fora do intervalo 2xx
                 data = response.json()
 
@@ -95,46 +112,30 @@ class NuvemShop:
         # Lidar com o erro da maneira que for apropriada para o seu aplicativo
         return None
 
-    def _get_clientes(self, code, store_id):
-        url = f"https://api.nuvemshop.com.br/v1/{store_id}/customers?per_page=1800&q=Sem%20nome"
-        return self._make_api_request(url, code, store_id)
+    def _post_create_webhook(self, code, store_id):
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/webhooks"
+        payload = {
+            "url": "https://webhook.site/5d190770-e7b4-4693-8877-188b7b556450",
+            "event": "order/created",
+        }
+        return self._make_api_request(url, code, store_id, method='POST', payload=payload)
 
-    def _get_pedidos(self, code, store_id):
-        url = f"https://api.nuvemshop.com.br/v1/{store_id}/products"
-        return self._make_api_request(url, code, store_id)
-
-    """
-    def _get_clientes(self, code, store_id):
-        if code and store_id:
-            url = f"https://api.nuvemshop.com.br/v1/{store_id}/customers?per_page=1800&q=Sem%20nome"
-            headers = {
-                "Authentication": f"bearer {code}",
-                "User-Agent": "CloudStore (cloudstore@email.com)",
-            }
-            try:
-                response = requests.get(url, headers=headers)
-                response.raise_for_status()  # Lança uma exceção para códigos de status HTTP fora do intervalo 2xx
-                data = response.json()
-
-                return data
-
-            except requests.exceptions.HTTPError as http_err:
-                logging.error(f"Erro HTTP: {http_err}")
-            except requests.exceptions.RequestException as req_err:
-                logging.error(f"Erro na solicitação HTTP: {req_err}")
-            except Exception as e:
-                logging.error(f"Erro inesperado: {e}")
-
-        # Lidar com o erro da maneira que for apropriada para o seu aplicativo
-        return None
-
- 
-"""
-
-
+"""# Exemplo de uso:
 nuvem_shop = NuvemShop()
 print(
-    nuvem_shop._get_clientes(
+    nuvem_shop._post_create_webhook(
         code=" bc544d10a6eef47e5462ebb7b9bdc32972ff3bd3 ", store_id="2686287"
     )
-)
+)"""
+
+
+""""
+{
+  "created_at": "2013-04-07T09:11:51-03:00",
+  "event": "category/created",
+  "id": 5670,
+  "updated_at": "2013-04-08T11:11:51-03:00",
+  "url": "https://myapp.com/category_created_hook"
+}
+
+"""
