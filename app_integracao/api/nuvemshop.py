@@ -144,7 +144,6 @@ class NuvemShop:
         return self._make_api_request(url, code, store_id, method="DELETE")
 
     def _get_pedidos(self, code, store_id, id_pedido):
-
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/orders/{id_pedido}"
         return self._make_api_request(url, code, store_id, method="GET")
 
