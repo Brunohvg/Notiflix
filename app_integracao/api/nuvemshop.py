@@ -122,7 +122,7 @@ class NuvemShop:
         return self._make_api_request(
             url, code, store_id, method="POST", payload=payload
         )
-
+# WEBHOOKS
     def _post_modificar_webhook(self, code, store_id):
         payload = {
             "id": "16955277",
@@ -157,17 +157,17 @@ class NuvemShop:
 """nuvem_shop = NuvemShop()
 print(
     nuvem_shop._post_create_webhook(
-        code=" bc544d10a6eef47e5462ebb7b9bdc32972ff3bd3 ",
-        store_id="2686287",
+        code=" 2d260991f96d18add384c34d7a5d5b1f59f8660b ",
+        store_id="2685706",
         url_webhook="https://goblin-romantic-imp.ngrok-free.app/pedido_pago/",
         event="order/paid",
     )
-)"""
-
+)
+"""
 """nuvem_shop = NuvemShop()
 print(
     nuvem_shop._get_webhook(
-        code=" bc544d10a6eef47e5462ebb7b9bdc32972ff3bd3 ",
+        code=" 753ccc21bec7cf741d48fed574b1229cb2f3aa7a",
         store_id="2686287",
     )
 )
