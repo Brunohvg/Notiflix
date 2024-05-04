@@ -1,7 +1,8 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from app_pedido.views import processar_pedido
+
+from libs.processar_webhook import processar_eventos
 
 
 @csrf_exempt
@@ -16,7 +17,7 @@ def webhook_receiver(request):
             order_id = webhook_data.get("id")
 
             # Chamar diretamente a função ou view de tratamento de pedidos
-            if processar_pedido(store_id, event_type, order_id):
+            if processar_eventos(store_id, event_type, order_id):
                 return JsonResponse({"status": "success"}, status=200)
             else:
                 return JsonResponse(

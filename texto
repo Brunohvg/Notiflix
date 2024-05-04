@@ -1,4 +1,4 @@
-Aprimorando seus Models para o Sistema de Notificações
+"""Aprimorando seus Models para o Sistema de Notificações
 Para implementar o sistema de notificações com base nos seus modelos existentes, sugiro as seguintes alterações e adições:
 
 1. Model app_profile.Profile:
@@ -67,4 +67,4 @@ Observações:
 As alterações acima são apenas sugestões, e você pode adaptá-las de acordo com as suas necessidades específicas.
 Certifique-se de que os tipos de dados e tamanhos dos campos sejam adequados para as informações que você precisa armazenar.
 Utilize documentação de código para descrever o propósito e uso de cada campo e model.
-Com essas melhorias, seus models estarão mais completos e preparados para suportar o sistema de notificações do seu sistema.
+Com essas melhorias, seus models estarão mais completos e preparados para suportar o sistema de notificações do seu sistema."""
