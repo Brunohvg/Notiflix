@@ -21,7 +21,7 @@ def webhook_receiver(request):
                 return JsonResponse({"status": "success"}, status=200)
             else:
                 return JsonResponse(
-                    {"error": "Failed to process the order"}, status=500
+                    {"error": "Falha ao processar o pedido"}, status=500
                 )
 
         except json.JSONDecodeError:
@@ -30,4 +30,6 @@ def webhook_receiver(request):
                 {"error": "Invalid JSON format in request body"}, status=400
             )
     else:
-        return JsonResponse({"error": "Only POST requests are allowed"}, status=405)
+        return JsonResponse(
+            {"error": "Apenas solicitações POST são permitidas"}, status=405
+        )

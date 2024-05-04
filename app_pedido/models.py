@@ -18,11 +18,16 @@ class Cliente(models.Model):
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     loja = models.ForeignKey(LojaIntegrada, on_delete=models.CASCADE, null=True)
-    id_venda = models.CharField(max_length=10, verbose_name="ID Venda", blank=True)
+    id_venda = models.CharField(
+        max_length=10, verbose_name="ID Venda", blank=True, null=True
+    )
+    id_pedido = models.BigIntegerField(verbose_name="Número do Pedido", blank=True)
     data_pedido = models.DateTimeField(verbose_name="Data do Pedido")
     total = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Valor")
     status_pagamento = models.CharField(max_length=100, verbose_name="Status Pagamento")
-    status_envio = models.CharField(max_length=100, verbose_name="Status Envio")
+    status_envio = models.CharField(
+        max_length=100, verbose_name="Status Envio", default="Processando"
+    )
     data_pagamento = models.DateField(
         verbose_name="Data Pagamento", null=True, blank=True
     )
