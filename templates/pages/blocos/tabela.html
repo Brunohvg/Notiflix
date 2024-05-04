@@ -8,7 +8,7 @@
         <div class="action-btn show-btn" style="display: block;">
           <a href="javascript:void(0)" class="delete-multiple bg-danger-subtle btn me-2 text-danger d-flex align-items-center"><i class="ti ti-trash me-1 fs-5"></i> Deletar pedido</a>
         </div>
-        <form method="post" action="{% url 'app_pedido:sincronizar_pedidos' %}" id="form-sincronizar">
+        <form method="post" action="{% url 'app_pedido:pedidos' %}" id="form-sincronizar">
           {% csrf_token %}
           <button type="submit" class="btn btn-primary d-flex align-items-center"><i class="ti ti-users text-white me-1 fs-5"></i> Sincronizar</button>
         </form>
