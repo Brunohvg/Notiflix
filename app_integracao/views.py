@@ -25,6 +25,9 @@ def response_sem_cookie(*args, **kwargs):
     return response
 
 
+# Importações omitidas por brevidade
+
+
 @login_required
 def integracao(request):
     code = request.GET.get(PARAMETRO_CODE, None)
@@ -32,7 +35,7 @@ def integracao(request):
     if code is not None:
         return autorizar(request, code=code)
     else:
-        return render(request, "app_integracao/integracao.html", {"nova_loja": lojas})
+        return render(request, "app_integracao/integracao.html", {"lojas": lojas})
 
 
 @login_required
@@ -42,14 +45,15 @@ def autorizar(request, code):
         access_token = autorizado.get("access_token")
         user_id = autorizado.get("user_id")
 
-        id_existe = LojaIntegrada.objects.filter(id=user_id).first()
-        if id_existe is not None:
-            email = ocultar_email(email=id_existe.usuario.email)
-            messages.error(request, f"Esta loja já está em uso com outro email {email}")
+        loja_existente = LojaIntegrada.objects.filter(id=user_id).first()
+        if loja_existente:
+            email_oculto = ocultar_email(loja_existente.usuario.email)
+            messages.error(
+                request, f"Esta loja já está em uso com outro email {email_oculto}"
+            )
             return redirect("app_integracao:integracao")
 
         if access_token and user_id:
-
             return loja_integrada(request, access_token, user_id)
 
     except Exception as e:
@@ -68,7 +72,6 @@ def loja_integrada(request, access_token, user_id):
         id = lj_integrada.get("id")
 
         loja_existente = LojaIntegrada.objects.filter(id=id).first()
-
         if loja_existente:
             if loja_existente.ativa:
                 messages.error(request, "Esta loja já está integrada")
@@ -101,7 +104,7 @@ def loja_integrada(request, access_token, user_id):
 def desativar_integracao(request):
     loja = get_object_or_404(LojaIntegrada, id=request.user.loja.id)
 
-    if int(loja.id) == int(request.user.loja.id):
+    if loja.usuario == request.user:
         cache_key = f"loja_{loja.id}_dados"
         cache.delete(cache_key)
 

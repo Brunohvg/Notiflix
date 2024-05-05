@@ -165,11 +165,11 @@ print(
     )
 )"""
 
-"""nuvem_shop = NuvemShop()
+
+nuvem_shop = NuvemShop()
 print(
     nuvem_shop._get_webhook(
-        code=" 753ccc21bec7cf741d48fed574b1229cb2f3aa7a",
-        store_id="2686287",
+        code=" 126880e05c831ee784ed90ac4e0beb12674bba05",
+        store_id="2685706",
     )
 )
-"""

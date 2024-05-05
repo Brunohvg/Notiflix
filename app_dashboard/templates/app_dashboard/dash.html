@@ -1,9 +1,16 @@
 {% extends 'pages/index.html' %}
 
-{% block ConteudoFluido %}
+{% block Dashboard %}
+  {% include 'app_dashboard/blocos/modal.html' %}
   {% include 'app_dashboard/blocos/dashboard.html' %}
 {% endblock %}
 
-{% block Dashboard %}
-  {% include 'app_dashboard/blocos/dashboard.html' %}
+{% block scripts %}
+  {% if not request.user.loja %}
+    <script>
+      $(document).ready(function () {
+        $('#staticBackdrop').modal('show')
+      })
+    </script>
+  {% endif %}
 {% endblock %}
