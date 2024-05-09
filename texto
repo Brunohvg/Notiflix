@@ -1,70 +1,41 @@
-"""Aprimorando seus Models para o Sistema de Notificações
-Para implementar o sistema de notificações com base nos seus modelos existentes, sugiro as seguintes alterações e adições:
+import requests
+import qrcode
+from PIL import Image
 
-1. Model app_profile.Profile:
+url = "https://zap.lojabibelo.com.br/instance/create"
+headers = {
+    "accept": "application/json",
+    "apikey": "123456",
+    "Content-Type": "application/json",
+}
+data = {
+    "instanceName": "BrunoVidal",
+    "token": "ccgsa08@@",
+    "qrcode": True,
+}
 
-Inclua os campos necessários para armazenar as preferências de notificação do usuário:
-notificacao_sms: Campo BooleanField para indicar se o usuário deseja receber notificações por SMS.
-notificacao_email: Campo BooleanField para indicar se o usuário deseja receber notificações por email.
-telefone_notificacao: Campo CharField para armazenar o número de telefone do usuário para envio de SMS (opcional, caso queira oferecer notificações por SMS).
-Exemplo:
+response = requests.post(url, headers=headers, json=data)
 
-Python
-from django.db import models
-from django.contrib.auth.models import User
+response_data = response.json()
 
+# Extrair o código do QR da resposta
+qr_code_data = response_data.get("qrcode", {}).get("code")
 
-class Profile(models.Model):
-    nome = models.CharField(max_length=125)
-    whatsapp = models.CharField(max_length=15)
-    user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
-    notificacao_whatsapp = models.BooleanField(default=True)
-    notificacao_email = models.BooleanField(default=True)
-    notificacao_sms = models.BooleanField(default=False)  # Campo novo
-    telefone_notificacao = models.CharField(max_length=20, null=True, blank=True)  # Campo novo
+if qr_code_data:
+    # Criar um objeto QR Code
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(qr_code_data)
+    qr.make(fit=True)
 
-    # ... (outros campos)
+    # Criar uma imagem PIL
+    img = qr.make_image(fill_color="black", back_color="white")
 
-    def __str__(self) -> str:
-        return self.nome
-Use o código com cuidado.
-content_copy
-2. Model app_pedido.Pedido:
-
-Adicione um campo para armazenar o status da notificação do pedido:
-notificacao_enviada: Campo BooleanField para indicar se a notificação do pedido já foi enviada para o usuário.
-Exemplo:
-
-Python
-from django.db import models
-from app_integracao.models import LojaIntegrada
-
-
-class Cliente(models.Model):
-    # ... (campos do model Cliente)
-
-    def __str__(self):
-        # ... (método __str__ do model Cliente)
-
-class Pedido(models.Model):
-    # ... (campos do model Pedido)
-
-    notificacao_enviada = models.BooleanField(default=False)  # Campo novo
-
-    # ... (outros métodos)
-
-    def __str__(self):
-        # ... (método __str__ do model Pedido)
-Use o código com cuidado.
-content_copy
-3. Considerações adicionais:
-
-Você pode criar um model adicional para armazenar o histórico de notificações, caso precise acompanhar quais notificações foram enviadas para cada usuário e a cada pedido.
-Implemente as funcionalidades para enviar as notificações por SMS e email, utilizando as informações armazenadas nos models Profile e Pedido.
-Defina triggers ou mecanismos para acionar o envio das notificações em momentos específicos, como na criação de um novo pedido, na alteração do status do pedido, etc.
-Observações:
-
-As alterações acima são apenas sugestões, e você pode adaptá-las de acordo com as suas necessidades específicas.
-Certifique-se de que os tipos de dados e tamanhos dos campos sejam adequados para as informações que você precisa armazenar.
-Utilize documentação de código para descrever o propósito e uso de cada campo e model.
-Com essas melhorias, seus models estarão mais completos e preparados para suportar o sistema de notificações do seu sistema."""
+    # Exibir a imagem do QR Code
+    img.show()
+else:
+    print("Código QR não encontrado na resposta da API.")
