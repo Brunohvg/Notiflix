@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.contrib import messages
 
 from .models import LojaIntegrada
-from libs.nuvemshop import NuvemShop
+from libs.integracoes.api.api_nuvemshop import NuvemShop
 
 nuvemshop = NuvemShop()
 PARAMETRO_CODE = "code"
@@ -35,7 +35,7 @@ def integracao(request):
     if code is not None:
         return autorizar(request, code=code)
     else:
-        return render(request, "app_integracao/integracao.html", {"lojas": lojas})
+        return render(request, "app_integracao/base.html", {"lojas": lojas})
 
 
 @login_required
@@ -61,7 +61,7 @@ def autorizar(request, code):
             request, f"Ocorreu um erro durante a autorização da loja: {str(e)}"
         )
 
-    return render(request, "app_integracao/integracao.html")
+    return render(request, "app_integracao/base.html")
 
 
 @login_required

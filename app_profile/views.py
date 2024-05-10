@@ -69,7 +69,7 @@ def deslogar_usuario(request):
 def exibir_perfil(request):
     t = request.POST.get("notificacao_whatsapp")
     b = request.POST.get("notificacao_email")
-    print(t, b)
+    # TODO VERIFICAR O STATUS DE RECEBIMENTO DE NOTIFICAÇÕES
     return render(request, "app_profile/perfil.html")
     # Código para exibir perfil aqui
     pass
