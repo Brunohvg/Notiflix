@@ -14,7 +14,7 @@ def pedidos(request):
         loja_do_usuario = request.user.loja
         pedidos_da_loja = Pedido.objects.filter(loja=loja_do_usuario)
         return render(
-            request, "app_pedido/pedido.html", context={"pedidos": pedidos_da_loja}
+            request, "app_pedido/base.html", context={"pedidos": pedidos_da_loja}
         )
     except ObjectDoesNotExist:
         return redirect("app_integracao:integracao")
