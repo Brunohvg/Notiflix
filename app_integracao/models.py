@@ -1,5 +1,9 @@
+import secrets
+import string
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 class LojaIntegrada(models.Model):
@@ -18,23 +22,19 @@ class LojaIntegrada(models.Model):
         return self.nome
 
 
-"""class Cliente(models.Model):
-    cpf_cnpj = models.CharField(max_length=14)
-    nome = models.CharField(max_length=100)
-    telefone = models.CharField(max_length=20)
-    email = models.EmailField()
+class WhatsappIntegrado(models.Model):
+    instanceId = models.CharField(max_length=200, primary_key=True)
+    instanceName = models.CharField(max_length=200)
+    token = models.CharField(max_length=200)
+    status = models.CharField(max_length=20, blank=True, null=True)
+    usuario = models.OneToOneField(
+        User, related_name="whatsapp", on_delete=models.CASCADE
+    )  # Usuario a quem essa instancia de whatsapp pertence
+    
 
-    def __str__(self) -> str:
-        return self.nome
-
-
-class Venda(models.Model):
-    id_venda = models.CharField(max_length=20, primary_key=True)
-    data = models.DateField()
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    status_pagamento = models.CharField(max_length=50)
-    status_envio = models.CharField(max_length=50)
-
-    def __str__(self) -> str:
-        return self.cliente.nome
-"""
+@receiver(pre_save, sender=WhatsappIntegrado)
+def generate_token(sender, instance, **kwargs):
+    if not instance.token:
+        alphabet = string.ascii_letters + string.digits
+        token = "".join(secrets.choice(alphabet) for _ in range(20))
+        instance.token = token
