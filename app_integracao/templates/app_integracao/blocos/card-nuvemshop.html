@@ -31,7 +31,7 @@
     <div class="card rounded-3 card-hover" bis_skin_checked="1">
       <div class="card-body" bis_skin_checked="1">
         <div class="d-flex align-items-center" bis_skin_checked="1">
-          <span class="flex-shrink-0"><i class="ti ti-cloud display-6 text-primary display-6"></i></span> <!-- Ícone da Nuvemshop -->
+          <span class="flex-shrink-0"><i class={% if user.loja %}"ti ti-cloud-check display-6 text-primary display-6"{% else %}"ti ti-cloud display-6 text-primary display-6"{% endif %}></i></span> <!-- Ícone da Nuvemshop -->
           <div class="ms-4" bis_skin_checked="1">
             <h4 class="card-title text-dark">Nuvemshop</h4>
             <h6 class="card-subtitle mb-0 fs-2 fw-normal">Potencialize suas Vendas Online</h6>
