@@ -27,10 +27,10 @@ class WhatsappIntegrado(models.Model):
     instanceName = models.CharField(max_length=200)
     token = models.CharField(max_length=200)
     status = models.CharField(max_length=20, blank=True, null=True)
-    usuario = models.OneToOneField(
-        User, related_name="whatsapp", on_delete=models.CASCADE
-    )  # Usuario a quem essa instancia de whatsapp pertence
-    
+    loja = models.OneToOneField(
+        LojaIntegrada, related_name="whatsapp", on_delete=models.CASCADE
+    )  # Loja a quem essa instancia de whatsapp pertence
+
 
 @receiver(pre_save, sender=WhatsappIntegrado)
 def generate_token(sender, instance, **kwargs):

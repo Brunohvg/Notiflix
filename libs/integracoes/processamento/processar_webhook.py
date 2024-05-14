@@ -12,6 +12,8 @@ def processar_eventos(store_id, event_type, order_id):
     """
     Processar os eventos que estão sendo enviados pelo webhook para identificar cada processo para lidar com a situação
     """
+
+    
     if event_type == "order/paid":
         return processar_pedido(store_id, event_type, order_id)
     elif event_type == "order/packed":
