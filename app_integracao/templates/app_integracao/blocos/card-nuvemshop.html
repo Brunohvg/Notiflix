@@ -1,41 +1,15 @@
-<div class="col-md-4">
-  <div class="card">
-    <div class="card-header position-relative">
-      <div class="position-absolute top--2 end-0">
-        {% if user.is_authenticated %}
-          {% if user.loja %}
-            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 25px; height: 25px;">
-              <i class="ti ti-check"></i>
-            </div>
-          {% endif %}
-        {% endif %}
-      </div>NuvemShop
-    </div>
-    <div class="card-body">
-      <h5 class="card-title">Configuração Nuvemshop</h5>
-      <p class="card-text">Você tem loja na Nuvemshop?</p>
-      {% if user.is_authenticated %}
-        {% if user.loja %}
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Remover</button>
-        {% else %}
-          <a href="https://www.tiendanube.com/apps/8619/authorize?state=csrf-code" class="btn btn-primary">Conectar</a>
-        {% endif %}
-      {% endif %}
-    </div>
-  </div>
-</div>
-
 <div class="col-md-6 col-lg-4" bis_skin_checked="1">
-  <a href="https://www.tiendanube.com/apps/8619/authorize?state=csrf-code" class="text-decoration-none">
+  {% if user.loja %} <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">{% else %} <a href="https://www.tiendanube.com/apps/8619/authorize?state=csrf-code" class="text-decoration-none">{% endif %}
+  
     <!-- Substitua URL_DO_SEU_LINK_AQUI pelo URL desejado -->
     <div class="card rounded-3 card-hover" bis_skin_checked="1">
       <div class="card-body" bis_skin_checked="1">
         <div class="d-flex align-items-center" bis_skin_checked="1">
-          <span class="flex-shrink-0"><i class={% if user.loja %}"ti ti-cloud-check display-6 text-primary display-6"{% else %}"ti ti-cloud display-6 text-primary display-6"{% endif %}></i></span> <!-- Ícone da Nuvemshop -->
+          <span class="flex-shrink-0"><i class={% if user.loja %}"ti ti-cloud-check display-6 text-primary display-6"{% else %}"ti ti-cloud display-6 text-danger display-6"{% endif %}></i></span> <!-- Ícone da Nuvemshop -->
           <div class="ms-4" bis_skin_checked="1">
             <h4 class="card-title text-dark">Nuvemshop</h4>
             <h6 class="card-subtitle mb-0 fs-2 fw-normal">Potencialize suas Vendas Online</h6>
-            <span class="fs-2 mt-1">Integre sua Loja à Nuvemshop</span>
+            <span class="fs-2 mt-1">{% if user.loja %}Ótimo sua loja já está integrada {% else %}Integre sua Loja à Nuvemshop {% endif %}</span>
           </div>
         </div>
       </div>
