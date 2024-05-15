@@ -25,7 +25,7 @@ class LojaIntegrada(models.Model):
 class WhatsappIntegrado(models.Model):
     instanceId = models.CharField(max_length=200, primary_key=True)
     instanceName = models.CharField(max_length=200)
-    token = models.CharField(max_length=200)
+    token = models.CharField(max_length=200, blank=True)
     status = models.CharField(max_length=20, blank=True, null=True)
     loja = models.OneToOneField(
         LojaIntegrada, related_name="whatsapp", on_delete=models.CASCADE
