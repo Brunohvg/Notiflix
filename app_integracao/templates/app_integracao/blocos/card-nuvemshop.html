@@ -1,26 +1,30 @@
 <div class="col-md-6 col-lg-4" bis_skin_checked="1">
-  {% if user.loja %}
-    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  {% else %} 
-    <a href="https://www.tiendanube.com/apps/8619/authorize?state=csrf-code" class="text-decoration-none">
-  {% endif %}
-  
-    <!-- Substitua URL_DO_SEU_LINK_AQUI pelo URL desejado -->
-    <div class="card rounded-3 card-hover" bis_skin_checked="1">
-      <div class="card-body" bis_skin_checked="1">
-        <div class="d-flex align-items-center" bis_skin_checked="1">
+	{% if user.loja %}
+		<a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+		{% else %}
+			<a href="https://www.tiendanube.com/apps/8619/authorize?state=csrf-code" class="text-decoration-none">
+			{% endif %}
 
-          <span class="flex-shrink-0"><i class="ti {% if user.loja %}ti-cloud-check display-6 text-primary{% else %}ti-cloud display-6 text-danger{% endif %}"></i></span> <!-- Ícone da Nuvemshop -->
+			<!-- Substitua URL_DO_SEU_LINK_AQUI pelo URL desejado -->
+			<div class="card rounded-3 card-hover" bis_skin_checked="1">
+				<div class="card-body" bis_skin_checked="1">
+					<div class="d-flex align-items-center" bis_skin_checked="1">
 
-          <div class="ms-4" bis_skin_checked="1">
-            <h4 class="card-title text-dark">Nuvemshop</h4>
-            <h6 class="card-subtitle mb-0 fs-2 fw-normal">Potencialize suas Vendas Online</h6>
-            <span class="fs-2 mt-1">{% if user.loja %}Ótimo sua loja já está integrada{% else %}Integre sua Loja à Nuvemshop{% endif %}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
-  
+						<span class="flex-shrink-0">
+							<i class="ti {% if user.loja %}ti-cloud-check display-6 text-primary{% else %}ti-cloud display-6 text-danger{% endif %}"></i>
+						</span>
+						<!-- Ícone da Nuvemshop -->
 
+						<div class="ms-4" bis_skin_checked="1">
+							<h4 class="card-title text-dark">Nuvemshop</h4>
+							<h6 class="card-subtitle mb-0 fs-2 fw-normal">Potencialize suas Vendas Online</h6>
+							<span class="fs-2 mt-1">
+								{% if user.loja %}Ótimo sua loja já está integrada{% else %}Integre sua Loja à Nuvemshop
+								{% endif %}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
