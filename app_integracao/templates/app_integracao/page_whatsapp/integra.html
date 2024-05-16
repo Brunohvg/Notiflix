@@ -1,1 +1,13 @@
-
+{% if loja_integrada %}
+  <p>A loja está integrada.</p>
+  <!-- Exibir os dados da Loja Integrada -->
+  <p>Nome: {{ loja_integrada.nome }}</p>
+  <p>WhatsApp: {{ loja_integrada.whatsapp_phone_number }}</p>
+  <!-- Adicione outros campos da Loja Integrada que você deseja exibir -->
+{% elif whatsapp_integrado %}
+  <p>O WhatsApp está integrado.</p>
+  <!-- Exibir os dados do Whatsapp Integrado -->
+  <p>Instance ID: {{ whatsapp_integrado.instanceId }}</p>
+  <p>Instance Name: {{ whatsapp_integrado.instanceName }}</p>
+  <!-- Adicione outros campos do Whatsapp Integrado que você deseja exibir -->
+{% endif %}

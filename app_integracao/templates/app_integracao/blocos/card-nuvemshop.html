@@ -1,7 +1,8 @@
 <div class="col-md-6 col-lg-4" bis_skin_checked="1">
 	
 	{% if user.loja %}
-		<a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+		<a href="{% url 'app_integracao:config_integracao' id=user.loja.pk %}">
+
 	{% else %}
 		<a href="https://www.tiendanube.com/apps/8619/authorize?state=csrf-code" class="text-decoration-none">
 	{% endif %}

@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.contrib import messages
 
-from .models import LojaIntegrada
+from django.core.exceptions import ObjectDoesNotExist
+
+from .models import LojaIntegrada, WhatsappIntegrado
 from libs.integracoes.api.api_nuvemshop import NuvemShop
 
 nuvemshop = NuvemShop()
@@ -114,3 +116,32 @@ def desativar_integracao(request):
         messages.error(request, "Você não tem permissão para desinstalar esta loja")
 
     return redirect("app_integracao:integracao")
+
+
+from django.shortcuts import get_object_or_404
+
+
+@login_required
+def config_integracao(request, id):
+    try:
+        # Verificar se o ID corresponde a uma Loja Integrada
+        if LojaIntegrada.objects.filter(pk=id, usuario=request.user).exists():
+            loja_integrada = LojaIntegrada.objects.get(pk=id)
+            context = {"loja_integrada": loja_integrada}
+            return render(request, "app_integracao/base_integracao.html", context)
+
+        # Verificar se o ID corresponde a um Whatsapp Integrado
+        elif WhatsappIntegrado.objects.filter(
+            pk=id, loja__usuario=request.user
+        ).exists():
+            whatsapp_integrado = WhatsappIntegrado.objects.get(pk=id)
+            context = {"whatsapp_integrado": whatsapp_integrado}
+            return render(request, "app_integracao/base_integracao.html", context)
+
+        # Se o ID não corresponder a nenhum dos dois, renderizar uma página de erro ou fazer o tratamento adequado
+        else:
+            return render(request, "app_integracao/base.html")
+
+    except (LojaIntegrada.DoesNotExist, WhatsappIntegrado.DoesNotExist):
+        # Se ocorrer uma exceção, renderizar uma página de erro ou fazer o tratamento adequado
+        return render(request, "app_integracao/base.html")

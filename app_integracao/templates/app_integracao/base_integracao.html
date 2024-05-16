@@ -1,0 +1,18 @@
+{% extends 'pages/base/base.html' %}
+
+{% block Dashboard %}
+  {% load static %}
+  <div class="container-fluid">
+    {% block TituloConteudoFluidoDashboard %}
+      <!-- Título do conteúdo fluido -->
+      <h5 class="card-title fw-semibold mb-4">Configurações das integrações</h5>
+      {% for message in messages %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
+      {% endfor %}
+    {% endblock %}
+    <!-- Título do conteúdo fluido -->
+    {% include 'app_integracao/page_whatsapp/integra.html' %}
+
+    <!-- Inclusão dos blocos -->
+  </div>
+{% endblock %}
