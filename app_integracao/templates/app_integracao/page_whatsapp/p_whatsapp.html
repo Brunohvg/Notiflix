@@ -1,0 +1,31 @@
+{% if loja_integrada %}
+  <div class="row mt-12">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ loja_integrada.nome }}</h5>
+          <hr />
+          <p class="card-text">WhatsApp: {{ loja_integrada.pk }}</p>
+          <p class="card-text">Email de Contato: {{ loja_integrada.email }}</p>
+          <p class="card-text">Nome: {{ loja_integrada }}</p>
+          <!-- Adicione outros campos da Loja Integrada que você deseja exibir -->
+        </div>
+      </div>
+    </div>
+  </div>
+{% elif whatsapp_integrado %}
+  <div class="row mt-12">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ whatsapp_integrado }}</h5>
+          <hr />
+          <p class="card-text">WhatsApp: {{ whatsapp_integrado.pk }}</p>
+          <p class="card-text">Email de Contato: {{ whatsapp_integrado.email }}</p>
+          <p class="card-text">Nome: {{ whatsapp_integrado }}</p>
+          <!-- Adicione outros campos da Loja Integrada que você deseja exibir -->
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
