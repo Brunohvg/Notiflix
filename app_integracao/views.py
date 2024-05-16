@@ -118,9 +118,6 @@ def desativar_integracao(request):
     return redirect("app_integracao:integracao")
 
 
-from django.shortcuts import get_object_or_404
-
-
 @login_required
 def config_integracao(request, id):
     try:

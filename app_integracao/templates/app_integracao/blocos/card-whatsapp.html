@@ -1,26 +1,28 @@
 <div class="col-md-6 col-lg-4" bis_skin_checked="1">
-  <a href="{% url 'app_integracao:integracao' %}" class="text-decoration-none">
-    <!-- Substitua URL_DO_SEU_LINK_AQUI pelo URL desejado -->
-    <div class="card rounded-3 card-hover" bis_skin_checked="1">
+    {% if user.loja.whatsapp.pk %}
+        <a href="{% url 'app_integracao:config_integracao' id=user.loja.whatsapp.pk %}"data-bs-toggle="tooltip" title="Click aqui para configurar">
+    {% else %}
+        <a href="#" class="text-decoration-none">
+    {% endif %}
+  <!-- Substitua URL_DO_SEU_LINK_AQUI pelo URL desejado -->
+  <div class="card rounded-3 card-hover" bis_skin_checked="1">
       <div>
-        {% if user.loja.whatsapp.pk %}
-          <span class="badge bg-success-subtle text-success">Conectada</span>
-          <a href="{% url 'app_integracao:config_integracao' id=user.loja.whatsapp.pk %}">
+          {% if user.loja.whatsapp.pk %}
+              <span class="badge bg-success-subtle text-success">Conectada</span>
           {% else %}
-
-          <span class="badge bg-warning-subtle text-warning">Pendente</span>
-        {% endif %}
+              <span class="badge bg-warning-subtle text-warning">Pendente</span>
+          {% endif %}
       </div>
       <div class="card-body" bis_skin_checked="1">
-        <div class="d-flex align-items-center" bis_skin_checked="1">
-          <span class="flex-shrink-0"><i class="ti ti-brand-whatsapp display-6 text-success display-6"></i></span>
-          <div class="ms-4" bis_skin_checked="1">
-            <h4 class="card-title text-dark">Whatsapp</h4>
-            <h6 class="card-subtitle mb-0 fs-2 fw-normal">Expanda Horizontes de Vendas</h6>
-            <span class="fs-2 mt-1">Conecte sua Loja ao WhatsApp</span>
+          <div class="d-flex align-items-center" bis_skin_checked="1">
+              <span class="flex-shrink-0"><i class="ti ti-brand-whatsapp display-6 text-success display-6"></i></span>
+              <div class="ms-4" bis_skin_checked="1">
+                  <h4 class="card-title text-dark">Whatsapp</h4>
+                  <h6 class="card-subtitle mb-0 fs-2 fw-normal">Expanda Horizontes de Vendas</h6>
+                  <span class="fs-2 mt-1">Conecte sua Loja ao WhatsApp</span>
+              </div>
           </div>
-        </div>
       </div>
-    </div>
+  </div>
   </a>
 </div>

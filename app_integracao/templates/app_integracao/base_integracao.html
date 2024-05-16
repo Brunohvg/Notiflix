@@ -4,15 +4,77 @@
   {% load static %}
   <div class="container-fluid">
     {% block TituloConteudoFluidoDashboard %}
-      <!-- Título do conteúdo fluido -->
-      <h5 class="card-title fw-semibold mb-4">Configurações das integrações</h5>
-      {% for message in messages %}
-        <div class="alert alert-success" role="alert">{{ message }}</div>
-      {% endfor %}
+      <div class="container">
+        <h5 class="card-title fw-semibold mb-4">Configurações das integrações</h5>
+      </div>
     {% endblock %}
-    <!-- Título do conteúdo fluido -->
-    {% include 'app_integracao/page_whatsapp/p_whatsapp.html' %}
+    <style>
+      .nav-tabs {
+        --bs-nav-tabs-border-width: 0;
+        --bs-nav-tabs-border-color: var(--bs-border-color);
+        --bs-nav-tabs-border-radius: 1.125rem;
+        --bs-nav-tabs-link-hover-border-color: var(--bs-secondary-bg) var(--bs-secondary-bg) var(--bs-border-color);
+        --bs-nav-tabs-link-active-color: #fff;
+        --bs-nav-tabs-link-active-bg: #0085db;
+        --bs-nav-tabs-link-active-border-color: var(--bs-border-color) var(--bs-border-color) #0085db;
+        border-bottom: var(--bs-nav-tabs-border-width) solid var(--bs-nav-tabs-border-color);
+      }
+      
+      .nav {
+        --bs-nav-link-padding-x: 1rem;
+        --bs-nav-link-padding-y: 0.5rem;
+        --bs-nav-link-font-size: 1rem;
+        --bs-nav-link-font-weight: 500;
+        --bs-nav-link-color: #111c2d;
+        --bs-nav-link-hover-color: #111c2d;
+        --bs-nav-link-disabled-color: var(--bs-secondary-color);
+        display: flex;
+        flex-wrap: wrap;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+      }
+    </style>
+    <div class="col-lg-12">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item me-2" role="presentation">
+          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Teacher Skill</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link " id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">Salary</button>
+        </li>
+      </ul>
 
-    <!-- Inclusão dos blocos -->
+      <div class="card mt-4">
+        <div class="card-body">
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+              <div class="mb-4 border-bottom pb-3">
+                <h4 class="card-title mb-0">Teacher Skill</h4>
+              </div>
+              <div class="table-responsive overflow-x-auto">
+                <table class="table align-middle text-nowrap">
+                  <!-- Conteúdo da tabela -->
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane fade active show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+              <div class="mb-4 border-bottom pb-3">
+                <h4 class="card-title mb-0">Salary Report</h4>
+              </div>
+              <div class="d-flex justify-content-between align-items-start">
+                <!-- Conteúdo do relatório de salário -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% for message in messages %}
+      <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endfor %}
+
+    {% include 'app_integracao/page_integracao/p_whatsapp.html' %}
   </div>
 {% endblock %}

@@ -8,6 +8,7 @@
           <p class="card-text">WhatsApp: {{ loja_integrada.pk }}</p>
           <p class="card-text">Email de Contato: {{ loja_integrada.email }}</p>
           <p class="card-text">Nome: {{ loja_integrada }}</p>
+          <p class="card-text">token: {{ loja_integrada.autorization_token }}</p>
           <!-- Adicione outros campos da Loja Integrada que você deseja exibir -->
         </div>
       </div>
@@ -22,7 +23,8 @@
           <hr />
           <p class="card-text">WhatsApp: {{ whatsapp_integrado.pk }}</p>
           <p class="card-text">Email de Contato: {{ whatsapp_integrado.email }}</p>
-          <p class="card-text">Nome: {{ whatsapp_integrado }}</p>
+          <p class="card-text">Nome: {{ whatsapp_integrado.instanceName }}</p>
+          <p class="card-text">token: {{ whatsapp_integrado.token }}</p>
           <!-- Adicione outros campos da Loja Integrada que você deseja exibir -->
         </div>
       </div>

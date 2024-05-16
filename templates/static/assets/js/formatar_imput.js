@@ -27,4 +27,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Usando a função formatField para formatar o campo "id_telefone"
     formatField(document.querySelector('#id_telefone'), '(##) #####-####')
-})
+}),
+
+
+

@@ -15,8 +15,17 @@
       {% include 'app_integracao/blocos/card-nuvemshop.html' %}
       {% include 'app_integracao/blocos/card-whatsapp.html' %}
       {% include 'app_integracao/blocos/excluir.html' %}
-      {% include 'app_integracao/page_whatsapp/integra.html' %}
-      {% include 'app_integracao/page_whatsapp/p_whatsapp.html' %}
+      {% include 'app_integracao/page_integracao/integra.html' %}
+      {% include 'app_integracao/page_integracao/p_whatsapp.html' %}
     </div>
   </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  </script>
 {% endblock %}
