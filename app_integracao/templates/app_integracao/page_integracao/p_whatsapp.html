@@ -6,6 +6,7 @@
           <h5 class="card-title">Informações da Loja</h5>
           <p class="card-text"></p>
           <form class="row g-3">
+            <!-- Informações da loja -->
             <div class="col-md-4">
               <label for="inputIdLoja" class="form-label">ID</label>
               <input type="text" class="form-control" id="inputIdLoja" value="{{ request.user.loja.pk }}" disabled />
@@ -19,17 +20,46 @@
               <input type="email" class="form-control" id="inputEmailLoja" value="{{ request.user.loja.email }}" disabled />
             </div>
             <div class="col-6">
-              <label for="inputToken" class="form-label">CPF/CNPJ</label>
-              <input type="text" class="form-control" id="inputToken" placeholder="1234 Main St" value="{{ request.user.loja.doc }} " />
+              <label for="inputCpfCnpj" class="form-label">CPF/CNPJ</label>
+              <input type="text" class="form-control" id="inputCpfCnpj" value="{{ request.user.loja.doc }}" />
             </div>
             <div class="col-6">
-              <label for="inputToken" class="form-label">WhatsApp</label>
-              <input type="text" class="form-control" id="inputToken" placeholder="1234 Main St" value="{{ request.user.loja.whatsapp_phone_number }}" />
+              <label for="inputWhatsapp" class="form-label">WhatsApp</label>
+              <input type="text" class="form-control" id="inputWhatsapp" value="{{ request.user.loja.whatsapp_phone_number }}" />
             </div>
             <div class="col-12" style="margin-bottom: 5px;">
-              <a class="btn btn-info rounded-pill" href="#">Atualizar</a>
+              <button type="submit" class="btn btn-info rounded-pill">Atualizar</button>
             </div>
           </form>
+
+          <!-- Informações dos Webhooks -->
+          <h5 class="card-title mt-4">Webhooks Configurados</h5>
+          {% if webhooks %}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Evento</th>
+                  <th scope="col">URL</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for webhook in webhooks %}
+                  <tr>
+                    <td>{{ webhook.event }}</td>
+                    <td>{{ webhook.url }}</td>
+                    <td>{{ webhook.status }}</td>
+                    <td>
+                      <button class="btn btn-success btn-sm">Testar</button>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p>Nenhum webhook configurado.</p>
+          {% endif %}
         </div>
       </div>
     </div>
