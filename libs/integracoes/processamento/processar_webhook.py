@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 import logging
 
+# TODO VERIFICAR OS PEDIDOS DE QUAL USUARIO PERTENCE
+
 logger = logging.getLogger("app_webhook")  # Nome específico para o módulo de webhook
 
 importar_pedidos = NuvemShop()
@@ -14,6 +16,7 @@ def processar_eventos(store_id, event_type, order_id):
     """
     Processar os eventos que estão sendo enviados pelo webhook para identificar cada processo para lidar com a situação
     """
+
     try:
         if event_type == "order/paid":
             return processar_pedido(store_id, order_id)
@@ -41,6 +44,11 @@ def processar_pedido(store_id, order_id):
             code=token, store_id=store_id, id_pedido=order_id
         )
         logger.info("Pedido recuperado: %s", novo_pedido)
+
+        # Verificar se o pedido já existe
+        if Pedido.objects.filter(id_venda=f'#{novo_pedido["id"]}').exists():
+            logger.info("Pedido já existe: %s", novo_pedido["id"])
+            return False
 
         # Extrair dados do cliente do pedido
         cliente_dados = {
@@ -90,7 +98,7 @@ def pedido_embalado(store_id, order_id):
         )
         logger.info("Pedido recuperado para embalagem: %s", novo_pedido)
 
-        pedido = Pedido.objects.get(id_venda=novo_pedido["id"])
+        pedido = Pedido.objects.get(id_venda=f'#{novo_pedido["id"]}')
         pedido.data_embalado = timezone.now()
         pedido.status_envio = "Embalado"
         pedido.save()
@@ -119,7 +127,7 @@ def pedido_enviado(store_id, order_id):
         )
         logger.info("Pedido recuperado para envio: %s", novo_pedido)
 
-        pedido = Pedido.objects.get(id_venda=novo_pedido["id"])
+        pedido = Pedido.objects.get(id_venda=f'#{novo_pedido["id"]}')
         pedido.data_enviado = timezone.now()
         pedido.status_envio = "Enviado"
         pedido.codigo_rastreio = novo_pedido["shipping_tracking_number"]
@@ -149,7 +157,7 @@ def pedido_cancelado(store_id, order_id):
         )
         logger.info("Pedido recuperado para cancelamento: %s", novo_pedido)
 
-        pedido = Pedido.objects.get(id_venda=novo_pedido["id"])
+        pedido = Pedido.objects.get(id_venda=f'#{novo_pedido["id"]}')
         pedido.status_pagamento = "cancelado"
         pedido.save()
 

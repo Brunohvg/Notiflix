@@ -34,7 +34,7 @@
 
           <!-- Informações dos Webhooks -->
           <h5 class="card-title mt-4">Webhooks Configurados</h5>
-          {% if webhooks %}
+          {% if loja_integrada.webhook_url %}
             <table class="table">
               <thead>
                 <tr>
@@ -45,11 +45,11 @@
                 </tr>
               </thead>
               <tbody>
-                {% for webhook in webhooks %}
+                {% for event in loja_integrada.events %}
                   <tr>
-                    <td>{{ webhook.event }}</td>
-                    <td>{{ webhook.url }}</td>
-                    <td>{{ webhook.status }}</td>
+                    <td>{{ event }}</td>
+                    <td>{{ loja_integrada.webhook_url }}</td>
+                    <td>{{ loja_integrada.webhook_status }}</td>
                     <td>
                       <button class="btn btn-success btn-sm">Testar</button>
                     </td>

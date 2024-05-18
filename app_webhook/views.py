@@ -8,24 +8,19 @@ logger = logging.getLogger(__name__)
 
 
 @csrf_exempt
-def webhook_receiver(request):
+def webhook_receiver(request, store_id):
     if request.method == "POST":
         try:
-            # Carregar os dados JSON do corpo da solicitação
             webhook_data = json.loads(request.body)
-            # Acessar os parâmetros do webhook
-            store_id = webhook_data.get("store_id")
             event_type = webhook_data.get("event")
             order_id = webhook_data.get("id")
 
-            # Verificar se os parâmetros essenciais estão presentes
-            if not store_id or not event_type or not order_id:
+            if not event_type or not order_id:
                 logger.error("Parâmetros do webhook incompletos: %s", webhook_data)
                 return JsonResponse(
                     {"error": "Parâmetros do webhook incompletos"}, status=400
                 )
 
-            # Chamar diretamente a função ou view de tratamento de pedidos
             if processar_eventos(store_id, event_type, order_id):
                 return JsonResponse({"status": "success"}, status=200)
             else:
@@ -35,10 +30,9 @@ def webhook_receiver(request):
                 )
 
         except json.JSONDecodeError:
-            # Se houver um erro ao analisar o JSON no corpo da solicitação
-            logger.error("Invalid JSON format in request body")
+            logger.error("Formato JSON inválido no corpo da solicitação")
             return JsonResponse(
-                {"error": "Invalid JSON format in request body"}, status=400
+                {"error": "Formato JSON inválido no corpo da solicitação"}, status=400
             )
     else:
         return JsonResponse(

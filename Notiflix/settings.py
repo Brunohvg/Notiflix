@@ -16,6 +16,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "goblin-romantic-imp.ngrok-free.app"]
 
+APPEND_SLASH = False
+
+
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -144,19 +147,51 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
     },
 }
 """
+import os
+
+import os
+
+import os
+
 LOGGING = {
     "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},
+    },
     "handlers": {
         "console": {
-            "level": "DEBUG",
+            "level": "INFO",
             "class": "logging.StreamHandler",
+            "formatter": "standard",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "formatter": "standard",
+            "filename": os.path.join(os.path.dirname(__file__), "django.log"),
         },
     },
     "loggers": {
-        "": {  # Logger raiz
-            "handlers": ["console"],
+        "": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "app_webhook": {  # Substitua pelo nome do seu aplicativo
+            "handlers": ["console", "file"],
             "level": "DEBUG",
-            "propagate": True,
-        }
+            "propagate": False,
+        },
+        "app_integracao": {  # Substitua pelo nome do seu aplicativo
+            "handlers": ["console", "file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
     },
 }

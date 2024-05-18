@@ -1,11 +1,5 @@
 import requests
 from decouple import config
-from requests.exceptions import RequestException
-import logging
-
-
-import requests
-import json
 import logging
 
 
@@ -25,109 +19,81 @@ class NuvemShop:
             }
             headers = {"Content-Type": "application/json"}
             response = requests.post(url, json=data, headers=headers)
-
-            response.raise_for_status()  # Levanta HTTPError para respostas ruins
-
-            date = response.json()
-            print(date)
-            return date
-
+            response.raise_for_status()
+            return response.json()
         except requests.exceptions.HTTPError as e:
-            return f"Erro na solicitação: {e}"
+            logging.error(f"Erro na solicitação: {e}")
+            return None
 
     def store_nuvem(self, code, store_id):
-        if code and store_id:
-            url = f"https://api.nuvemshop.com.br/v1/{store_id}/store"
-            headers = {
-                "Authentication": f"bearer {code}",
-                "User-Agent": "CloudStore (cloudstore@email.com)",
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/store"
+        headers = {
+            "Authentication": f"bearer {code}",
+            "User-Agent": "CloudStore (cloudstore@email.com)",
+        }
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+            return {
+                "nome": data["name"]["pt"],
+                "doc": data["business_id"],
+                "whatsapp_phone_number": data.get("whatsapp_phone_number"),
+                "contact_email": data.get("contact_email"),
+                "email": data.get("email"),
+                "id": data["id"],
             }
-            try:
-                response = requests.get(url, headers=headers)
-                response.raise_for_status()  # Lança uma exceção para códigos de status HTTP fora do intervalo 2xx
-                data = response.json()
-                store_data = {
-                    "nome": data["name"]["pt"],
-                    "doc": data["business_id"],
-                    "whatsapp_phone_number": data["whatsapp_phone_number"],
-                    "contact_email": data["contact_email"],
-                    "email": data["email"],
-                    "id": data["id"],
-                }
-                return store_data
-
-            except requests.exceptions.HTTPError as http_err:
-                logging.error(f"Erro HTTP: {http_err}")
-            except requests.exceptions.RequestException as req_err:
-                logging.error(f"Erro na solicitação HTTP: {req_err}")
-            except Exception as e:
-                logging.error(f"Erro inesperado: {e}")
-
-        # Lidar com o erro da maneira que for apropriada para o seu aplicativo
+        except requests.exceptions.HTTPError as http_err:
+            logging.error(f"Erro HTTP: {http_err}")
+        except requests.exceptions.RequestException as req_err:
+            logging.error(f"Erro na solicitação HTTP: {req_err}")
+        except Exception as e:
+            logging.error(f"Erro inesperado: {e}")
         return None
 
     def _make_api_request(self, url, code, store_id, method="GET", payload=None):
-        """Faz uma solicitação HTTP para a API da Nuvemshop.
-
-        Args:
-            url (str): O URL da API específico para a solicitação.
-            code (str): O código de autenticação da API.
-            store_id (str): O ID da loja.
-            method (str): O método da solicitação HTTP (GET, POST, DELETE, etc.).
-            payload (dict): Os dados a serem enviados na solicitação, se houver.
-
-        Returns:
-            dict or None: Os dados da resposta JSON da API, ou None se ocorrer um erro.
-        """
-        if code and store_id:
-            headers = {
-                "Authentication": f"bearer {code}",
-                "User-Agent": "CloudStore (cloudstore@email.com)",
-                "Content-Type": "application/json",  # Definindo explicitamente o tipo de conteúdo como JSON
-            }
-            try:
-                if method == "GET":
-                    response = requests.get(url, headers=headers)
-                elif method == "POST":
-                    response = requests.post(url, json=payload, headers=headers)
-                elif method == "PUT":
-                    response = requests.post(url, json=payload, headers=headers)
-                elif method == "DELETE":
-                    response = requests.delete(url, headers=headers)
-                else:
-                    # Adicione suporte para outros métodos conforme necessário
-                    pass
-
-                response.raise_for_status()  # Lança uma exceção para códigos de status HTTP fora do intervalo 2xx
-                data = response.json()
-
-                return data
-
-            except requests.exceptions.HTTPError as http_err:
-                logging.error(f"Erro HTTP: {http_err}")
-            except requests.exceptions.RequestException as req_err:
-                logging.error(f"Erro na solicitação HTTP: {req_err}")
-            except Exception as e:
-                logging.error(f"Erro inesperado: {e}")
-
-        # Lidar com o erro da maneira que for apropriada para o seu aplicativo
+        headers = {
+            "Authentication": f"bearer {code}",
+            "User-Agent": "CloudStore (cloudstore@email.com)",
+            "Content-Type": "application/json",
+        }
+        try:
+            if method == "GET":
+                response = requests.get(url, headers=headers)
+            elif method == "POST":
+                response = requests.post(url, json=payload, headers=headers)
+            elif method == "PUT":
+                response = requests.put(url, json=payload, headers=headers)
+            elif method == "DELETE":
+                response = requests.delete(url, headers=headers)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.HTTPError as http_err:
+            logging.error(f"Erro HTTP: {http_err}")
+        except requests.exceptions.RequestException as req_err:
+            logging.error(f"Erro na solicitação HTTP: {req_err}")
+        except Exception as e:
+            logging.error(f"Erro inesperado: {e}")
         return None
 
     def _post_create_webhook(self, code, store_id, url_webhook, event):
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/webhooks"
-        payload = {
-            "url": url_webhook,
-            "event": event,
-        }
+        payload = {"url": url_webhook, "event": event}
         return self._make_api_request(
             url, code, store_id, method="POST", payload=payload
         )
 
-    # WEBHOOKS
+    def _post_create_webhooks_batch(self, code, store_id, url_webhook, events):
+        results = []
+        for event in events:
+            result = self._post_create_webhook(code, store_id, url_webhook, event)
+            results.append(result)
+        return results
+
     def _post_modificar_webhook(self, code, store_id):
         payload = {
             "id": "16955277",
-            "url": "https://goblin-romantic-imp.ngrok-free.app/webhook",
+            "url": "https://goblin-romantic-imp.ngrok-free.app/webhook/",
             "event": "order/paid",
         }
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/webhooks/"
@@ -140,7 +106,6 @@ class NuvemShop:
         return self._make_api_request(url, code, store_id, method="GET")
 
     def _deletar_webhook(self, code, store_id, id_webhook):
-
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/webhooks/{id_webhook}"
         return self._make_api_request(url, code, store_id, method="DELETE")
 
@@ -149,35 +114,16 @@ class NuvemShop:
         return self._make_api_request(url, code, store_id, method="GET")
 
     def _get_pedido(self, code, store_id):
-
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/orders/"
         return self._make_api_request(url, code, store_id, method="GET")
 
 
-# Exemplo de uso:
 """nuvem_shop = NuvemShop()
-print(
-    nuvem_shop._post_create_webhook(
-        code="7b3e91b253abc1d220f1e3172cd13ed9cec4daa6",
-        store_id="2685706",
-        url_webhook="https://goblin-romantic-imp.ngrok-free.app/pedido_pago/",
-        event="order/fulfilled",
-    )
-)"""
 
-"""nuvem_shop = NuvemShop()
-print(
-    nuvem_shop._get_webhook(
-        code=" 753ccc21bec7cf741d48fed574b1229cb2f3aa7a",
-        store_id="2686287",
-    )
+store_id = "2685706"
+results = nuvem_shop._get_webhook(
+    code="5eefe8a9b5159a0cfc08c9d890aa0d93d3d905d8",
+    store_id=store_id,
 )
+print(results)
 """
-"""get_pedio = NuvemShop()
-print(
-    get_pedio._get_pedidos(
-        code="ef2a74efb98744c46552459b76eb7837ce537276",
-        store_id="2685706",
-        id_pedido=1472835801,
-    )
-)"""
