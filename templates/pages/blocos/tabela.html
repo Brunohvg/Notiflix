@@ -61,10 +61,22 @@
                 <span class="usr-total" data-total="total">{{ pedido.valor_formatado }}</span>
               </td>
               <td>
-                <span class="usr-status-pagamento" data-status-pagamento="status-pagamento">{{ pedido.status_pagamento }}</span>
+                {% if pedido.status_pagamento == 'cancelado' %}
+                  <span class="badge bg-danger-subtle text-danger" data-status-pagamento="status-pagamento">{{ pedido.status_pagamento }}</span>
+                {% else %}
+                  <span class="badge bg-success-subtle text-success" data-status-pagamento="status-pagamento">{{ pedido.status_pagamento }}</span>
+                {% endif %}
               </td>
               <td>
-                <span class="usr-status-envio" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+                {% if pedido.status_envio == 'Processando' %}
+                  <span class="badge bg-primary-subtle text-primary" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+                {% elif pedido.status_envio == 'Embalado' %}
+                  <span class="badge bg-warning-subtle text-warning" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+                {% elif pedido.status_envio == 'Enviado' %}
+                  <span class="badge bg-success-subtle text-success" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+                {% elif pedido.status_envio == 'Devolvido' %}
+                  <span class="badge bg-danger-subtle text-danger" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+                {% endif %}
               </td>
               <td>
                 <div class="action-btn">
