@@ -144,7 +144,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
     },
 }
 """
-
 LOGGING = {
     "version": 1,
     "handlers": {
@@ -154,10 +153,10 @@ LOGGING = {
         },
     },
     "loggers": {
-        "app_integracao.middleware": {
+        "": {  # Logger raiz
             "handlers": ["console"],
             "level": "DEBUG",
             "propagate": True,
-        },
+        }
     },
 }
