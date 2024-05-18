@@ -12,7 +12,7 @@ class LojaIntegrada(models.Model):
     whatsapp_phone_number = models.CharField(max_length=20, null=True, blank=True)
     contact_email = models.EmailField(null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    doc = models.CharField(max_length=14, null=True, blank=True)
+    doc = models.CharField(max_length=14, null=True, blank=True, default="")
     autorization_token = models.CharField(max_length=200)
     usuario = models.OneToOneField(User, related_name="loja", on_delete=models.CASCADE)
     ativa = models.BooleanField(default=True)
