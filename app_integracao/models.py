@@ -30,6 +30,22 @@ class LojaIntegrada(models.Model):
     def __str__(self) -> str:
         return self.nome
 
+    @property
+    def total_pedidos(self):
+        return self.pedidos.filter(status_pagamento="pago").count()
+
+    @property
+    def total_embalados(self):
+        return self.pedidos.filter(status_envio="Processando").count()
+
+    @property
+    def total_enviados(self):
+        return self.pedidos.filter(status_envio="Enviado").count()
+
+    @property
+    def total_cancelados(self):
+        return self.pedidos.filter(status_envio="Devolvido").count()
+
 
 class WhatsappIntegrado(models.Model):
     instanceId = models.CharField(max_length=200, primary_key=True)

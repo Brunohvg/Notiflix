@@ -17,7 +17,11 @@ class Cliente(models.Model):
 
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    loja = models.ForeignKey(LojaIntegrada, on_delete=models.CASCADE, null=True)
+
+    loja = models.ForeignKey(
+        LojaIntegrada, related_name="pedidos", on_delete=models.CASCADE, null=True
+    )
+
     id_venda = models.CharField(
         max_length=10, verbose_name="ID Venda", blank=True, null=True
     )
