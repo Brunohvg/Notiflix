@@ -19,13 +19,17 @@
               <label for="inputEmailLoja" class="form-label">E-mail</label>
               <input type="email" class="form-control" id="inputEmailLoja" value="{{ request.user.loja.email }}" disabled />
             </div>
-            <div class="col-6">
+            <div class="col-4">
               <label for="inputCpfCnpj" class="form-label">CPF/CNPJ</label>
               <input type="text" class="form-control" id="inputCpfCnpj" value="{{ request.user.loja.doc }}" />
             </div>
-            <div class="col-6">
+            <div class="col-4">
               <label for="inputWhatsapp" class="form-label">WhatsApp</label>
               <input type="text" class="form-control" id="inputWhatsapp" value="{{ request.user.loja.whatsapp_phone_number }}" />
+            </div>
+            <div class="col-4">
+              <label for="inputWhatsapp" class="form-label">Website</label>
+              <input type="text" class="form-control" id="inputWhatsapp" value="{{ request.user.loja.url }}" />
             </div>
             <div class="col-12" style="margin-bottom: 5px;">
               <button type="submit" class="btn btn-info rounded-pill">Atualizar</button>
@@ -33,33 +37,6 @@
           </form>
 
           <!-- Informações dos Webhooks -->
-          <h5 class="card-title mt-4">Webhooks Configurados</h5>
-          {% if loja_integrada.webhook_url %}
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Evento</th>
-                  <th scope="col">URL</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for event in loja_integrada.events %}
-                  <tr>
-                    <td>{{ event }}</td>
-                    <td>{{ loja_integrada.webhook_url }}</td>
-                    <td>{{ loja_integrada.webhook_status }}</td>
-                    <td>
-                      <button class="btn btn-success btn-sm">Testar</button>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          {% else %}
-            <p>Nenhum webhook configurado.</p>
-          {% endif %}
         </div>
       </div>
     </div>

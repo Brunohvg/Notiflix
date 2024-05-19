@@ -1,0 +1,33 @@
+{% if loja_integrada %}
+  {% if loja_integrada.webhook_url %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title mt-4">Webhooks Configurados</h5>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Evento</th>
+              <th scope="col">URL</th>
+              <th scope="col">Status</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for event in loja_integrada.events %}
+              <tr>
+                <td>{{ event }}</td>
+                <td>{{ loja_integrada.webhook_url }}</td>
+                <td>{{ loja_integrada.webhook_status }}</td>
+                <td>
+                  <button class="btn btn-success btn-sm">Testar</button>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <p>Nenhum webhook configurado.</p>
+  {% endif %}
+{% endif %}

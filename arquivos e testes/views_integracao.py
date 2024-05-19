@@ -48,7 +48,11 @@ def integracao(request):
     if code is not None:
         return autorizar(request, code=code)
     else:
-        return render(request, "app_integracao/base.html", {"lojas": lojas})
+        response = render(request, "app_integracao/base.html", {"lojas": lojas})
+        response.set_cookie(
+            "ultimo_acesso", "integracao", max_age=3600
+        )  # Adiciona um cookie
+        return response
 
 
 @login_required
@@ -74,7 +78,11 @@ def autorizar(request, code):
             return redirect("app_integracao:integracao")
 
         if access_token and user_id:
-            return loja_integrada(request, access_token, user_id)
+            response = loja_integrada(request, access_token, user_id)
+            response.set_cookie(
+                "ultimo_acesso", "autorizar", max_age=3600
+            )  # Adiciona um cookie
+            return response
 
     except Exception as e:
         logger.error(f"Erro durante a autorização: {str(e)}")
@@ -128,7 +136,11 @@ def loja_integrada(request, access_token, user_id):
             request, f"Ocorreu um erro durante a integração da loja: {str(e)}"
         )
 
-    return redirect("app_integracao:integracao")
+    response = redirect("app_integracao:integracao")
+    response.set_cookie(
+        "ultimo_acesso", "loja_integrada", max_age=3600
+    )  # Adiciona um cookie
+    return response
 
 
 @login_required
@@ -146,7 +158,9 @@ def desativar_integracao(request):
     else:
         messages.error(request, "Você não tem permissão para desinstalar esta loja")
 
-    return redirect("app_integracao:integracao")
+    response = redirect("app_integracao:integracao")
+    response.delete_cookie("ultimo_acesso")  # Remove um cookie
+    return response
 
 
 @login_required
@@ -160,14 +174,22 @@ def config_integracao(request, id):
         ).first()
         if loja_integrada:
             context = {"loja_integrada": loja_integrada}
-            return render(request, "app_integracao/base_integracao.html", context)
+            response = render(request, "app_integracao/base_integracao.html", context)
+            response.set_cookie(
+                "ultimo_acesso", "config_integracao", max_age=3600
+            )  # Adiciona um cookie
+            return response
 
         whatsapp_integrado = WhatsappIntegrado.objects.filter(
             pk=id, loja__usuario=request.user
         ).first()
         if whatsapp_integrado:
             context = {"whatsapp_integrado": whatsapp_integrado}
-            return render(request, "app_integracao/base_integracao.html", context)
+            response = render(request, "app_integracao/base_integracao.html", context)
+            response.set_cookie(
+                "ultimo_acesso", "config_integracao", max_age=3600
+            )  # Adiciona um cookie
+            return response
 
         messages.error(request, "Configuração não encontrada")
         return render(request, "app_integracao/base.html")

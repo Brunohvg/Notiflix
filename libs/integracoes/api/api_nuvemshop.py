@@ -26,6 +26,17 @@ class NuvemShop:
             return None
 
     def store_nuvem(self, code, store_id):
+        """
+        Obtém informações da loja da Nuvem Shop.
+
+        Args:
+            code (str): Código de autenticação.
+            store_id (str): ID da loja.
+
+        Returns:
+            dict: Informações da loja, ou None em caso de erro.
+        """
+
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/store"
         headers = {
             "Authentication": f"bearer {code}",
@@ -42,6 +53,8 @@ class NuvemShop:
                 "contact_email": data.get("contact_email"),
                 "email": data.get("email"),
                 "id": data["id"],
+                "original_domain": data["original_domain"],
+                "domains": data["domains"],
             }
         except requests.exceptions.HTTPError as http_err:
             logging.error(f"Erro HTTP: {http_err}")
@@ -118,12 +131,11 @@ class NuvemShop:
         return self._make_api_request(url, code, store_id, method="GET")
 
 
-"""nuvem_shop = NuvemShop()
+nuvem_shop = NuvemShop()
 
-store_id = "2685706"
-results = nuvem_shop._get_webhook(
-    code="5eefe8a9b5159a0cfc08c9d890aa0d93d3d905d8",
+store_id = "2386568"
+results = nuvem_shop.store_nuvem(
+    code="84b3e93d7569e8a85ac7b24b79831ef7ea7f614d",
     store_id=store_id,
 )
 print(results)
-"""
