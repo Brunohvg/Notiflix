@@ -1,0 +1,25 @@
+<div class="container">
+  <h5 class="card-title fw-semibold mb-4">Configurações das integrações</h5>
+</div>
+
+<div class="card card-body">
+  <div class="row">
+    <div class="col-md-4 col-xl-3">
+      {% if loja_integrada %}
+        <h5>{{ user.loja }}</h5>
+        <span>A nossa plataforma esta integrada a NuvemShop</span>
+      {% elif whatsapp_integrado %}
+        <h5>{{ user.loja.whatsapp.instanceName }}</h5>
+      {% endif %}
+    </div>
+    <div class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
+      <div class="action-btn show-btn" style="display: block;">
+        <a href="{% url 'app_integracao:integracao' %}" class="delete-multiple bg-danger-subtle btn me-2 text-danger d-flex align-items-center"><i class="ti ti- me-1 fs-5"></i> Voltar</a>
+      </div>
+      <form method="post" action="{% url 'app_pedido:pedidos' %}" id="form-sincronizar">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary d-flex align-items-center"><i class="ti ti-users text-white me-1 fs-5"></i> Deletar integração</button>
+      </form>
+    </div>
+  </div>
+</div>

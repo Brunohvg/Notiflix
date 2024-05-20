@@ -10,4 +10,5 @@ urlpatterns = [
         "integracao/<str:id>/", views.config_integracao, name="config_integracao"
     ),  # Corrigido aqui
     path("remover/", views.desativar_integracao, name="desativar_integracao"),
+    path("integra_whatsapp/", views.integra_whatsapp, name="integra_whatsapp"),
 ]

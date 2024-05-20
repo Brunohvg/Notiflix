@@ -57,6 +57,7 @@ class WhatsappIntegrado(models.Model):
     )
 
 
+# Gerar token instancia whatsapp automaticamente
 @receiver(pre_save, sender=WhatsappIntegrado)
 def generate_token(sender, instance, **kwargs):
     if not instance.token:

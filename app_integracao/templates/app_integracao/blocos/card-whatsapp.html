@@ -2,7 +2,7 @@
     {% if user.loja.whatsapp.pk %}
         <a href="{% url 'app_integracao:config_integracao' id=user.loja.whatsapp.pk %}"data-bs-toggle="tooltip" title="Click aqui para configurar">
     {% else %}
-        <a href="#" class="text-decoration-none">
+        <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#modal-instance-whatsapp" >
     {% endif %}
   <!-- Substitua URL_DO_SEU_LINK_AQUI pelo URL desejado -->
   <div class="card rounded-3 card-hover" bis_skin_checked="1">

@@ -7,7 +7,9 @@ import logging
 
 from .models import LojaIntegrada, WhatsappIntegrado
 from libs.integracoes.api.api_nuvemshop import NuvemShop
+from libs.integracoes.api.api_whatsapp import Whatsapp
 
+WHATSAPP = Whatsapp()
 nuvemshop = NuvemShop()
 PARAMETRO_CODE = "code"
 logger = logging.getLogger(__name__)
@@ -175,3 +177,33 @@ def config_integracao(request, id):
     except Exception as e:
         logger.error(f"Erro ao configurar integração: {str(e)}")
         return render(request, "app_integracao/base.html")
+
+
+# Sistema de integração whatsapp
+
+
+@login_required
+def integra_whatsapp(request, instanceId):
+    instanceId = 123456
+    try:
+        if WhatsappIntegrado.objects.filter(id=instanceId).exists():
+            whatsapp_conectado = WhatsappIntegrado.objects.get(pk=instanceId)
+            messages.error(request, f"Este número já está em uso {whatsapp_conectado}")
+            return redirect("app_integracao:integracao")
+
+    except Exception as e:
+        logger.error(f"Erro durante a autorização: {str(e)}")
+        messages.error(
+            request, f"Ocorreu um erro durante a criação do whatsapp: {str(e)}"
+        )
+
+    return render(request, "app_integracao/base.html")
+
+    """
+    instanceId =
+    instanceName =
+    status =
+    loja =
+    """
+
+    ...
