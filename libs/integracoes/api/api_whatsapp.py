@@ -12,7 +12,7 @@ class Whatsapp:
         if not self.APIKEY:
             raise ValueError("APIKEY não configurada")
 
-    def _create_instancia(self, instanceName, token):
+    def _create_instancia(self, instanceName, token=None):
         url = "https://zap.lojabibelo.com.br/instance/create"
         headers = {
             "accept": "application/json",
@@ -21,7 +21,7 @@ class Whatsapp:
         }
         data = {
             "instanceName": instanceName,
-            "token": token,
+            "token": "token",
             "qrcode": True,
         }
 

@@ -182,14 +182,6 @@ def config_integracao(request, id):
 # Sistema de integração whatsapp
 
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-import logging
-
-logger = logging.getLogger(__name__)
-
-
 @login_required
 def integra_whatsapp(request, instanceId=None):
     if request.method == "GET":
@@ -199,23 +191,31 @@ def integra_whatsapp(request, instanceId=None):
         if request.method == "POST":
             instanceName = request.POST.get("instanceName")
             loja = request.user.loja.pk
-            print(instanceName, loja)
-            if WhatsappIntegrado.objects.filter(id=instanceId).exists():
-                whatsapp_conectado = WhatsappIntegrado.objects.get(pk=instanceId)
+
+            if WhatsappIntegrado.objects.filter(instanceId=instanceId).exists():
+                whatsapp_conectado = WhatsappIntegrado.objects.get(
+                    instanceId=instanceId
+                )
                 messages.error(
-                    request, f"Este número já está em uso {whatsapp_conectado}"
+                    request, f"Este número já está em uso: {whatsapp_conectado}"
                 )
                 return redirect("app_integracao:integracao")
 
-            # Process the instanceName and loja as needed
-            print(instanceName, loja)
+            criando_instancia = WHATSAPP._create_instancia(
+                instanceName=instanceName,
+            )
+            save_instancia = WhatsappIntegrado.objects.create(
+                instanceId=instanceName,
+                instanceName=instanceName,
+                loja=request.user.loja,
+            )
+            save_instancia.save()
 
-            # Redirect after successful processing
             return redirect("app_integracao:integracao")
     except Exception as e:
         logger.error(f"Erro durante a autorização: {str(e)}")
         messages.error(
-            request, f"Ocorreu um erro durante a criação do whatsapp: {str(e)}"
+            request, f"Ocorreu um erro durante a criação do WhatsApp: {str(e)}"
         )
 
     return render(request, "app_integracao/base.html")
