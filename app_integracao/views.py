@@ -182,15 +182,36 @@ def config_integracao(request, id):
 # Sistema de integração whatsapp
 
 
-@login_required
-def integra_whatsapp(request, instanceId):
-    instanceId = 123456
-    try:
-        if WhatsappIntegrado.objects.filter(id=instanceId).exists():
-            whatsapp_conectado = WhatsappIntegrado.objects.get(pk=instanceId)
-            messages.error(request, f"Este número já está em uso {whatsapp_conectado}")
-            return redirect("app_integracao:integracao")
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+import logging
 
+logger = logging.getLogger(__name__)
+
+
+@login_required
+def integra_whatsapp(request, instanceId=None):
+    if request.method == "GET":
+        return render(request, "app_integracao/base_integracao_whatsapp.html")
+
+    try:
+        if request.method == "POST":
+            instanceName = request.POST.get("instanceName")
+            loja = request.user.loja.pk
+            print(instanceName, loja)
+            if WhatsappIntegrado.objects.filter(id=instanceId).exists():
+                whatsapp_conectado = WhatsappIntegrado.objects.get(pk=instanceId)
+                messages.error(
+                    request, f"Este número já está em uso {whatsapp_conectado}"
+                )
+                return redirect("app_integracao:integracao")
+
+            # Process the instanceName and loja as needed
+            print(instanceName, loja)
+
+            # Redirect after successful processing
+            return redirect("app_integracao:integracao")
     except Exception as e:
         logger.error(f"Erro durante a autorização: {str(e)}")
         messages.error(

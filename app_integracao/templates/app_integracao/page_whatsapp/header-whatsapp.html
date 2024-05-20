@@ -5,14 +5,9 @@
 <div class="card card-body">
   <div class="row">
     <div class="col-md-4 col-xl-3">
-      {% block ConteudoIntegracao %}
-        {% if loja_integrada %}
-          <h5>{{ user.loja }}</h5>
-          <span>A nossa plataforma esta integrada a NuvemShop</span>
-        {% elif whatsapp_integrado %}
-          <h5>{{ user.loja.whatsapp.instanceName }}</h5>
-        {% endif %}
-      {% endblock %}
+      <span>Api não Oficial</span>
+
+      <h5></h5>
     </div>
     <div class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
       <div class="action-btn show-btn" style="display: block;">
@@ -20,7 +15,11 @@
       </div>
       <form method="post" action="{% url 'app_pedido:pedidos' %}" id="form-sincronizar">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary d-flex align-items-center"><i class="ti ti-users text-white me-1 fs-5"></i> Deletar integração</button>
+        {% if user.loja.whatsapp.pk %}
+          <button type="submit" class="btn btn-primary d-flex align-items-center"><i class="ti ti-users text-white me-1 fs-5"></i> Deletar integração</button>
+        {% else %}
+          <button type="button" class="btn btn-primary d-flex align-items-center"><i class="ti ti-users text-white me-1 fs-5"></i> Conectar Whatsapp</button>
+        {% endif %}
       </form>
     </div>
   </div>
