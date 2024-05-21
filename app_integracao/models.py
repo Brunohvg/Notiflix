@@ -52,6 +52,7 @@ class WhatsappIntegrado(models.Model):
     instanceName = models.CharField(max_length=200)
     token = models.CharField(max_length=200, blank=True)
     status = models.CharField(max_length=20, blank=True, null=True)
+    qr_code_image = models.TextField(blank=True, null=True)
     loja = models.OneToOneField(
         LojaIntegrada, related_name="whatsapp", on_delete=models.CASCADE
     )

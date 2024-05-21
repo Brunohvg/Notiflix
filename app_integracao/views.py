@@ -182,6 +182,9 @@ def config_integracao(request, id):
 # Sistema de integração whatsapp
 
 
+# Assumindo que o arquivo da classe Whatsapp é whatsapp.py
+
+
 @login_required
 def integra_whatsapp(request, instanceId=None):
     if request.method == "GET":
@@ -190,26 +193,36 @@ def integra_whatsapp(request, instanceId=None):
     try:
         if request.method == "POST":
             instanceName = request.POST.get("instanceName")
-            loja = request.user.loja.pk
+            loja = request.user.loja
 
+            # Verificar se a instância já existe
             if WhatsappIntegrado.objects.filter(instanceId=instanceId).exists():
-                whatsapp_conectado = WhatsappIntegrado.objects.get(
+                qr_code_image = WhatsappIntegrado.objects.get(
                     instanceId=instanceId
-                )
-                messages.error(
-                    request, f"Este número já está em uso: {whatsapp_conectado}"
-                )
+                ).qr_code_image
+                messages.error(request, f"Este número já está em uso: {qr_code_image}")
                 return redirect("app_integracao:integracao")
 
-            criando_instancia = WHATSAPP._create_instancia(
-                instanceName=instanceName,
-            )
-            save_instancia = WhatsappIntegrado.objects.create(
+            # Criar nova instância de WhatsApp
+            qr_code_base64 = WHATSAPP._create_instancia(instanceName)
+            if not qr_code_base64:
+                messages.error(request, "Falha ao gerar o QR Code.")
+                return redirect("app_integracao:integracao")
+
+            # Salvar a instância no banco de dados
+            instance, created = WhatsappIntegrado.objects.get_or_create(
                 instanceId=instanceName,
-                instanceName=instanceName,
-                loja=request.user.loja,
+                defaults={
+                    "instanceName": instanceName,
+                    "loja": loja,
+                    "qr_code_image": qr_code_base64,
+                },
             )
-            save_instancia.save()
+
+            if created:
+                messages.success(request, "WhatsApp integrado com sucesso.")
+            else:
+                messages.error(request, "Este número já está em uso.")
 
             return redirect("app_integracao:integracao")
     except Exception as e:

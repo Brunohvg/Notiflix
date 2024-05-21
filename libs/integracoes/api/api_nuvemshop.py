@@ -131,7 +131,7 @@ class NuvemShop:
         return self._make_api_request(url, code, store_id, method="GET")
 
 
-nuvem_shop = NuvemShop()
+"""nuvem_shop = NuvemShop()
 
 store_id = "2386568"
 results = nuvem_shop.store_nuvem(
@@ -139,3 +139,4 @@ results = nuvem_shop.store_nuvem(
     store_id=store_id,
 )
 print(results)
+"""
