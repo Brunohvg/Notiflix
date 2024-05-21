@@ -6,6 +6,12 @@ from libs.integracoes.processamento.processar_webhook import processar_eventos
 
 logger = logging.getLogger(__name__)
 
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 @csrf_exempt
 def webhook_receiver(request, store_id):
@@ -38,3 +44,28 @@ def webhook_receiver(request, store_id):
         return JsonResponse(
             {"error": "Apenas solicitações POST são permitidas"}, status=405
         )
+
+
+@csrf_exempt
+def webhook_zap(request):
+    if request.method == "POST":
+        try:
+            # Supondo que você processe os dados do request.POST aqui
+            data = json.loads(
+                request.body
+            )  # ou request.body dependendo do tipo de dados
+            # Processar os dados aqui...
+            teste = data.get("event")
+            print(teste)
+            # Exemplo de processamento dos dados
+            logger.info(f"Dados recebidos: {teste}")
+
+            # Retorne uma resposta de sucesso
+            return JsonResponse({"message": "Success"}, status=200)
+        except Exception as e:
+            # Retorne uma resposta de erro em caso de exceção
+            logger.error(f"Erro ao processar o webhook: {e}")
+            return JsonResponse({"error": str(e)}, status=500)
+    else:
+        # Retorne uma resposta de método não permitido para métodos não suportados
+        return HttpResponse(status=405)

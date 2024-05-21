@@ -59,12 +59,12 @@ class WhatsappIntegrado(models.Model):
 
 
 # Gerar token instancia whatsapp automaticamente
-@receiver(pre_save, sender=WhatsappIntegrado)
+"""@receiver(pre_save, sender=WhatsappIntegrado)
 def generate_token(sender, instance, **kwargs):
     if not instance.token:
         alphabet = string.ascii_letters + string.digits
         token = "".join(secrets.choice(alphabet) for _ in range(20))
-        instance.token = token
+        instance.token = token"""
 
 
 @receiver(post_save, sender=LojaIntegrada)

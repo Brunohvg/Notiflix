@@ -10,9 +10,9 @@ from libs.integracoes.api.api_nuvemshop import NuvemShop
 from libs.integracoes.api.api_whatsapp import Whatsapp
 
 WHATSAPP = Whatsapp()
-nuvemshop = NuvemShop()
+NUVEMSHOP = NuvemShop()
 PARAMETRO_CODE = "code"
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 def ocultar_email(email):
@@ -25,7 +25,7 @@ def ocultar_email(email):
         usuario_oculto = "*" * num_ocultar + usuario[num_ocultar:]
         return usuario_oculto + "@" + dominio
     except ValueError:
-        logger.error(f"Email inválido: {email}")
+        LOGGER.error(f"Email inválido: {email}")
         return email
 
 
@@ -59,7 +59,7 @@ def autorizar(request, code):
     Authorize the store with the given code.
     """
     try:
-        autorizado = nuvemshop.auth_nuvem_shop(code=code)
+        autorizado = NUVEMSHOP.auth_nuvem_shop(code=code)
         if autorizado is None:
             messages.error(request, "Erro na autorização. Por favor, tente novamente.")
             return redirect("app_integracao:integracao")
@@ -79,7 +79,7 @@ def autorizar(request, code):
             return loja_integrada(request, access_token, user_id)
 
     except Exception as e:
-        logger.error(f"Erro durante a autorização: {str(e)}")
+        LOGGER.error(f"Erro durante a autorização: {str(e)}")
         messages.error(
             request, f"Ocorreu um erro durante a autorização da loja: {str(e)}"
         )
@@ -94,7 +94,7 @@ def loja_integrada(request, access_token, user_id):
     """
     try:
         usuario = request.user
-        lj_integrada = nuvemshop.store_nuvem(code=access_token, store_id=user_id)
+        lj_integrada = NUVEMSHOP.store_nuvem(code=access_token, store_id=user_id)
         if lj_integrada is None:
             messages.error(
                 request, "Erro ao obter dados da loja. Por favor, tente novamente."
@@ -125,7 +125,7 @@ def loja_integrada(request, access_token, user_id):
             messages.success(request, "Loja integrada com sucesso")
 
     except Exception as e:
-        logger.error(f"Erro durante a integração da loja: {str(e)}")
+        LOGGER.error(f"Erro durante a integração da loja: {str(e)}")
         messages.error(
             request, f"Ocorreu um erro durante a integração da loja: {str(e)}"
         )
@@ -175,14 +175,11 @@ def config_integracao(request, id):
         return render(request, "app_integracao/base.html")
 
     except Exception as e:
-        logger.error(f"Erro ao configurar integração: {str(e)}")
+        LOGGER.error(f"Erro ao configurar integração: {str(e)}")
         return render(request, "app_integracao/base.html")
 
 
 # Sistema de integração whatsapp
-
-
-# Assumindo que o arquivo da classe Whatsapp é whatsapp.py
 
 
 @login_required
@@ -195,27 +192,35 @@ def integra_whatsapp(request, instanceId=None):
             instanceName = request.POST.get("instanceName")
             loja = request.user.loja
 
-            # Verificar se a instância já existe
-            if WhatsappIntegrado.objects.filter(instanceId=instanceId).exists():
-                qr_code_image = WhatsappIntegrado.objects.get(
+            # Verificar se a instância já existe pelo instanceId ou instanceName
+            if instanceId:
+                existing_instance = WhatsappIntegrado.objects.filter(
                     instanceId=instanceId
-                ).qr_code_image
+                ).first()
+            else:
+                existing_instance = WhatsappIntegrado.objects.filter(
+                    instanceId=instanceName
+                ).first()
+
+            if existing_instance:
+                qr_code_image = existing_instance.qr_code_image
                 messages.error(request, f"Este número já está em uso: {qr_code_image}")
                 return redirect("app_integracao:integracao")
 
             # Criar nova instância de WhatsApp
-            qr_code_base64 = WHATSAPP._create_instancia(instanceName)
+            qr_code_base64, token = WHATSAPP._create_instancia(instanceName)
             if not qr_code_base64:
                 messages.error(request, "Falha ao gerar o QR Code.")
                 return redirect("app_integracao:integracao")
 
             # Salvar a instância no banco de dados
             instance, created = WhatsappIntegrado.objects.get_or_create(
-                instanceId=instanceName,
+                instanceId=instanceId if instanceId else instanceName,
                 defaults={
                     "instanceName": instanceName,
                     "loja": loja,
                     "qr_code_image": qr_code_base64,
+                    "token": token,
                 },
             )
 
@@ -226,18 +231,9 @@ def integra_whatsapp(request, instanceId=None):
 
             return redirect("app_integracao:integracao")
     except Exception as e:
-        logger.error(f"Erro durante a autorização: {str(e)}")
+        LOGGER.error(f"Erro durante a autorização: {str(e)}")
         messages.error(
             request, f"Ocorreu um erro durante a criação do WhatsApp: {str(e)}"
         )
 
     return render(request, "app_integracao/base.html")
-
-    """
-    instanceId =
-    instanceName =
-    status =
-    loja =
-    """
-
-    ...
