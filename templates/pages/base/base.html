@@ -244,13 +244,14 @@
     <script src="{% static 'assets/js/sidebarmenu.js' %}"></script>
     <script src="{% static 'assets/js/app.min.js' %}"></script>
     <script src="{% static 'assets/libs/simplebar/dist/simplebar.js' %}"></script>
-    <script src="{% static 'assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
-    <script src="{% static 'assets/js/dashboard.js' %}"></script>
-    <script src="{% static 'assets/js/formatar_imput.js' %}"></script>
+
+    <!-- Header <script src="{% static 'assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>End -->
+    <!-- Header<script src="{% static 'assets/js/dashboard.js' %}"></script>End -->
+
     <script src="{% static 'assets/libs/htmx/js/htmx.min.js' %}"></script>
 
     {% block scripts %}
-
+      <script src="{% static 'assets/js/formatador-imput.js' %}"></script>
     {% endblock %}
   </body>
 </html>

@@ -1,5 +1,4 @@
 <form action="{% url 'app_profile:registrar' %}" method="POST" autocomplete="off">
-  {% load static %}
   {% csrf_token %}
   <div class="mb-3">
     <label for="nome" class="form-label">Nome</label>
@@ -7,7 +6,7 @@
   </div>
   <div class="">
     <label for="whatsapp" class="form-label">WhatsApp</label>
-    <input type="tel" class="form-control" id="id_telefone" aria-describedby="whatsappHelp" name="whatsapp" placeholder="31 9999-1234" autocomplete="off" required />
+    <input type="text" class="form-control" id="id_telefone" aria-describedby="whatsappHelp" name="whatsapp" placeholder="31 9999-1234" autocomplete="off" required />
   </div>
   <div class="mb-3">
     <label for="email" class="form-label">E-mail</label>
@@ -25,9 +24,11 @@
 </form>
 <div>
   <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Script carregado e executado1')
+    
       function formatField(inputElement, format) {
-        if (inputElement !== null) {
+        if (inputElement) {
           inputElement.addEventListener('input', function () {
             let value = this.value.replace(/\D/g, '') // Remove todos os caracteres não numéricos
             let formattedValue = ''
@@ -46,14 +47,10 @@
         }
       }
     
-      // Usando a função formatField para formatar o campo "cep"
+      // Usando a função formatField para formatar os campos
       formatField(document.getElementById('cep'), '#####-####')
-    
-      // Usando a função formatField para formatar o campo "id_cep"
-      formatField(document.querySelector('#id_cep'), '#####-####')
-    
-      // Usando a função formatField para formatar o campo "id_telefone"
-      formatField(document.querySelector('#id_telefone'), '(##) #####-####')
+      formatField(document.getElementById('id_cep'), '#####-####')
+      formatField(document.getElementById('id_telefone'), '(##) #####-####')
     })
   </script>
 </div>
