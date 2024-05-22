@@ -4,14 +4,15 @@
   {% load static %}
   <div class="container-fluid">
     {% include 'app_integracao/page_whatsapp/api-nao-oficial.html' %}
-    {% include 'app_integracao/page_whatsapp/modal-whatsapp.html' %}
+    {% include 'app_integracao/page_whatsapp/blocos/modal-whatsapp.html' %}
     {% block TituloConteudoFluidoDashboard %}
 
     {% endblock %}
   </div>
 {% endblock %}
+
 {% block scripts %}
-  <script>
+  <script defer>
     document.addEventListener('DOMContentLoaded', () => {
       console.log('Script carregado e executado')
     

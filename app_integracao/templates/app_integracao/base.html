@@ -15,13 +15,13 @@
       {% include 'app_integracao/blocos/card-nuvemshop.html' %}
       {% include 'app_integracao/blocos/card-whatsapp.html' %}
       {% include 'app_integracao/blocos/excluir.html' %}
-      {% include 'app_integracao/page_whatsapp/modal-whatsapp.html' %}
+      {% include 'app_integracao/page_whatsapp/blocos/modal-whatsapp.html' %}
     </div>
   </div>
 {% endblock %}
 
 {% block scripts %}
-  <script>
+  <script defer>
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)

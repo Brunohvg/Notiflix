@@ -1,0 +1,42 @@
+{% load static %}
+<!-- card-info.html -->
+
+<div class="card" bis_skin_checked="1">
+    <div class="card-body position-relative" bis_skin_checked="1">
+      <div bis_skin_checked="1">
+        <h4 class="card-title mb-1">
+          Olá{% if user.is_authenticated %}
+            {{ request.user.profile.nome }}
+          {% endif %}
+        </h4>
+        <hr />
+        <div bis_skin_checked="1">
+          <p class="text-justify">
+            Este serviço não é uma versão oficial da API do WhatsApp. <br />
+            O WhatsApp está sempre se atualizando, <br />
+            e a conexão depende da leitura do QR Code e da atualização do aplicativo no seu smartphone. <br />
+            Por conta disso, lamentamos informar que não podemos oferecer suporte técnico para a conexão com o WhatsApp.<br />
+          </p>
+        </div>
+        <button type="button" class="btn btn-primary d-flex align-items-center rounded-pill" data-bs-toggle="modal" data-bs-target="#modal-instance-whatsapp"><i class="ti ti-users text-white me-1 fs-5"></i>Informações importantes</button>
+      </div>
+      <!-- Mover a imagem para dentro do card -->
+      <style>
+        .school-img {
+          position: absolute;
+          bottom: 9px;
+          right: 20px;
+          max-width: 190px;
+          width: 100%;
+        }
+      </style>
+      <div class="school-img d-none d-sm-block" bis_skin_checked="1">
+        <img src="{% static 'assets/images/backgrounds/profile01.png' %}" class="img-fluid" alt="spike-img" />
+      </div>
+
+      <div class="d-sm-none d-block text-center" bis_skin_checked="1">
+        <img src="{% static 'assets/images/backgrounds/education-blocks.png' %}" class="img-fluid" alt="spike-img" />
+      </div>
+    </div>
+  </div>
+</div>
