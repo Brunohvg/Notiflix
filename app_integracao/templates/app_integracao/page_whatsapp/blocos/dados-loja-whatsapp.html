@@ -1,19 +1,16 @@
 {% if whatsapp_integrado %}
-  <div class="row mt-12">
-    <div class="col-md-8 mx-auto">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ whatsapp_integrado }}</h5>
-          <hr />
-          <p class="card-text">WhatsApp: {{ whatsapp_integrado.pk }}</p>
-          <p class="card-text">Email de Contato: {{ whatsapp_integrado.email }}</p>
-          <p class="card-text">Nome: {{ whatsapp_integrado.instanceName }}</p>
-          <p class="card-text">token: {{ whatsapp_integrado.token }}</p>
+  <div class="card-body">
+    <h5 class="card-title">Configurações</h5>
 
-          <img src="{{ whatsapp_integrado.qr_code_image }}" alt="" />
-          <!-- Adicione outros campos da Loja Integrada que você deseja exibir -->
-        </div>
-      </div>
-    </div>
+    <hr />
+    <label>Idioma</label>
+    <select id="editar_lang" name="lang" class="form-control">
+      <option value="pt-br">Português do Brasil</option>
+      <option value="es-mx">Español</option>
+    </select>
   </div>
-{% endif %}
+{% else %}
+  <div class="card-body card-text">
+    <p>você ainda não tem um instancia conectada</p>
+  </div>
+{% endif %}""" instanceName instanceId token status qr_code_image loja"""

@@ -170,7 +170,9 @@ def config_integracao(request, id):
         ).first()
         if whatsapp_integrado:
             context = {"whatsapp_integrado": whatsapp_integrado}
-            return render(request, "app_integracao/base_integracao.html", context)
+            return render(
+                request, "app_integracao/base_integracao_whatsapp.html", context
+            )
 
         messages.error(request, "Configuração não encontrada")
         return render(request, "app_integracao/base.html")
