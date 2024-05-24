@@ -1,8 +1,7 @@
 import requests
 import logging
 from decouple import config
-import secrets
-import string
+import uuid
 
 # Configuração do logger
 logging.basicConfig(level=logging.INFO)
@@ -24,13 +23,11 @@ class Whatsapp:
         }
 
         # Gerar um token aleatório de 8 caracteres alfanuméricos
-        token = "".join(
-            secrets.choice(string.ascii_letters + string.digits) for _ in range(16)
-        )
+
+        token = str(uuid.uuid4()).upper()
 
         data = {
             "instanceName": instanceName,
-            "token": token,
             "qrcode": True,
             # "number": "559999999999 (Recipient number with Country Code)",
             "webhook": "https://goblin-romantic-imp.ngrok-free.app/zapi/",
@@ -66,10 +63,16 @@ class Whatsapp:
             response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
             response_data = response.json()
-
+            instanceId = response_data.get("instance", {}).get("instanceId")
             qr_code_data = response_data.get("qrcode", {}).get("base64")
+            status = response_data.get("instance", {}).get("status")
             if qr_code_data:
-                return qr_code_data, token  # Retorna o QR Code e o token
+                return (
+                    qr_code_data,
+                    token,
+                    instanceId,
+                    status,
+                )  # Retorna o QR Code e o token
             else:
                 logger.warning("Código QR não encontrado na resposta da API.")
                 return None
@@ -86,12 +89,12 @@ class Whatsapp:
             return None
 
 
-"""# Exemplo de uso
+# Exemplo de uso
 if __name__ == "__main__":
     whatsapp = Whatsapp()
-    instance_name = "test_instance"
+    instance_name = "test_instanceabc"
     qr_code = whatsapp._create_instancia(instance_name)
     if qr_code:
         print(f"QR Code gerado com sucesso: {qr_code}")
     else:
-        print("Falha ao gerar o QR Code.")"""
+        print("Falha ao gerar o QR Code.")

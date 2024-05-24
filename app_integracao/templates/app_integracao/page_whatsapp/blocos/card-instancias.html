@@ -38,17 +38,17 @@
             <div class="card-body">
               <h4 class="card-title" _msttexthash="594919" _msthash="659">Vamos criar uma conexão com o WhatsApp</h4>
               <p class="card-subtitle mb-3" _msttexthash="719017" _msthash="660">basta digitar o numero do WhatsApp que deseja conectar</p>
-              <form method="POST">
+              <form method="POST" action="{% url 'app_integracao:integra_whatsapp' %}">
                 {% csrf_token %}
                 <div class="form-floating mb-3">
-                  <input type="text" class="form-control border border-primary" id="name" placeholder="Nome de usuário" _mstplaceholder="113997" _msthash="661" />
+                  <input type="text" class="form-control border border-primary" name="name" placeholder="Nome de usuário" _mstplaceholder="113997" _msthash="661" />
                   <label>
                     <i class="ti ti-user me-2 fs-4 text-primary"></i>
-                    <span class="border-start border-primary ps-3" _msttexthash="262080" _msthash="662">Nome do WhatsApp</span>
+                    <span class="border-start border-primary ps-3" _msttexthash="262080" _msthash="662">Ex: Empresa</span>
                   </label>
                 </div>
                 <div class="form-floating mb-3">
-                  <input type="email" class="form-control border border-primary" id="id_telefone" placeholder="Número do WhatsApp que deseja conectar " _mstplaceholder="58058" _msthash="663" />
+                  <input type="text" class="form-control border border-primary" id="id_telefone" name="id_telefone" placeholder="Número do WhatsApp que deseja conectar " _mstplaceholder="58058" _msthash="663" />
                   <label>
                     <i class="ti ti-mail me-2 fs-4 text-primary"></i>
                     <span class="border-start border-primary ps-3" _msttexthash="441363" _msthash="664">Numero do WhatsApp</span>
@@ -56,9 +56,15 @@
                 </div>
 
                 <div class="d-md-flex align-items-center">
-                  <div class="mt-3 mt-md-0 ms-auto">
-                    <button type="submit" class="btn btn-primary hstack gap-6"><i class="ti ti-qrcode me-2 fs-4"></i><font _mstmutation="1" _msttexthash="76830" _msthash="670">Gerar Qr-Code</font></button>
-                  </div>
+                  {% if user.loja.whatsapp %}
+                    <div class="mt-3 mt-md-0 ms-auto">
+                      <button type="submit" class="btn btn-primary hstack gap-6"><i class="ti ti-qrcode me-2 fs-4"></i><font _mstmutation="1" _msttexthash="76830" _msthash="670">Gerar Qr-Code</font></button>
+                    </div>
+                  {% else %}
+                    <div class="mt-3 mt-md-0 ms-auto">
+                      <button type="submit" class="btn btn-primary hstack gap-6"><i class="ti ti-qrcode me-2 fs-4"></i><font _mstmutation="1" _msttexthash="76830" _msthash="670">Gerar Qr-Code</font></button>
+                    </div>
+                  {% endif %}
                 </div>
               </form>
             </div>

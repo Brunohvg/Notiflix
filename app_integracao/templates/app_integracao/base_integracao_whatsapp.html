@@ -3,7 +3,11 @@
 {% block Dashboard %}
   {% load static %}
   <div class="container-fluid">
+    {% for message in messages %}
+      <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endfor %}
     {% include 'app_integracao/page_whatsapp/api-nao-oficial.html' %}
+
     {% include 'app_integracao/page_whatsapp/blocos/modal-whatsapp.html' %}
     {% block TituloConteudoFluidoDashboard %}
 

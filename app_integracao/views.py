@@ -185,6 +185,9 @@ def config_integracao(request, id):
 # Sistema de integração whatsapp
 
 
+from django.db import IntegrityError
+
+
 @login_required
 def integra_whatsapp(request, instanceId=None):
     if request.method == "GET":
@@ -196,42 +199,45 @@ def integra_whatsapp(request, instanceId=None):
             instanceName = request.POST.get("id_telefone")
             loja = request.user.loja
 
-            # Verificar se a instância já existe pelo instanceId ou instanceName
-            if instanceId:
-                existing_instance = WhatsappIntegrado.objects.filter(
-                    instanceId=instanceId
-                ).first()
-            else:
-                existing_instance = WhatsappIntegrado.objects.filter(
-                    instanceId=instanceName
-                ).first()
+            # Verificar se o número já está integrado ao sistema
+            if WhatsappIntegrado.objects.filter(instanceName=instanceName).exists():
+                messages.error(
+                    request,
+                    f"Esse número: {instanceName}, já está integrado ao sistema e pertence a outra loja.",
+                )
+                return redirect("app_integracao:integra_whatsapp")
 
-            if existing_instance:
-                qr_code_image = existing_instance.qr_code_image
-                messages.error(request, f"Este número já está em uso: {qr_code_image}")
+            # Verificar se a loja já tem uma conta de WhatsApp em uso
+            if hasattr(loja, "whatsapp"):
+                messages.error(
+                    request, "Esta loja já tem uma conta de WhatsApp em uso."
+                )
                 return redirect("app_integracao:integracao")
 
             # Criar nova instância de WhatsApp
-            qr_code_base64, token = WHATSAPP._create_instancia(instanceName)
+            whatsapp = Whatsapp()
+            qr_code_base64, token, instanceId, status = whatsapp._create_instancia(
+                instanceName
+            )
             if not qr_code_base64:
                 messages.error(request, "Falha ao gerar o QR Code.")
                 return redirect("app_integracao:integracao")
 
             # Salvar a instância no banco de dados
-            instance, created = WhatsappIntegrado.objects.get_or_create(
-                instanceId=instanceId if instanceId else instanceName,
-                defaults={
-                    "instanceName": instanceName,
-                    "loja": loja,
-                    "qr_code_image": qr_code_base64,
-                    "token": token,
-                },
-            )
-
-            if created:
+            try:
+                instance = WhatsappIntegrado.objects.create(
+                    instanceId=instanceId,
+                    name=name,
+                    instanceName=instanceName,
+                    loja=loja,
+                    qr_code_image=qr_code_base64,
+                    token=token,
+                    status=status,
+                )
                 messages.success(request, "WhatsApp integrado com sucesso.")
-            else:
-                messages.error(request, "Este número já está em uso.")
+            except IntegrityError:
+                messages.error(request, "Erro ao salvar a integração do WhatsApp.")
+                return redirect("app_integracao:integracao")
 
             return redirect("app_integracao:integracao")
     except Exception as e:
