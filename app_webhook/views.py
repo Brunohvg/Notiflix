@@ -1,14 +1,9 @@
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import json
 import logging
-from libs.integracoes.processamento.processar_webhook import processar_eventos
-
-logger = logging.getLogger(__name__)
-
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-import logging
+from libs.integracoes.processamento.processar_webhook import processar_eventos
+from app_integracao.htmx_views import check_qrcode
 
 logger = logging.getLogger(__name__)
 
@@ -50,15 +45,20 @@ def webhook_receiver(request, store_id):
 def webhook_zap(request):
     if request.method == "POST":
         try:
-            # Supondo que você processe os dados do request.POST aqui
-            data = json.loads(
-                request.body
-            )  # ou request.body dependendo do tipo de dados
+            # Carregar os dados JSON do corpo da requisição
+            data = json.loads(request.body)
+
             # Processar os dados aqui...
-            teste = data.get("event")
-            print(teste)
+            event = data.get("event")
+
+            if event == "qrcode.updated":
+                base64_qrcode = data.get("data", {}).get("qrcode", {}).get("base64")
+
+                # base64_qrcode = data["data"]["qrcode"]["code"]
+
+                print(base64_qrcode)
             # Exemplo de processamento dos dados
-            logger.info(f"Dados recebidos: {teste}")
+            logger.info(f"Dados recebidos: {event}")
 
             # Retorne uma resposta de sucesso
             return JsonResponse({"message": "Success"}, status=200)

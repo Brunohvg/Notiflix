@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 import logging
 
+from django.db import IntegrityError
 from .models import LojaIntegrada, WhatsappIntegrado
 from libs.integracoes.api.api_nuvemshop import NuvemShop
 from libs.integracoes.api.api_whatsapp import Whatsapp
@@ -183,9 +184,6 @@ def config_integracao(request, id):
 
 
 # Sistema de integração whatsapp
-
-
-from django.db import IntegrityError
 
 
 @login_required

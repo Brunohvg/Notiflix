@@ -1,11 +1,13 @@
 {% load static %}
+
 <!-- card-qrcode.html -->
 <div class="col-sm-4">
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">QR-Code</h5>
-
-      <img src="" alt="" />
+      <div id="qrcode-container" hx-get="{% url 'app_integracao:check_qrcode' %}" hx-trigger="load" hx-target="#qrcode-container" hx-swap="innerHTML">
+        <img src="" alt="QR Code" />
+      </div>
     </div>
   </div>
 </div>
