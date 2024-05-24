@@ -49,6 +49,12 @@ class LojaIntegrada(models.Model):
 
 class WhatsappIntegrado(models.Model):
     instanceId = models.CharField(max_length=200, primary_key=True)
+    name = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name="Identificação WhatsApp",
+    )
     instanceName = models.CharField(max_length=200)
     token = models.CharField(max_length=200, blank=True)
     status = models.CharField(max_length=20, blank=True, null=True)

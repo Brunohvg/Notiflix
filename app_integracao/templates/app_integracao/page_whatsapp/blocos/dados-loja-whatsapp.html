@@ -1,16 +1,48 @@
 {% if whatsapp_integrado %}
   <div class="card-body">
-    <h5 class="card-title">Configurações</h5>
+    <div class="row">
+      <div class="col-sm-12">
+        <div>
+          <div class="card-body">
+            <h5 class="card-title">Informações do WhatsApp</h5>
+            <p class="card-text"></p>
+            <form class="row g-3" method="POST" action="{% url 'app_profile:profile' %}">
+              {% csrf_token %}
+              <div class="col-md-8">
+                <label for="name_whatsapp" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="name_whatsapp" name="name_whatsapp" value="{{ whatsapp_integrado.name }}" />
+              </div>
+              <div class="col-md-4">
+                <label for="inputWhatsapp-number" class="form-label">WhatsApp</label>
+                <input type="tel" class="form-control" id="inputWhatsapp-number" value="{{ whatsapp_integrado.instanceName }}" disabled />
+              </div>
+              <div class="col-6">
+                <label for="inputstatus" class="form-label">WhatsApp Conectado</label>
+                <input type="text" class="form-control" id="inputstatus" placeholder="1234 Main St" value="{{ whatsapp_integrado.status }}" disabled />
+              </div>
+              <div class="col-6" style="margin-top: 43px;">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="notificacao_whatsapp" value="{{ request.user.notificacao_whatsapp }}" />
+                  <label class="form-check-label" for="flexSwitchCheckDefault">Notificações no WhatsApp</label>
+                </div>
 
-    <hr />
-    <label>Idioma</label>
-    <select id="editar_lang" name="lang" class="form-control">
-      <option value="pt-br">Português do Brasil</option>
-      <option value="es-mx">Español</option>
-    </select>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="notificacao_email" value="{{ request.user.notificacao_email }}" />
+                  <label class="form-check-label" for="flexSwitchCheckChecked">Notificações no Email</label>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <button type="submit" class="btn btn-danger rounded-pill">Desconectar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 {% else %}
   <div class="card-body card-text">
     <p>você ainda não tem um instancia conectada</p>
   </div>
-{% endif %}""" instanceName instanceId token status qr_code_image loja"""
+{% endif %}
