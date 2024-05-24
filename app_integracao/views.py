@@ -192,7 +192,8 @@ def integra_whatsapp(request, instanceId=None):
 
     try:
         if request.method == "POST":
-            instanceName = request.POST.get("instanceName")
+            name = request.POST.get("name")
+            instanceName = request.POST.get("id_telefone")
             loja = request.user.loja
 
             # Verificar se a instância já existe pelo instanceId ou instanceName
