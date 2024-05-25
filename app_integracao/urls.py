@@ -11,11 +11,8 @@ urlpatterns = [
 ]
 
 htmx_urlpatterns = [
-    path(
-        "check_qrcode/<str:base64_qrcode>/",
-        htmx_views.check_qrcode,
-        name="check_qrcode",
-    ),
+    path("check_qrcode/", htmx_views.check_qrcode, name="check_qrcode"),
+    path("views_qrcode/", htmx_views.views_qrcode, name="views_qrcode"),
 ]
 
 urlpatterns += htmx_urlpatterns

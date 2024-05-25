@@ -1,12 +1,15 @@
 {% load static %}
 
-<!-- card-qrcode.html -->
+<!-- qrcode_fragment.html -->
 <div class="col-sm-4">
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">QR-Code</h5>
-      <div id="qrcode-container" hx-get="{% url 'app_integracao:check_qrcode' %}" hx-trigger="load" hx-target="#qrcode-container" hx-swap="innerHTML">
-        <img src="" alt="QR Code" />
+
+      <div id="qrcode-container" hx-get="{% url 'app_integracao:views_qrcode' %}" hx-trigger="load" hx-target="#qrcode-container" hx-swap="innerHTML">
+        <div class="card">
+          <!-- Usando a variável base64_qrcode para exibir o QR code -->
+        </div>
       </div>
     </div>
   </div>
