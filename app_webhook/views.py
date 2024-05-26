@@ -3,7 +3,7 @@ import logging
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from libs.integracoes.processamento.processar_webhook import processar_eventos
-from app_integracao.htmx_views import check_qrcode, check_instance
+from app_integracao.htmx_views import update_instance_status, check_instance
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,7 @@ def webhook_receiver(request, store_id):
 
 
 @csrf_exempt
-def webhook_zap(request):
+def webhook_zap(request, id):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
@@ -55,11 +55,22 @@ def webhook_zap(request):
                 base64_qrcode = data.get("data", {}).get("qrcode", {}).get("base64")
                 instanceId = data.get("instance")
 
-                if base64_qrcode or instanceId:
+                if base64_qrcode and instanceId:
                     data_response = {"qrcode": base64_qrcode, "instancia": instanceId}
-                    return check_instance(request, data=data_response)
+                    return check_instance(request, data=data_response, id=id)
 
             logger.info(f"Dados recebidos: {event}")
+
+            if event == "connection.update":
+                status = data.get("data", {}).get("state")
+                instanceId = data.get("instance")
+
+                if status and instanceId:
+                    data_response = {
+                        "instancia": instanceId,
+                        "state": status,
+                    }
+                    return update_instance_status(request, data=data_response, id=id)
 
             return JsonResponse({"message": "Success"}, status=200)
         except json.JSONDecodeError:

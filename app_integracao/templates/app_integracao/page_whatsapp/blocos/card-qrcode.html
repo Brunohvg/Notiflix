@@ -1,16 +1,17 @@
 {% load static %}
 
-<!-- qrcode_fragment.html -->
 <div class="col-sm-4">
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">QR-Code</h5>
-
-      <div id="qrcode-container" hx-get="{% url 'app_integracao:views_qrcode' %}" hx-trigger="load" hx-target="#qrcode-container" hx-swap="innerHTML">
-        <div class="card">
-          <!-- Usando a variável base64_qrcode para exibir o QR code -->
+      {% if user.loja.whatsapp.status == 'connecting' %}
+        <div hx-get="{% url 'app_integracao:views_qrcode' id=user.loja.whatsapp.pk %}" hx-trigger="every 20s" hx-target="#qrcode-container" hx-swap="innerHTML">
+          <!-- Este conteúdo será substituído pela resposta de views_qrcode -->
+          <div id="qrcode-container"></div>
         </div>
-      </div>
+      {% else %}
+        <h5>whatsapp conectado</h5>
+      {% endif %}
     </div>
   </div>
 </div>

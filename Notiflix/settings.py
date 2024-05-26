@@ -14,7 +14,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "goblin-romantic-imp.ngrok-free.app"]
+ALLOWED_HOSTS = ["*"]  # Permitir todos os hosts (não recomendado para produção)
 
 APPEND_SLASH = False
 

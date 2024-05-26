@@ -12,7 +12,8 @@ urlpatterns = [
 
 htmx_urlpatterns = [
     path("check_qrcode/", htmx_views.check_qrcode, name="check_qrcode"),
-    path("views_qrcode/", htmx_views.views_qrcode, name="views_qrcode"),
+    path("views_qrcode/<str:id>/", htmx_views.views_qrcode, name="views_qrcode"),
+    path("teste/", htmx_views.teste, name="teste"),
 ]
 
 urlpatterns += htmx_urlpatterns
