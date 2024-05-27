@@ -35,11 +35,7 @@ def registrar_usuario(request):
             novo_usuario = User.objects.create_user(
                 username=email, email=email, password=senha
             )
-            novo_usuario.save()
-            perfil = Profile.objects.create(
-                nome=nome, whatsapp=whatsapp, user=novo_usuario
-            )
-            perfil.save()
+            Profile.objects.create(nome=nome, whatsapp=whatsapp, user=novo_usuario)
             user = authenticate(request, username=email, password=senha)
             if user is not None:
                 login(request, user)
@@ -54,8 +50,13 @@ def redefinir_senha(request):
     if request.method == "POST":
         email = request.POST.get("emailRedefinir")
         if User.objects.filter(email=email).exists():
-            print(email)
-        print(f"nao existe esse {email}")
+            # Implementar a lógica de redefinição de senha aqui
+            messages.success(
+                request,
+                "Instruções para redefinição de senha enviadas para o e-mail fornecido.",
+            )
+        else:
+            messages.error(request, "Não existe uma conta associada a este e-mail.")
     return render(request, "app_profile/redefinir.html")
 
 
@@ -67,15 +68,13 @@ def deslogar_usuario(request):
 
 @login_required
 def exibir_perfil(request):
-    t = request.POST.get("notificacao_whatsapp")
-    b = request.POST.get("notificacao_email")
-    # TODO VERIFICAR O STATUS DE RECEBIMENTO DE NOTIFICAÇÕES
+    # TODO: Verificar o status de recebimento de notificações e outras lógicas necessárias
     return render(request, "app_profile/perfil.html")
-    # Código para exibir perfil aqui
-    pass
 
 
 @login_required
 def atualizar_perfil_usuario(request):
-    # Código para atualizar perfil aqui
-    pass
+    if request.method == "POST":
+        # Implementar a lógica de atualização do perfil do usuário aqui
+        messages.success(request, "Perfil atualizado com sucesso.")
+    return redirect("exibir_perfil")

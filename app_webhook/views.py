@@ -50,28 +50,23 @@ def webhook_zap(request, id):
         try:
             data = json.loads(request.body)
             event = data.get("event")
-            print(f"1{event}")
 
             if event != "open":
                 base64_qrcode = data.get("data", {}).get("qrcode", {}).get("base64")
-                instanceId = data.get("instance")
-                print(base64_qrcode)
-                if base64_qrcode and instanceId:
-                    data_response = {"qrcode": base64_qrcode, "instancia": instanceId}
-                    print(base64_qrcode)
+                instance_id = data.get("instance")
+
+                if base64_qrcode and instance_id:
+                    data_response = {"qrcode": base64_qrcode, "instancia": instance_id}
                     return check_instance(request, data=data_response, id=id)
 
             logger.info(f"Dados recebidos: {event}")
 
             if event == "connection.update":
                 status = data.get("data", {}).get("state")
-                instanceId = data.get("instance")
+                instance_id = data.get("instance")
 
-                if status and instanceId:
-                    data_response = {
-                        "instancia": instanceId,
-                        "state": status,
-                    }
+                if status and instance_id:
+                    data_response = {"instancia": instance_id, "state": status}
                     return update_instance_status(request, data=data_response, id=id)
 
             return JsonResponse({"message": "Success"}, status=200)

@@ -1,20 +1,23 @@
+import json
+import logging
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-import logging
-
+from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
+
 from .models import LojaIntegrada, WhatsappIntegrado
 from libs.integracoes.api.api_nuvemshop import NuvemShop
 from libs.integracoes.api.api_whatsapp import Whatsapp
 
+logger = logging.getLogger(__name__)
+
 WHATSAPP = Whatsapp()
 NUVEMSHOP = NuvemShop()
 PARAMETRO_CODE = "code"
-LOGGER = logging.getLogger(__name__)
 
 
 def ocultar_email(email):
@@ -25,9 +28,9 @@ def ocultar_email(email):
         usuario, dominio = email.split("@")
         num_ocultar = len(usuario) // 2
         usuario_oculto = "*" * num_ocultar + usuario[num_ocultar:]
-        return usuario_oculto + "@" + dominio
+        return f"{usuario_oculto}@{dominio}"
     except ValueError:
-        LOGGER.error(f"Email inválido: {email}")
+        logger.error(f"Email inválido: {email}")
         return email
 
 
@@ -36,9 +39,7 @@ def response_sem_cookie(*args, **kwargs):
     Cria uma resposta HTTP sem cookies.
     """
     response = HttpResponse(*args, **kwargs)
-    response.set_cookie(
-        "meu_cookie", "", max_age=0
-    )  # Configura o cookie para expirar imediatamente
+    response.set_cookie("meu_cookie", "", max_age=0)
     return response
 
 
@@ -49,10 +50,9 @@ def integracao(request):
     """
     code = request.GET.get(PARAMETRO_CODE, None)
     lojas = LojaIntegrada.objects.all()
-    if code is not None:
+    if code:
         return autorizar(request, code=code)
-    else:
-        return render(request, "app_integracao/base.html", {"lojas": lojas})
+    return render(request, "app_integracao/base.html", {"lojas": lojas})
 
 
 @login_required
@@ -62,7 +62,7 @@ def autorizar(request, code):
     """
     try:
         autorizado = NUVEMSHOP.auth_nuvem_shop(code=code)
-        if autorizado is None:
+        if not autorizado:
             messages.error(request, "Erro na autorização. Por favor, tente novamente.")
             return redirect("app_integracao:integracao")
 
@@ -81,7 +81,7 @@ def autorizar(request, code):
             return loja_integrada(request, access_token, user_id)
 
     except Exception as e:
-        LOGGER.error(f"Erro durante a autorização: {str(e)}")
+        logger.error(f"Erro durante a autorização: {str(e)}")
         messages.error(
             request, f"Ocorreu um erro durante a autorização da loja: {str(e)}"
         )
@@ -97,15 +97,15 @@ def loja_integrada(request, access_token, user_id):
     try:
         usuario = request.user
         lj_integrada = NUVEMSHOP.store_nuvem(code=access_token, store_id=user_id)
-        if lj_integrada is None:
+        if not lj_integrada:
             messages.error(
                 request, "Erro ao obter dados da loja. Por favor, tente novamente."
             )
             return redirect("app_integracao:integracao")
 
-        id = lj_integrada.get("id")
+        loja_id = lj_integrada.get("id")
 
-        loja_existente = LojaIntegrada.objects.filter(id=id).first()
+        loja_existente = LojaIntegrada.objects.filter(id=loja_id).first()
         if loja_existente:
             if loja_existente.ativa:
                 messages.error(request, "Esta loja já está integrada")
@@ -115,7 +115,7 @@ def loja_integrada(request, access_token, user_id):
                 messages.success(request, "Loja reativada com sucesso")
         else:
             LojaIntegrada.objects.create(
-                id=id,
+                id=loja_id,
                 nome=lj_integrada.get("nome"),
                 whatsapp_phone_number=lj_integrada.get("whatsapp_phone_number"),
                 contact_email=lj_integrada.get("contact_email"),
@@ -127,7 +127,7 @@ def loja_integrada(request, access_token, user_id):
             messages.success(request, "Loja integrada com sucesso")
 
     except Exception as e:
-        LOGGER.error(f"Erro durante a integração da loja: {str(e)}")
+        logger.error(f"Erro durante a integração da loja: {str(e)}")
         messages.error(
             request, f"Ocorreu um erro durante a integração da loja: {str(e)}"
         )
@@ -179,11 +179,8 @@ def config_integracao(request, id):
         return render(request, "app_integracao/base.html")
 
     except Exception as e:
-        LOGGER.error(f"Erro ao configurar integração: {str(e)}")
+        logger.error(f"Erro ao configurar integração: {str(e)}")
         return render(request, "app_integracao/base.html")
-
-
-# Sistema de integração whatsapp
 
 
 @login_required
@@ -213,8 +210,7 @@ def integra_whatsapp(request, instanceId=None):
                 return redirect("app_integracao:integracao")
 
             # Criar nova instância de WhatsApp
-            whatsapp = Whatsapp()
-            qr_code_base64, token, instanceId, status = whatsapp._create_instancia(
+            qr_code_base64, token, instanceId, status = WHATSAPP._create_instancia(
                 instanceName, instanceId
             )
             if not qr_code_base64:
@@ -223,7 +219,7 @@ def integra_whatsapp(request, instanceId=None):
 
             # Salvar a instância no banco de dados
             try:
-                instance = WhatsappIntegrado.objects.create(
+                WhatsappIntegrado.objects.create(
                     instanceId=instanceId,
                     name=name,
                     instanceName=instanceName,
@@ -239,7 +235,7 @@ def integra_whatsapp(request, instanceId=None):
 
             return redirect("app_integracao:integracao")
     except Exception as e:
-        LOGGER.error(f"Erro durante a autorização: {str(e)}")
+        logger.error(f"Erro durante a autorização: {str(e)}")
         messages.error(
             request, f"Ocorreu um erro durante a criação do WhatsApp: {str(e)}"
         )
