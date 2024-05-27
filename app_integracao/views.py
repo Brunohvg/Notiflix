@@ -215,7 +215,7 @@ def integra_whatsapp(request, instanceId=None):
             # Criar nova instância de WhatsApp
             whatsapp = Whatsapp()
             qr_code_base64, token, instanceId, status = whatsapp._create_instancia(
-                instanceName
+                instanceName, instanceId
             )
             if not qr_code_base64:
                 messages.error(request, "Falha ao gerar o QR Code.")

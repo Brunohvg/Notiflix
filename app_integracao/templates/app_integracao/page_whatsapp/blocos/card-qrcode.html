@@ -1,17 +1,18 @@
 {% load static %}
-
-<div class="col-sm-4">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">QR-Code</h5>
-      {% if user.loja.whatsapp.status == 'connecting' %}
-        <div hx-get="{% url 'app_integracao:views_qrcode' id=user.loja.whatsapp.pk %}" hx-trigger="every 20s" hx-target="#qrcode-container" hx-swap="innerHTML">
-          <!-- Este conteúdo será substituído pela resposta de views_qrcode -->
-          <div id="qrcode-container"></div>
-        </div>
-      {% else %}
-        <h5>whatsapp conectado</h5>
-      {% endif %}
+{% if whatsapp_integrado %}
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">QR-Code</h5>
+        {% if user.loja.whatsapp.status != 'open' %}
+          <div hx-get="{% url 'app_integracao:views_qrcode' id=user.loja.whatsapp.pk %}" hx-trigger="every 5s" hx-target="#qrcode-container" hx-swap="innerHTML">
+            <!-- Este conteúdo será substituído pela resposta de views_qrcode -->
+            <div id="qrcode-container"></div>
+          </div>
+        {% else %}
+          <h5>whatsapp conectado</h5>
+        {% endif %}
+      </div>
     </div>
   </div>
-</div>
+{% endif %}
