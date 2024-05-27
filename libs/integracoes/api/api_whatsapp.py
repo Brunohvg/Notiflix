@@ -9,12 +9,29 @@ logger = logging.getLogger(__name__)
 
 
 class Whatsapp:
+    """
+    Classe para integração com o serviço de WhatsApp.
+    """
+
     def __init__(self) -> None:
+        """
+        Inicializa a classe Whatsapp e configura a APIKEY.
+        """
         self.APIKEY = config("APIKEY")
         if not self.APIKEY:
             raise ValueError("APIKEY não configurada")
 
     def _create_instancia(self, instanceName, instanceId):
+        """
+        Cria uma nova instância de WhatsApp e obtém o QR Code para configuração.
+
+        Args:
+            instanceName (str): Nome da instância do WhatsApp.
+            instanceId (str): ID da instância do WhatsApp.
+
+        Returns:
+            tuple: Contendo QR Code em base64, token, instanceId e status.
+        """
         url = "https://zap.lojabibelo.com.br/instance/create"
         headers = {
             "accept": "application/json",
@@ -48,10 +65,7 @@ class Whatsapp:
                     "url": f"https://goblin-romantic-imp.ngrok-free.app/zapi/{instanceId}/",
                     "webhook_by_events": False,
                     "webhook_base64": False,
-                    "events": [
-                        "QRCODE_UPDATED",
-                        "CONNECTION_UPDATE",
-                    ],
+                    "events": ["QRCODE_UPDATED", "CONNECTION_UPDATE"],
                 }
                 webhook_response = requests.post(
                     webhook_url, headers=headers, json=webhook_data
@@ -98,5 +112,4 @@ if __name__ == "__main__":
     if qr_code:
         print(f"QR Code gerado com sucesso: {qr_code}")
     else:
-        print("Falha ao gerar o QR Code.")
-"""
+        print("Falha ao gerar o QR Code.")"""
