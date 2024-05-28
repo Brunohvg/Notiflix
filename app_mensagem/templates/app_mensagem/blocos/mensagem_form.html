@@ -1,0 +1,8 @@
+<!-- mensagem_form.html -->
+{% load static %}
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Salvar</button>
+</form>
+<a href="{% url 'app_mensagem:lista_mensagens' %}">Voltar</a>

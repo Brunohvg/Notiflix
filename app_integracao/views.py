@@ -241,3 +241,18 @@ def integra_whatsapp(request, instanceId=None):
         )
 
     return render(request, "app_integracao/base.html")
+
+
+from app_mensagem.models import MensagemPersonalizada
+
+
+def enviar_mensagem_pedido(loja, tipo_pedido, dados_pedido):
+    try:
+        mensagem = MensagemPersonalizada.objects.get(loja=loja, tipo_pedido=tipo_pedido)
+        # Lógica para enviar a mensagem via WhatsApp
+        mensagem_texto = mensagem.mensagem.format(**dados_pedido)
+        # Chame a função para enviar a mensagem via WhatsApp aqui
+    except MensagemPersonalizada.DoesNotExist:
+        logging.warning(
+            f"Mensagem do tipo '{tipo_pedido}' não encontrada para a loja {loja.nome}"
+        )

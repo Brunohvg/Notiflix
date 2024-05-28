@@ -16,7 +16,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]  # Permitir todos os hosts (não recomendado para produção)
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 
 # Application definition
@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "app_integracao",
     "app_pedido",
     "app_webhook",
+    "app_mensagem",
 ]
 
 MIDDLEWARE = [
@@ -147,10 +148,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
     },
 }
 """
-import os
-
-import os
-
 import os
 
 LOGGING = {

@@ -1,4 +1,5 @@
 {% load static %}
+
 {% if whatsapp_integrado %}
   <div class="col-sm-4">
     <div class="card">
@@ -10,7 +11,9 @@
             <div id="qrcode-container"></div>
           </div>
         {% else %}
-          <h5>whatsapp conectado</h5>
+          <div class="card">
+            <img src="{% static 'assets/images/qrcode/qrcode-check.jpg' %}" alt="QR Code" />
+          </div>
         {% endif %}
       </div>
     </div>
