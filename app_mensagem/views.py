@@ -9,9 +9,7 @@ from app_integracao.models import LojaIntegrada
 def lista_mensagens(request):
     loja = get_object_or_404(LojaIntegrada, usuario=request.user)
     mensagens = MensagemPersonalizada.objects.filter(loja=loja)
-    return render(
-        request, "app_mensagem/lista_mensagens.html", {"mensagens": mensagens}
-    )
+    return render(request, "app_mensagem/base.html", {"mensagens": mensagens})
 
 
 @login_required

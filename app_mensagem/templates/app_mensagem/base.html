@@ -1,13 +1,12 @@
-<!-- cria_mensagem.html -->
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Criar Mensagem Personalizada</title>
-  </head>
-  <body>
-    <h1>Criar Mensagem Personalizada</h1>
-    {% include 'app_mensagem/blocos/mensagem_form.html' %}
-  </body>
-</html>
+{% extends 'pages/base/base.html' %}
+
+{% block Dashboard %}
+  <div class="container-fluid">
+    {% block TituloConteudoFluidoDashboard %}
+      <!-- Título do conteúdo fluido -->
+      <h6 class="card-title fw-semibold mb-4">Mensagens preconfiguradas</h6>
+
+      {% include 'app_mensagem/blocos/cards_mensagens.html' %}
+    {% endblock %}
+  </div>
+{% endblock %}

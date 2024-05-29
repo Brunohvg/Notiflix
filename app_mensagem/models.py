@@ -7,6 +7,7 @@ class MensagemPersonalizada(models.Model):
         LojaIntegrada, related_name="mensagens_personalizadas", on_delete=models.CASCADE
     )
     tipo_pedido = models.CharField(max_length=50)  # Ex: "confirmacao", "enviado", etc.
+    ativado = models.BooleanField(default=True)
     mensagem = models.TextField()
 
     def __str__(self):
