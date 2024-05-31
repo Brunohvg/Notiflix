@@ -1,8 +1,8 @@
 from django import forms
-from .models import MensagemPersonalizada
+from .models import MensagemPadrao
 
 
 class MensagemPersonalizadaForm(forms.ModelForm):
     class Meta:
-        model = MensagemPersonalizada
+        model = MensagemPadrao
         fields = ["tipo_pedido", "mensagem"]
