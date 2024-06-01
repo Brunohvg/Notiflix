@@ -1,4 +1,5 @@
 <!-- Modal -->
+
 <div class="modal fade modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -11,19 +12,20 @@
           <div class="col">
             <div class="form-floating mb-3">
               <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
-              <label for="floatingInput">Nome da mensagem</label>
+              <label for="floatingInput">Nome da mensagem </label>
             </div>
           </div>
           <div class="col">
             <div class="form-floating">
               <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                <option selected>Selecione o tipo</option>
-                <option value="1">Pedido pago</option>
-                <option value="2">Pedido embalado</option>
-                <option value="3">Pedido enviado</option>
-                <option value="4">Pedido cancelado</option>
-                <option value="5">Carrinho abandonado</option>
-              </select>
+                <option selected disabled>Selecione o tipo</option>
+                {% for mensagem_padrao in request.user.mensagem_padrao.all %}
+                    
+                    <option value="{{ mensagem_padrao.id }}">{{ mensagem_padrao.tipo_pedido }}</option>
+                    
+                {% endfor %}
+            </select>
+            
               <label for="floatingSelect">Enviar quando um</label>
             </div>
           </div>

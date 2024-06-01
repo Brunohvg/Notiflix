@@ -1,0 +1,21 @@
+# Mensagens Personalizadas
+Pedido Pago:
+🎉🛍️ Olá [customer.name]! 
+🛍️🎉 Estamos radiantes em informar que seu pagamento para o pedido #[order.number] foi aprovado com sucesso! 
+🥳✅ Agradecemos muito por escolher a nossa loja para suas compras. Agora, nossa equipe está ocupada preparando seus produtos com todo o cuidado. 
+📦👏 Assim que seu pedido for despachado, você receberá um número de rastreamento para acompanhar a entrega. 
+🚚📮 Se tiver alguma dúvida ou precisar de assistência adicional, não hesite em nos contatar. Estamos aqui para ajudar! 
+📞💬 Agradecemos sua confiança em nós e esperamos que você aproveite suas compras. Tenha um ótimo dia! 😊🛒
+
+Pedido Embalado:
+Olá [customer.name], seu Pedido Embalado está pronto para envio!
+
+Pedido Enviado:
+Olá [customer.name], seu Pedido Enviado está a caminho!
+
+Pedido Cancelado:
+👋 Olá [customer.name]!
+Notamos que o seu pedido foi cancelado e gostaríamos de entender melhor o motivo para podermos melhorar nossos serviços. 
+😊 Ficaríamos gratos se você pudesse compartilhar conosco o que motivou o cancelamento. Sua opinião é muito importante para nós e queremos garantir que sua experiência seja a melhor possível.
+Por favor, sinta-se à vontade para nos contar o que aconteceu e como podemos resolver isso da melhor forma para você. Estamos aqui para ajudar! 
+🛒✨ Esperamos poder servi-lo novamente em breve. Obrigado por escolher [store.name]! 💙

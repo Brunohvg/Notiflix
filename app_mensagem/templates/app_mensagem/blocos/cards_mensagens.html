@@ -1,35 +1,52 @@
+<div>
+  <style>
+    /* CSS para ajustar o estilo dos textareas */
+    textarea.form-control {
+      resize: vertical; /* Permite redimensionamento vertical apenas */
+      min-height: 150px; /* Altura mínima */
+      max-height: 300px; /* Altura máxima */
+      padding: 10px; /* Espaçamento interno */
+      border: 1px solid #ccc; /* Borda */
+      border-radius: 5px; /* Borda arredondada */
+      font-size: 14px; /* Tamanho da fonte */
+      line-height: 1.5; /* Altura da linha */
+      box-sizing: border-box; /* Incluir padding e borda na largura e altura total */
+    }
+  
+    /* Estilo para o botão de atualizar */
+    .btn-atualizar {
+      margin-top: 10px; /* Espaço acima do botão */
+    }
+  </style>
+  
+</div>
 <div class="row">
   {% for mensagem in mensagens %}
-  <div class="col-lg-6">
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="mb-3">
-          <div class="d-flex align-items-center gap-3 flex-wrap">
-            <div class="hstack gap-3">
-              <label for="textarea{{ forloop.counter }}" class="card-title fw-semibold mb-4">{{ mensagem.tipo_pedido }}</label>
+    <div class="col-lg-6">
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="mb-3">
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+              <div class="hstack gap-3">
+                <label for="textarea{{ forloop.counter }}" class="card-title fw-semibold mb-4">{{ mensagem.tipo_pedido }}</label>
+              </div>
+              <div class="form-check form-switch ms-auto">
+                <form method="POST" action="{% url 'app_mensagem:edita_mensagem' pk=mensagem.pk %}">
+                  {% csrf_token %}
+                <input class="form-check-input" name="ative_id" type="checkbox" id="toggleSwitch{{ forloop.counter }}" {% if mensagem.ativado %}checked{% endif %} value="{{ mensagem.pk }}">
+                <label class="form-check-label" for="toggleSwitch{{ forloop.counter }}">Ativar</label>
+              </div>
             </div>
-            <div class="form-check form-switch ms-auto">
-              <input class="form-check-input" type="checkbox" id="toggleSwitch{{ forloop.counter }}" {% if mensagem.ativado %}checked{% endif %} />
-              <label class="form-check-label" for="toggleSwitch{{ forloop.counter }}">Ativar</label>
-            </div>
+
+              <input type="hidden" name="mensagem_id" value="{{ mensagem.pk }}">
+              <textarea class="form-control" name="mensagem_edit" id="textarea{{ forloop.counter }}" rows="14">{% if mensagem.usuario %}{{ mensagem.mensagem_padrao }}{% endif %}</textarea>
+              <div class="m-1">
+                <button type="submit" class="btn btn-info rounded-pill">Atualizar</button>
+              </div>
+            </form>
           </div>
-          <form method="POST" action="{% url 'app_mensagem:edita_mensagem' pk=mensagem.pk %}">
-            {% csrf_token %}
-            <input type="hidden" name="mensagem_id" value="{{ mensagem.pk }}">
-            <textarea class="form-control" name="mensagem_edit" id="textarea{{ forloop.counter }}" rows="7">
-              {% if mensagem.usuario %}
-                {{ mensagem.mensagem_personalizada }}
-              {% else %}
-                {{ mensagem.mensagem_padrao }}
-              {% endif %}
-            </textarea>
-            <div class="m-1">
-            <button type="submit" class="btn btn-info rounded-pill">Atualizar</button>
-          </div>
-          </form>
         </div>
       </div>
     </div>
-  </div>
   {% endfor %}
 </div>
