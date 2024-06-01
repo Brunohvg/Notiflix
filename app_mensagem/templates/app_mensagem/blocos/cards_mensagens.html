@@ -39,7 +39,7 @@
             </div>
 
               <input type="hidden" name="mensagem_id" value="{{ mensagem.pk }}">
-              <textarea class="form-control" name="mensagem_edit" id="textarea{{ forloop.counter }}" rows="14">{% if mensagem.usuario %}{{ mensagem.mensagem_padrao }}{% endif %}</textarea>
+              <textarea class="form-control" name="mensagem_edit" id="textarea{{ forloop.counter }}" rows="3">{% if mensagem.usuario %}{{ mensagem.mensagem_padrao }}{% endif %}</textarea>
               <div class="m-1">
                 <button type="submit" class="btn btn-info rounded-pill">Atualizar</button>
               </div>

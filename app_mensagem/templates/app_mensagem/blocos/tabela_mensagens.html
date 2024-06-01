@@ -1,0 +1,76 @@
+<div class="container-fluid">
+  <div class="card card-body">
+    <div class="table-responsive">
+      <table id="example" class="table search-table align-middle text-nowrap">
+        <thead class="header-item">
+          <tr>
+            <th>
+              <div class="n-chk align-self-center text-center">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input primary" id="contact-check-all" />
+                  <label class="form-check-label" for="contact-check-all"></label>
+                  <span class="new-control-indicator"></span>
+                </div>
+              </div>
+            </th>
+            <th>Venda</th>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Status de pagamento</th>
+            <th>Status de envio</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pedido in pedidos %}
+            <tr class="search-items">
+              <td>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox{{ forloop.counter }}" />
+                  <label class="form-check-label" for="checkbox{{ forloop.counter }}"></label>
+                </div>
+              </td>
+              <td>
+                <span class="usr-email-addr" data-venda="venda">{{ pedido.id_pedido }}</span>
+              </td>
+              <td>
+                <span class="usr-data" data-data="data">{{ pedido.data_pedido }}</span>
+              </td>
+              <td>
+                <span class="usr-cliente" data-cliente="cliente">{{ pedido.cliente.contact_name }}</span>
+              </td>
+              <td>
+                <span class="usr-total" data-total="total">{{ pedido.valor_formatado }}</span>
+              </td>
+              <td>
+                {% if pedido.status_pagamento == 'cancelado' %}
+                  <span class="badge bg-danger-subtle text-danger" data-status-pagamento="status-pagamento">{{ pedido.status_pagamento }}</span>
+                {% else %}
+                  <span class="badge bg-success-subtle text-success" data-status-pagamento="status-pagamento">{{ pedido.status_pagamento }}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if pedido.status_envio == 'Processando' %}
+                  <span class="badge bg-primary-subtle text-primary" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+                {% elif pedido.status_envio == 'Embalado' %}
+                  <span class="badge bg-warning-subtle text-warning" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+                {% elif pedido.status_envio == 'Enviado' %}
+                  <span class="badge bg-success-subtle text-success" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+                {% elif pedido.status_envio == 'Devolvido' %}
+                  <span class="badge bg-danger-subtle text-danger" data-status-envio="status-envio">{{ pedido.status_envio }}</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="action-btn">
+                  <a href="javascript:void(0)" class="text-primary edit"><i class="ti ti-eye fs-5"></i></a>
+                  <a href="javascript:void(0)" class="text-dark delete ms-2"><i class="ti ti-trash fs-5"></i></a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
