@@ -1,6 +1,9 @@
 import json
+import re
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
@@ -188,12 +191,13 @@ def integra_whatsapp(request, instanceId=None):
     if request.method == "GET":
         return render(request, "app_integracao/base_integracao_whatsapp.html")
 
-    try:
-        if request.method == "POST":
-            name = request.POST.get("name")
-            instanceName = request.POST.get("id_telefone")
-            loja = request.user.loja
+    if request.method == "POST":
+        name = request.POST.get("name")
+        instanceName = request.POST.get("id_telefone")
+        instanceName = re.sub(r'\D', '', instanceName)  # Remover caracteres não numéricos do número de telefone
+        loja = request.user.loja
 
+        try:
             # Verificar se o número já está integrado ao sistema
             if WhatsappIntegrado.objects.filter(instanceName=instanceName).exists():
                 messages.error(
@@ -232,15 +236,20 @@ def integra_whatsapp(request, instanceId=None):
             except IntegrityError:
                 messages.error(request, "Erro ao salvar a integração do WhatsApp.")
                 return redirect("app_integracao:integracao")
+                
 
-            return redirect("app_integracao:integracao")
-    except Exception as e:
-        logger.error(f"Erro durante a autorização: {str(e)}")
-        messages.error(
-            request, f"Ocorreu um erro durante a criação do WhatsApp: {str(e)}"
-        )
+            # Supondo que você tenha o pk disponível em uma variável chamada pk_value
+            return redirect(reverse("app_integracao:config_integracao", args=[instanceId]))
 
-    return render(request, "app_integracao/base.html")
+        except Exception as e:
+            logger.error(f"Erro durante a autorização: {str(e)}")
+            messages.error(
+                request, f"Ocorreu um erro durante a criação do WhatsApp: {str(e)}"
+            )
+
+    return render(request, "app_integracao/base_integracao_whatsapp.html")
+
+
 
 
 from app_mensagem.models import MensagemPadrao
