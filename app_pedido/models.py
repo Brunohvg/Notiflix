@@ -60,3 +60,6 @@ class Pedido(models.Model):
     def enviar_notificacao_status(self):
         # Implementar lógica para enviar notificação ao cliente com base no status do pedido
         pass
+
+
+
