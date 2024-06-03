@@ -2,8 +2,8 @@ import pika
 from decouple import config
 def check_rabbitmq_connection():
     # Configurações de conexão
-    rabbitmq_host = config('rabbitmq_host')  # Ou o endereço IP público do servidor
-    rabbitmq_port = config('rabbitmq_port')
+    rabbitmq_host = 'rabbitmq.lojabibelo.com.br'  # Ou o endereço IP público do servidor
+    rabbitmq_port = 5672
     rabbitmq_user = config('rabbitmq_user')
     rabbitmq_password = config('rabbitmq_password')
 
