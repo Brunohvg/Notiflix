@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from app_mensagem.models import MensagemPadrao
 
+
 @csrf_exempt
 def autenticar_usuario(request):
     """
@@ -49,19 +50,56 @@ def registrar_usuario(request):
                 username=email, email=email, password=senha
             )
             Profile.objects.create(nome=nome, whatsapp=whatsapp, user=novo_usuario)
-            
+
             # Dicionário de mensagens padrão para cada tipo de pedido
             mensagens_por_tipo = {
-                'Pedido Pago': f"Olá {nome}, seu Pedido Pago foi processado com sucesso!",
-                'Pedido Embalado': f"Olá {nome}, seu Pedido Embalado está pronto para envio!",
-                'Pedido Enviado': f"Olá {nome}, seu Pedido Enviado está a caminho!",
-                'Pedido Cancelado': f"Olá {nome}, lamentamos informar que seu Pedido Cancelado foi cancelado."
+                "Pedido Pago": (
+                    "Olá [nome_cliente],\n\n"
+                    "🎉 Acabamos de receber seu pedido #[numero_pedido]!\n"
+                    "Agradecemos a sua compra e estamos verificando tudo para o próximo passo.\n\n"
+                    "Atenciosamente,\n"
+                    "Equipe de Vendas"
+                ),
+                "Pedido Embalado": (
+                    "Boas notícias [nome_cliente],\n\n"
+                    "📦 Tudo certo com seu pedido #[numero_pedido], acabamos de embalar e está pronto para envio!\n"
+                    "Estamos cuidando de todos os detalhes para que seu pedido chegue em perfeito estado.\n\n"
+                    "Atenciosamente,\n"
+                    "Equipe de Logística"
+                ),
+                "Pedido Enviado": (
+                    "Olá [nome_cliente], agora é só aguardar! 🚚\n\n"
+                    "Seu pedido #[numero_pedido] foi enviado e está a caminho!\n"
+                    "Em breve você receberá suas compras no endereço fornecido. Acompanhe o rastreamento para mais detalhes: [link_rastreio].\n\n"
+                    "Atenciosamente,\n"
+                    "Equipe de Entregas"
+                ),
+                "Pedido Cancelado": (
+                    "Olá [nome_cliente],\n\n"
+                    "Lamentamos informar que seu pedido #[numero_pedido] foi cancelado. 😔\n"
+                    "Se você tiver alguma dúvida ou precisar de assistência, por favor, entre em contato conosco.\n"
+                    "Estamos à disposição para ajudar no que for necessário.\n\n"
+                    "Atenciosamente,\n"
+                    "Equipe de Atendimento ao Cliente"
+                ),
+                "Carrinho Abandonado": (
+                    "Olá [nome_cliente],\n\n"
+                    "Somos da [nome_loja] e esperamos que você esteja bem. 😊\n"
+                    "Vimos que você iniciou uma compra em nossa loja e não finalizou, se precisar de ajuda, conte com a gente!\n"
+                    "Aqui está o link para continuar sua compra: [cart.link]\n\n"
+                    "Atenciosamente,\n"
+                    "Equipe de Vendas"
+                ),
             }
-            
+
             # Criação de mensagens padrão para o novo usuário
             for tipo_pedido, mensagem in mensagens_por_tipo.items():
-                MensagemPadrao.objects.create(usuario=novo_usuario, tipo_pedido=tipo_pedido, mensagem_padrao=mensagem)
-                
+                MensagemPadrao.objects.create(
+                    usuario=novo_usuario,
+                    tipo_pedido=tipo_pedido,
+                    mensagem_padrao=mensagem,
+                )
+
             user = authenticate(request, username=email, password=senha)
             if user is not None:
                 login(request, user)
