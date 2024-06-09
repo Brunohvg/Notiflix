@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "app_pedido",
     "app_webhook",
     "app_mensagem",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -192,3 +193,25 @@ LOGGING = {
         },
     },
 }
+
+
+# Celery
+
+
+# URL do broker do Celery
+
+
+# Configurações depreciadas (remover ou comentar)
+# CELERY_ACCEPT_CONTENT = ["json"]  # Depreciado, use accept_content
+# CELERY_TASK_CONTENT = "json"  # Depreciado, ajuste conforme necessário
+# CELERY_RESULT_BACKEND = "django-db"  # Depreciado, use result_backend
+
+# settings.py
+
+CELERY_BROKER_URL = "amqp://admin:Mfcd62!!Mfcd62!!@rabbitmq.lojabibelo.com.br:5672/cloudstore"
+
+
+# Configurações atualizadas para Celery 6.0.0
+accept_content = ["json"]
+result_backend = "django-db"
+broker_connection_retry_on_startup = True  # Novo parâmetro para substituir o deprecated
