@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from .models import Pedido
 from libs.integracoes.api.api_whatsapp import Whatsapp
 from app_mensagem.models import MensagemPadrao
-
+from time import sleep
 WHATSAPP = Whatsapp()
 
 
@@ -15,14 +15,14 @@ def _enviar_msg(sender, instance, created, **kwargs):
     loja = instance.loja.nome
     user = instance.loja.usuario
     rastreio = instance.codigo_rastreio
-    instance_name = instance.loja.whatsapp.instanceId
-    apikey = instance.loja.whatsapp.token
-    print(instance_name)
+    instance_name = instance.loja.whatsapp.instanceName 
+    token = instance.loja.whatsapp.token
+    print(token)
     tipo_mensagem = {
         "processando": "Pedido Pago",
         "embalado": "Pedido Embalado",
         "enviado": "Pedido Enviado",
-        "cancelado": "Pedido Cancelado",
+        "devolvido": "Pedido Cancelado",
     }
 
     tipo_pedido = tipo_mensagem.get(status.lower())
@@ -41,9 +41,10 @@ def _enviar_msg(sender, instance, created, **kwargs):
                 texto_formatado = texto_formatado.replace("[link_rastreio]", rastreio)
                 # Envia cada mensagem via WhatsApp
                 if msg.ativado:
+                    
                     WHATSAPP._enviar_msg(
                         instance_name=instance_name,
-                        apikey=apikey,
+                        apikey=token,
                         number_phone=f"55{phone}",
                         texto=texto_formatado,
                     )

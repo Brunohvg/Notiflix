@@ -41,12 +41,13 @@ class Whatsapp:
         }
 
         # Gerar um token aleatório de 8 caracteres alfanuméricos
-        token = str(uuid.uuid4()).upper()
+        #token = str(uuid.uuid4()).upper()
 
         data = {
             "instanceId": instanceId,
             "instanceName": instanceName,
             "qrcode": True,
+            
         }
 
         try:
@@ -55,6 +56,7 @@ class Whatsapp:
             response_data = response.json()
             instanceName = response_data.get("instance", {}).get("instanceName")
             instanceId = response_data.get("instance", {}).get("instanceId")
+            token = response_data.get("hash", {}).get("apikey")
             qr_code_data = response_data.get("qrcode", {}).get("base64")
             status = response_data.get("instance", {}).get("status")
 
@@ -148,11 +150,10 @@ class Whatsapp:
             return None
 
 # Exemplo de uso
-"""if __name__ == "__main__":
+if __name__ == "__main__":
     WHATSAPP = Whatsapp()
-    result = WHATSAPP._enviar_msg('319924305000', '7fbhgrqj4d2x5vf0betit', '5531973121650', 'esse é um teste')
+    result = WHATSAPP._enviar_msg('31973121650', '5721C91E-D2DC-4563-B8D7-3E64CBEF33CE', '5531973121650', 'esse é um teste')
     if result is None:
         print("Falha ao enviar a mensagem")
     else:
         print(result)
-"""
