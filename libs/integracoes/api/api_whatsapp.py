@@ -141,15 +141,15 @@ class Whatsapp:
             logger.error(
                 f"Erro na solicitação HTTP: {e.response.status_code} - {e.response.text}"
             )
-            return None
+            return {"status_code": 400}
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro na solicitação: {e}")
             return None
         except Exception as e:
             logger.error(f"Erro inesperado: {e}")
-            return None
+            return {"status_code": 400}
 
-# Exemplo de uso
+"""# Exemplo de uso
 if __name__ == "__main__":
     WHATSAPP = Whatsapp()
     result = WHATSAPP._enviar_msg('31973121650', '5721C91E-D2DC-4563-B8D7-3E64CBEF33CE', '5531973121650', 'esse é um teste')
@@ -157,3 +157,4 @@ if __name__ == "__main__":
         print("Falha ao enviar a mensagem")
     else:
         print(result)
+"""
