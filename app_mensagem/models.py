@@ -8,6 +8,7 @@ tipos_pedidos = {
     "Pedido Cancelado": "Pedido Cancelado",
     "Carrinho Abandonado": "Carrinho Abandonado",
 }
+te = "te"
 
 
 class MensagemPadrao(models.Model):
