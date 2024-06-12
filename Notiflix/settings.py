@@ -208,10 +208,44 @@ LOGGING = {
 
 # settings.py
 
-CELERY_BROKER_URL = "amqp://admin:Mfcd62!!Mfcd62!!@rabbitmq.lojabibelo.com.br:5672/cloudstore"
-
+#CELERY_BROKER_URL = "amqp://admin:Mfcd62!!Mfcd62!!@rabbitmq.lojabibelo.com.br:5672/cloudstore"
+CELERY_BROKER_URL = "redis://159.54.139.153:6379/0"
+CELERY_RESULT_BACKEND = "redis://159.54.139.153:6379/0"
 
 # Configurações atualizadas para Celery 6.0.0
 accept_content = ["json"]
 result_backend = "django-db"
 broker_connection_retry_on_startup = True  # Novo parâmetro para substituir o deprecated
+
+# Celery
+"""CELERY_BROKER_URL = "amqp://admin:Mfcd62!!Mfcd62!!@rabbitmq.lojabibelo.com.br:5672/cloudstore"
+CELERY_RESULT_BACKEND = "rpc://"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "America/Sao_Paulo"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True"""
+
+"""
+
+# Celery
+
+# Substitua as configurações do RabbitMQ pelas configurações do Redis
+CELERY_BROKER_URL = 'redis://:password@hostname:port/db'
+CELERY_RESULT_BACKEND = 'redis://:password@hostname:port/db'
+
+# Exemplo de configuração local sem senha
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# Exemplo de configuração com senha e servidor remoto
+# CELERY_BROKER_URL = 'redis://:sua_senha@redis.exemplo.com:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://:sua_senha@redis.exemplo.com:6379/0'
+
+# Configurações adicionais do Celery (opcionais)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Sao_Paulo'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True  # Parâmetro atualizado
+"""
