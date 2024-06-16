@@ -18,7 +18,6 @@ ALLOWED_HOSTS = ["*"]  # Permitir todos os hosts (não recomendado para produç�
 
 APPEND_SLASH = True
 
-
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -74,6 +73,19 @@ DATABASES = {
     }
 }
 
+# Dtabase Postgresql
+"""DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("POSTGRES_DB"),
+        "USER": config("POSTGRES_USER"),
+        "PASSWORD": config("POSTGRES_PASSWORD"),
+        "HOST": config("DB_HOST"),
+        "PORT": config("DB_PORT", 5431, cast=int),
+    }
+}
+"""
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -111,46 +123,6 @@ MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Logging configuration
-"""LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},
-    },
-    "handlers": {
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "standard",
-        },
-        "file": {
-            "level": "DEBUG",
-            "class": "logging.FileHandler",
-            "filename": os.path.join(BASE_DIR, "logs", "app.log"),
-            "formatter": "standard",
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console", "file"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-        "app_integracao.middleware": {
-            "handlers": ["console", "file"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-        "app_webhook": {
-            "handlers": ["console", "file"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-    },
-}
-"""
-import os
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -181,12 +153,12 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "app_webhook": {  # Substitua pelo nome do seu aplicativo
+        "app_webhook": {
             "handlers": ["console", "file"],
             "level": "DEBUG",
             "propagate": False,
         },
-        "app_integracao": {  # Substitua pelo nome do seu aplicativo
+        "app_integracao": {
             "handlers": ["console", "file"],
             "level": "DEBUG",
             "propagate": False,
@@ -194,58 +166,11 @@ LOGGING = {
     },
 }
 
-
-# Celery
-
-
-# URL do broker do Celery
-
-
-# Configurações depreciadas (remover ou comentar)
-# CELERY_ACCEPT_CONTENT = ["json"]  # Depreciado, use accept_content
-# CELERY_TASK_CONTENT = "json"  # Depreciado, ajuste conforme necessário
-# CELERY_RESULT_BACKEND = "django-db"  # Depreciado, use result_backend
-
-# settings.py
-
-#CELERY_BROKER_URL = "amqp://admin:Mfcd62!!Mfcd62!!@rabbitmq.lojabibelo.com.br:5672/cloudstore"
+# Celery configuration
 CELERY_BROKER_URL = "redis://159.54.139.153:6379/0"
 CELERY_RESULT_BACKEND = "redis://159.54.139.153:6379/0"
-
-# Configurações atualizadas para Celery 6.0.0
-accept_content = ["json"]
-result_backend = "django-db"
-broker_connection_retry_on_startup = True  # Novo parâmetro para substituir o deprecated
-
-# Celery
-"""CELERY_BROKER_URL = "amqp://admin:Mfcd62!!Mfcd62!!@rabbitmq.lojabibelo.com.br:5672/cloudstore"
-CELERY_RESULT_BACKEND = "rpc://"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "America/Sao_Paulo"
-CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True"""
-
-"""
-
-# Celery
-
-# Substitua as configurações do RabbitMQ pelas configurações do Redis
-CELERY_BROKER_URL = 'redis://:password@hostname:port/db'
-CELERY_RESULT_BACKEND = 'redis://:password@hostname:port/db'
-
-# Exemplo de configuração local sem senha
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-
-# Exemplo de configuração com senha e servidor remoto
-# CELERY_BROKER_URL = 'redis://:sua_senha@redis.exemplo.com:6379/0'
-# CELERY_RESULT_BACKEND = 'redis://:sua_senha@redis.exemplo.com:6379/0'
-
-# Configurações adicionais do Celery (opcionais)
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'America/Sao_Paulo'
-CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True  # Parâmetro atualizado
-"""
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
