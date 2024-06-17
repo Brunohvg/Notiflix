@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from app_integracao.api.nuvemshop import NuvemShop
 from app_integracao.models import LojaIntegrada
 from .models import Pedido, Cliente
@@ -18,7 +18,7 @@ def pedidos(request):
         )
     except ObjectDoesNotExist:
         return redirect("app_integracao:integracao")
-    
+
 
 @login_required
 def clientes(request):
@@ -30,10 +30,23 @@ def clientes(request):
         )
     except ObjectDoesNotExist:
         return redirect("app_integracao:integracao")
-    
 
 
 @login_required
+def detalhe_cliente(request, id):
+    try:
+        print(id)
+
+        cliente = Cliente.objects.get(id=id)
+        pedidos_do_cliente = Pedido.objects.filter(cliente=id)
+        for pedido in pedidos_do_cliente:
+            return HttpResponse(pedido.status_pagamento)
+
+    except ObjectDoesNotExist:
+        return redirect("app_integracao:integracao")
+
+
+"""@login_required
 def detalhes_cliente(request, cliente_id):
     try:
         cliente = Cliente.objects.get(id=cliente_id)
@@ -41,4 +54,4 @@ def detalhes_cliente(request, cliente_id):
         return render(request, "app_pedido/detalhes_cliente.html", context={"cliente": cliente, "pedidos": pedidos_do_cliente})
     except Cliente.DoesNotExist:
         return redirect("app_pedido:clientes")
-
+"""
