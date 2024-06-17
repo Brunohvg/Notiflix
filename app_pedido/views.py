@@ -32,3 +32,13 @@ def clientes(request):
         return redirect("app_integracao:integracao")
     
 
+
+@login_required
+def detalhes_cliente(request, cliente_id):
+    try:
+        cliente = Cliente.objects.get(id=cliente_id)
+        pedidos_do_cliente = cliente.pedidos.all()
+        return render(request, "app_pedido/detalhes_cliente.html", context={"cliente": cliente, "pedidos": pedidos_do_cliente})
+    except Cliente.DoesNotExist:
+        return redirect("app_pedido:clientes")
+
