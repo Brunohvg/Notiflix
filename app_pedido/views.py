@@ -19,12 +19,23 @@ def pedidos(request):
     except ObjectDoesNotExist:
         return redirect("app_integracao:integracao")
 
-
 @login_required
 def clientes(request):
     try:
         loja_do_usuario = request.user.loja
-        clientes_da_loja = Pedido.objects.filter(loja=loja_do_usuario)
+        
+        # Obtenha o ID do cliente no URL da solicitação
+        customer_id = request.GET.get('id')
+        print(customer_id)
+
+        # Se um ID de cliente for fornecido, filtre os clientes com base nesse ID
+        if customer_id:
+            cliente = Cliente.objects.get(id=customer_id)
+            clientes_da_loja = [cliente]  # Lista contendo apenas o cliente específico
+        else:
+            # Se nenhum ID de cliente for fornecido, obtenha todos os clientes da loja
+            clientes_da_loja = Cliente.objects.filter(pedido__loja=loja_do_usuario).distinct()
+
         return render(
             request, "app_pedido/base.html", context={"clientes": clientes_da_loja}
         )
@@ -35,15 +46,18 @@ def clientes(request):
 @login_required
 def detalhe_cliente(request, id):
     try:
-        print(id)
-
         cliente = Cliente.objects.get(id=id)
         pedidos_do_cliente = Pedido.objects.filter(cliente=id)
-        for pedido in pedidos_do_cliente:
-            return HttpResponse(pedido.status_pagamento)
+        
+        context = {
+            'cliente': cliente,
+            'pedidos': pedidos_do_cliente
+        }
 
+        return HttpResponse(cliente,pedidos_do_cliente )
     except ObjectDoesNotExist:
-        return redirect("app_integracao:integracao")
+        return redirect('app_integracao:integracao')
+
 
 
 """@login_required

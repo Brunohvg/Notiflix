@@ -48,20 +48,20 @@
                   </div>
                 </td>
                 <td>
-                  <span class="usr-cliente" data-cliente="cliente">{{ cliente.cliente.contact_name }}</span>
+                  <span class="usr-cliente" data-cliente="cliente">{{ cliente.contact_name }}</span>
                 </td>
                 <td>
-                  <span class="usr-cliente" data-cliente="cliente">{{ cliente.cliente.contact_email }}</span>
+                  <span class="usr-cliente" data-cliente="cliente">{{ cliente.contact_email }}</span>
                 </td>
                 <td>
-                  <span class="usr-cliente" data-cliente="cliente">{{ cliente.cliente.contact_phone }}</span>
+                  <span class="usr-cliente" data-cliente="cliente">{{ cliente.contact_phone }}</span>
                 </td>
                 <td>
-                  <span class="usr-cliente" data-cliente="cliente">{{ cliente.cliente.contact_identification }}</span>
+                  <span class="usr-cliente" data-cliente="cliente">{{ cliente.contact_identification }}</span>
                 </td>
                 <td>
                   <div class="action-btn">
-                    <a href="{% url 'app_pedido:detalhe_cliente' id=cliente.cliente.pk %}" class="text-primary edit"><i class="ti ti-eye fs-5"></i></a>
+                    <a href="{% url 'app_pedido:detalhe_cliente' id=cliente.pk %}" class="text-primary edit"><i class="ti ti-eye fs-5"></i></a>
                     <a href="javascript:void(0)" class="text-dark delete ms-2"><i class="ti ti-trash fs-5"></i></a>
                   </div>
                 </td>
