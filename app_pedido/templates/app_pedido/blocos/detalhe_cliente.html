@@ -41,43 +41,23 @@
           <ul class="list-group list-group-flush">
             {% for pedido in pedidos %}
               <li class="list-group-item">
-                Id Venda: {{ pedido.id_venda }} <br /> Data Venda: {{ pedido.data_pedido }} <br /> Valor Total: R$ {{ pedido.total }}
+                Id Venda: {{ pedido.id_venda }} <br />p{{ pedido.data_pedido }} <br /> Valor Total: R$ {{ pedido.total }}
               </li>
             {% endfor %}
           </ul>
         </div>
       </div>
     </div>
+
+    <!-- Card Dados Cliente -->
     <div class="col-sm-4">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Informações da Loja</h5>
+          <h5 class="card-title">Informações do cliente</h5>
           <p class="card-text"></p>
-          <form class="row g-3">
-            <div class="col-md-4">
-              <label for="inputIdLoja" class="form-label">ID</label>
-              <input type="text" class="form-control" id="inputIdLoja" value="{{ request.user.loja.pk }}" disabled />
-            </div>
-            <div class="col-md-8">
-              <label for="inputNomeLoja" class="form-label">Nome/Razão Social</label>
-              <input type="text" class="form-control" id="inputNomeLoja" value="{{ request.user.loja.nome }}" disabled />
-            </div>
-            <div class="col-md-12">
-              <label for="inputEmailLoja" class="form-label">E-mail</label>
-              <input type="email" class="form-control" id="inputEmailLoja" value="{{ request.user.loja.email }}" disabled />
-            </div>
-            <div class="col-6">
-              <label for="inputToken" class="form-label">CPF/CNPJ</label>
-              <input type="text" class="form-control" id="inputToken" placeholder="1234 Main St" value="{{ request.user.loja.doc }}" />
-            </div>
-            <div class="col-6">
-              <label for="inputToken" class="form-label">WhatsApp</label>
-              <input type="text" class="form-control" id="inputToken" placeholder="1234 Main St" value="{{ request.user.loja.whatsapp_phone_number }}" />
-            </div>
-            <div class="col-12" style="margin-bottom: 5px;">
-              <a class="btn btn-info rounded-pill" href="https://www.bibelo.com.br" target="_blank">Visitar minha loja</a>
-            </div>
-          </form>
+          <p class="lh-3">
+            {{ cliente.contact_name }} {{ cliente.contact_email }}<br /> Telefone: {{ cliente.contact_phone }} <br />CPF/CNPJ: {{ cliente.contact_identification }}
+          </p>
         </div>
       </div>
     </div>
