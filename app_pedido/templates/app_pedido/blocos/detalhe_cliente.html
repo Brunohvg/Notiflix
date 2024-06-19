@@ -1,0 +1,87 @@
+{% load static %}
+<div class="container-fluid">
+  <div class="col-lg-12 col-xl-12" bis_skin_checked="1">
+    <div class="card" bis_skin_checked="1">
+      <div class="card-body position-relative" bis_skin_checked="1">
+        <div bis_skin_checked="1">
+          <h2>Detalhes do cliente</h2>
+          <div class="card-title mb-1">
+            <p>{{ cliente }}</p>
+          </div>
+        </div>
+        <!-- Mover a imagem para dentro do card -->
+        <style>
+          .school-img {
+            position: absolute;
+            bottom: 0px;
+            right: 20px;
+            max-width: 150px;
+            width: 100%;
+          }
+        </style>
+        <div class="school-img d-none d-sm-block" bis_skin_checked="1">
+          <img src="{% static 'assets/images/backgrounds/profile01.png' %}" class="img-fluid" alt="spike-img" />
+        </div>
+
+        <div class="d-sm-none d-block text-center" bis_skin_checked="1">
+          <img src="{% static 'assets/images/backgrounds/education-blocks.png' %}" class="img-fluid" alt="spike-img" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Vendas</h5>
+          <p class="card-text"></p>
+
+          <ul class="list-group list-group-flush">
+            {% for pedido in pedidos %}
+              <li class="list-group-item">
+                Id Venda: {{ pedido.id_venda }} <br /> Data Venda: {{ pedido.data_pedido }} <br /> Valor Total: R$ {{ pedido.total }}
+              </li>
+             
+            {% endfor %}
+          </ul>
+
+         
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Informações da Loja</h5>
+          <p class="card-text"></p>
+          <form class="row g-3">
+            <div class="col-md-4">
+              <label for="inputIdLoja" class="form-label">ID</label>
+              <input type="text" class="form-control" id="inputIdLoja" value="{{ request.user.loja.pk }}" disabled />
+            </div>
+            <div class="col-md-8">
+              <label for="inputNomeLoja" class="form-label">Nome/Razão Social</label>
+              <input type="text" class="form-control" id="inputNomeLoja" value="{{ request.user.loja.nome }}" disabled />
+            </div>
+            <div class="col-md-12">
+              <label for="inputEmailLoja" class="form-label">E-mail</label>
+              <input type="email" class="form-control" id="inputEmailLoja" value="{{ request.user.loja.email }}" disabled />
+            </div>
+            <div class="col-6">
+              <label for="inputToken" class="form-label">CPF/CNPJ</label>
+              <input type="text" class="form-control" id="inputToken" placeholder="1234 Main St" value="{{ request.user.loja.doc }}" />
+            </div>
+            <div class="col-6">
+              <label for="inputToken" class="form-label">WhatsApp</label>
+              <input type="text" class="form-control" id="inputToken" placeholder="1234 Main St" value="{{ request.user.loja.whatsapp_phone_number }}" />
+            </div>
+            <div class="col-12" style="margin-bottom: 5px;">
+              <a class="btn btn-info rounded-pill" href="https://www.bibelo.com.br" target="_blank">Visitar minha loja</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

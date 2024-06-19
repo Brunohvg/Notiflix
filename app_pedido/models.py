@@ -38,3 +38,8 @@ class Pedido(models.Model):
 
     def valor_formatado(self):
         return f"R${self.total:.2f}"
+
+
+    @property
+    def total_pedidos_cliente(self):
+        return self.pedidos.filter(status_pagamento="pago").count()

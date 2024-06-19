@@ -54,18 +54,8 @@ def detalhe_cliente(request, id):
             'pedidos': pedidos_do_cliente
         }
 
-        return HttpResponse(cliente,pedidos_do_cliente )
+        return render (request, template_name='app_pedido/base_detalhe_cliente.html', context=context )
     except ObjectDoesNotExist:
         return redirect('app_integracao:integracao')
 
 
-
-"""@login_required
-def detalhes_cliente(request, cliente_id):
-    try:
-        cliente = Cliente.objects.get(id=cliente_id)
-        pedidos_do_cliente = cliente.pedidos.all()
-        return render(request, "app_pedido/detalhes_cliente.html", context={"cliente": cliente, "pedidos": pedidos_do_cliente})
-    except Cliente.DoesNotExist:
-        return redirect("app_pedido:clientes")
-"""
