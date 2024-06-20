@@ -1,47 +1,44 @@
 {% load static %}
 <div class="container-fluid">
-  <div class="col-lg-12 col-xl-12" bis_skin_checked="1">
-    <div class="card" bis_skin_checked="1">
-      <div class="card-body position-relative" bis_skin_checked="1">
-        <div bis_skin_checked="1">
-          <h2>Detalhes do cliente</h2>
-          <div class="card-title mb-1">
-            <p>{{ cliente }}</p>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body position-relative">
+          <div>
+            <h2>Detalhes do cliente</h2>
+            <div class="card-title mb-1">
+              <p>{{ cliente }}</p>
+            </div>
           </div>
-        </div>
-        <!-- Mover a imagem para dentro do card -->
-        <!-- Mover a imagem para dentro do card -->
-        <style>
-          .school-img {
-            position: absolute;
-            bottom: 0px;
-            right: 20px;
-            max-width: 150px;
-            width: 100%;
-          }
-        </style>
-        <div class="school-img d-none d-sm-block" bis_skin_checked="1">
-          <img src="{% static 'assets/images/backgrounds/profile01.png' %}" class="img-fluid" alt="spike-img" />
-        </div>
-
-        <div class="d-sm-none d-block text-center" bis_skin_checked="1">
-          <img src="{% static 'assets/images/backgrounds/education-blocks.png' %}" class="img-fluid" alt="spike-img" />
+          <style>
+            .school-img {
+              position: absolute;
+              bottom: 0px;
+              right: 20px;
+              max-width: 150px;
+              width: 100%;
+            }
+          </style>
+          <div class="school-img d-none d-md-block">
+            <img src="{% static 'assets/images/backgrounds/profile01.png' %}" class="img-fluid" alt="spike-img" />
+          </div>
+          <div class="d-md-none text-center">
+            <img src="{% static 'assets/images/backgrounds/education-blocks.png' %}" class="img-fluid" alt="spike-img" />
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-sm-8">
+    <div class="col-md-8">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Vendas</h5>
-          <p class="card-text"></p>
-
           <ul class="list-group list-group-flush">
             {% for pedido in pedidos %}
               <li class="list-group-item">
-                Id Venda: {{ pedido.id_venda }} <br />p{{ pedido.data_pedido }} <br /> Valor Total: R$ {{ pedido.total }}
+                Id Venda: {{ pedido.id_venda }} <br />{{ pedido.data_pedido }} <br /> Valor Total: R$ {{ pedido.total }}
               </li>
             {% endfor %}
           </ul>
@@ -49,15 +46,54 @@
       </div>
     </div>
 
-    <!-- Card Dados Cliente -->
-    <div class="col-sm-4">
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row">
+            <h5 class="col-10 card-title">Informações do cliente</h5>
+            <a class="col-2 nimbus--icon-button__wrapper" aria-label="Dados do cliente" role="button">
+              <i class="nimbus--icon-button">
+                <span class="nimbus--tooltip-trigger" role="tooltip" aria-label="Dados do cliente">
+                  <svg aria-hidden="true" aria-label="Whatsapp" role="img" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                    <path d="M11.42 9.49c-.19-.09-1.1-.54-1.27-.61s-.29-.09-.42.1-.48.6-.59.73-.21.14-.4 0a5.13 5.13 0 0 1-1.49-.92 5.25 5.25 0 0 1-1-1.29c-.11-.18 0-.28.08-.38s.18-.21.28-.32a1.39 1.39 0 0 0 .18-.31.38.38 0 0 0 0-.33c0-.09-.42-1-.58-1.37s-.3-.32-.41-.32h-.4a.72.72 0 0 0-.5.23 2.1 2.1 0 0 0-.65 1.55A3.59 3.59 0 0 0 5 8.2 8.32 8.32 0 0 0 8.19 11c.44.19.78.3 1.05.39a2.53 2.53 0 0 0 1.17.07 1.93 1.93 0 0 0 1.26-.88 1.67 1.67 0 0 0 .11-.88c-.05-.07-.17-.12-.36-.21z"></path>
+                    <path d="M13.29 2.68A7.36 7.36 0 0 0 8 .5a7.44 7.44 0 0 0-6.41 11.15l-1 3.85 3.94-1a7.4 7.4 0 0 0 3.55.9H8a7.44 7.44 0 0 0 5.29-12.72zM8 14.12a6.12 6.12 0 0 1-3.15-.87l-.22-.13-2.34.61.62-2.28-.14-.23a6.18 6.18 0 0 1 9.6-7.65 6.12 6.12 0 0 1 1.81 4.37A6.19 6.19 0 0 1 8 14.12z"></path>
+                  </svg>
+                </span>
+              </i>
+            </a>
+          </div>
+          <p class="lh-2">
+            {{ cliente.contact_name }} <br /> {{ cliente.contact_email }}<br /> Telefone: {{ cliente.contact_phone }} <br />CPF/CNPJ: {{ cliente.contact_identification }}
+          </p>
+          <a class="nimbus--link nimbus--link--primary nimbus--link--base" href="#">
+            <i class="nimbus--link__icon nimbus--link__icon--start">
+              <svg aria-hidden="true" aria-label="Trash" role="img" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                <path d="M13.11 1.88a1.27 1.27 0 0 0-.9-.38h-3v-.3a1.25 1.25 0 0 0-2.5 0v.3h-3a1.25 1.25 0 0 0-1.17 1.29l.41 12A1.26 1.26 0 0 0 4.2 16h7.59A1.24 1.24 0 0 0 13 14.79l.42-12a1.28 1.28 0 0 0-.31-.91zM4.2 14.75l-.32-9.5h8.24l-.33 9.5zM12.16 4H3.84V2.75h8.42z"></path>
+                <path d="M5 7h1.25v5H5zm2.37 0h1.25v5H7.37zm2.38 0H11v5H9.75z"></path>
+              </svg>
+            </i>Eliminar dados do cliente
+          </a>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Informações do cliente</h5>
-          <p class="card-text"></p>
-          <p class="lh-3">
-            {{ cliente.contact_name }} {{ cliente.contact_email }}<br /> Telefone: {{ cliente.contact_phone }} <br />CPF/CNPJ: {{ cliente.contact_identification }}
-          </p>
+          <div class="row">
+            <h5 class="col-10 card-title">Anotações</h5>
+            <a class="col-2 nimbus--icon-button__wrapper" aria-label="Anotações" href="##">
+              <i class="nimbus--icon-button">
+                <span class="nimbus--tooltip-trigger" role="tooltip" aria-label="Anotações">
+                  <svg aria-hidden="true" aria-label="Edit" role="img" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                    <path d="M15.49 7.3h-1.16v6.35H1.67V3.28H8V2H1.67A1.21 1.21 0 0 0 .5 3.28v10.37a1.21 1.21 0 0 0 1.17 1.25h12.66a1.21 1.21 0 0 0 1.17-1.25z"></path>
+                    <path d="M10.56 2.87 6.22 7.22l-.44.44-.08.08-1.52 3.16a1.08 1.08 0 0 0 1.45 1.45l3.14-1.53.53-.53.43-.43 4.34-4.36.45-.44.25-.25a2.18 2.18 0 0 0 0-3.08 2.17 2.17 0 0 0-1.53-.63 2.19 2.19 0 0 0-1.54.63l-.7.69-.45.44zM5.51 11l1.18-2.43 1.25 1.26zm2-3.36 3.9-3.91 1.3 1.31L8.85 9zm5.68-5.31a.91.91 0 0 1 .65.27.93.93 0 0 1 0 1.31l-.25.24-1.3-1.3.25-.25a.88.88 0 0 1 .69-.25z"></path>
+                  </svg>
+                </span>
+              </i>
+            </a>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="" disabled />
+          </div>
         </div>
       </div>
     </div>

@@ -18,10 +18,10 @@
       <div class="action-btn show-btn" style="display: block;">
         <a href="{% url 'app_integracao:integracao' %}" class="delete-multiple bg-danger-subtle btn me-2 text-danger d-flex align-items-center"><i class="ti ti- me-1 fs-5"></i> Voltar</a>
       </div>
-      <form method="post" action="{% url 'app_pedido:pedidos' %}" id="form-sincronizar">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary d-flex align-items-center"><i class="ti ti-users text-white me-1 fs-5"></i> Deletar integração</button>
-      </form>
+   
+
+        <a type="button" href="{% url "app_integracao:desativar_integracao" %}" class="btn btn-primary d-flex align-items-center"><i class="ti ti-users text-white me-1 fs-5"></i> Deletar integração</a>
+
     </div>
   </div>
 </div>

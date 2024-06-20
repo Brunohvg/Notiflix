@@ -144,6 +144,7 @@ def desativar_integracao(request):
     Deactivate the store integration.
     """
     loja = get_object_or_404(LojaIntegrada, id=request.user.loja.id)
+    
 
     if loja.usuario == request.user:
         cache_key = f"loja_{loja.id}_dados"

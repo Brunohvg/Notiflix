@@ -1,6 +1,81 @@
 {% extends 'pages/base/base.html' %}
 
 {% block Dashboard %}
-{% include "app_pedido/blocos/detalhe_cliente.html" %}
+  {% include 'app_pedido/blocos/detalhe_cliente.html' %}
 {% endblock %}
-
+{% block scripts %}
+  <style>
+    .nimbus--link--base {
+      font-family: Geist, -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', arial, sans-serif;
+      font-weight: 400;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+    .nimbus--link--primary {
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: rgba(0, 0, 0, 0);
+        -webkit-column-gap: .25rem;
+        -moz-column-gap: .25rem;
+        column-gap: .25rem;
+        cursor: pointer;
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        text-align: center;
+        -webkit-transition: 150ms ease;
+        transition: 150ms ease;
+        vertical-align: middle;
+        border: 1px solid rgba(0, 0, 0, 0);
+        border-radius: .5rem;
+        color: #0059d5;
+        font-family: Geist, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", arial, sans-serif;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        text-align: left;
+        text-decoration: none;
+        vertical-align: baseline;
+    }
+    element.style {
+        display: inline-block;
+        user-select: none;
+        vertical-align: middle;
+    }
+    .nimbus--tooltip-trigger {
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: rgba(0, 0, 0, 0);
+        -webkit-column-gap: .25rem;
+        -moz-column-gap: .25rem;
+        column-gap: .25rem;
+        cursor: pointer;
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        text-align: center;
+        -webkit-transition: 150ms ease;
+        transition: 150ms ease;
+        vertical-align: middle;
+        border: 1px solid rgba(0, 0, 0, 0);
+        border-radius: .5rem;
+        color: #0059d5;
+        font-family: Geist, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", arial, sans-serif;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        text-align: left;
+        text-decoration: none;
+        vertical-align: baseline;
+        margin: -0.5rem;
+        padding: .5rem;
+    }
+    
+  </style>
+{% endblock %}
