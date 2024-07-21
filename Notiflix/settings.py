@@ -32,8 +32,6 @@ INSTALLED_APPS = [
     "app_pedido",
     "app_webhook",
     "app_mensagem",
-    "django_celery_results",
-    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -167,17 +165,3 @@ LOGGING = {
         },
     },
 }
-
-# Celery configuration
-# CELERY_BROKER_URL = "redis://159.54.139.153:6379/0"
-#result_backend 
-RESULT_BACKEND = "django-db"
-CELERY_BROKER_URL = config("CELERY_BROKER_REDIS_URL", default="redis://localhost:6379")
-
-"""CELERY_ACCEPT_CONTENT = ["json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_TIMEZONE = "America/Sao_Paulo"
-CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True"""
-
-CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"
