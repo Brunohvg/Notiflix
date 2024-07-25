@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "app_pedido",
     "app_webhook",
     "app_mensagem",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,14 @@ LOGGING = {
         },
     },
 }
+
+
+# Celery Configurations
+
+CELERY_BROKER_URL = (
+    "amqp://admin:Mfcd62!!Mfcd62!!@rabbitmq.lojabibelo.com.br:5672/cloudstore"
+)
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
