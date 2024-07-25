@@ -5,5 +5,5 @@ from .tasks import teste
 # Create your views here.
 @login_required
 def dashboard(request):
-    teste.delay(15, 115)
+    teste.delay(10, 10)
     return render(request, template_name=("app_dashboard/base.html"))
