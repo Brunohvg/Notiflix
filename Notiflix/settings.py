@@ -171,7 +171,7 @@ LOGGING = {
 # Celery Configurations
 
 CELERY_BROKER_URL = (
-    "amqp://admin:Mfcd62!!Mfcd62!!@rabbitmq.lojabibelo.com.br:5672/cloudstore"
+    config('CELERY_BROKER_URL')
 )
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ["json"]
