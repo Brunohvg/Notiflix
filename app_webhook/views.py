@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from libs.integracoes.processamento.processar_webhook import processar_eventos
 from app_integracao.htmx_views import update_instance_status, check_instance
 from django.shortcuts import get_object_or_404
-from app_integracao.models import LojaIntegrada
+from app_integracao.models import LojaIntegrada, WhatsappIntegrado
 
 
 logger = logging.getLogger(__name__)
@@ -21,13 +21,13 @@ def webhook_receiver(request, store_id):
             webhook_data = json.loads(request.body)
             event_type = webhook_data.get("event")
             order_id = webhook_data.get("id")
-      
+
             if not event_type or not order_id:
                 logger.error("Parâmetros do webhook incompletos: %s", webhook_data)
                 return JsonResponse(
                     {"error": "Parâmetros do webhook incompletos"}, status=400
                 )
-            
+
             # Agora que temos certeza que store_id existe, podemos prosseguir
             if processar_eventos.delay(store_id, event_type, order_id):
                 return JsonResponse({"status": "success"}, status=200)
@@ -53,6 +53,7 @@ def webhook_receiver(request, store_id):
 
 @csrf_exempt
 def webhook_zap(request, id):
+
     if request.method == "POST":
         try:
             data = json.loads(request.body)
