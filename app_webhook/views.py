@@ -4,25 +4,32 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from libs.integracoes.processamento.processar_webhook import processar_eventos
 from app_integracao.htmx_views import update_instance_status, check_instance
+from django.shortcuts import get_object_or_404
+from app_integracao.models import LojaIntegrada
+
 
 logger = logging.getLogger(__name__)
 
 
 @csrf_exempt
 def webhook_receiver(request, store_id):
+    # Verifica se a loja com o ID fornecido existe no banco de dados
+    store = get_object_or_404(LojaIntegrada, id=store_id)
+
     if request.method == "POST":
         try:
             webhook_data = json.loads(request.body)
             event_type = webhook_data.get("event")
             order_id = webhook_data.get("id")
-
+      
             if not event_type or not order_id:
                 logger.error("Parâmetros do webhook incompletos: %s", webhook_data)
                 return JsonResponse(
                     {"error": "Parâmetros do webhook incompletos"}, status=400
                 )
-
-            if processar_eventos(store_id, event_type, order_id):
+            
+            # Agora que temos certeza que store_id existe, podemos prosseguir
+            if processar_eventos.delay(store_id, event_type, order_id):
                 return JsonResponse({"status": "success"}, status=200)
             else:
                 logger.error("Falha ao processar o evento do webhook: %s", webhook_data)
