@@ -2,7 +2,9 @@
 
 {% block Dashboard %}
   {% include 'app_pedido/blocos/tabela_pedido.html' %}
-  {% include 'app_pedido/blocos/tabela_cliente.html' %}
+  {% if clientes %}
+    {% include 'app_pedido/blocos/tabela_cliente.html' %}
+  {% endif %}
 {% endblock %}
 {% block scripts %}
   {% include 'pages/blocos/scripts-tabela.html' %}
