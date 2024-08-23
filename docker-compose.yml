@@ -1,9 +1,46 @@
-version: '3'
-
+version: "3.8"
 services:
   web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    image: notiflix
+    build:
+      context: .
     ports:
-      - "8000:8000"
-    
+      - "5000:8000"
+    environment:
+      - DEBUG=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - APIKEYS=${APIKEYS}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+    networks:
+      - traefik_public
+    volumes:
+      - static_data:/app/staticfiles
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1024M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.web.rule=Host(`cp.lojabibelo.com.br`)
+        - traefik.http.routers.web.tls.certresolver=le
+        - traefik.http.routers.web.entrypoints=websecure
+        - traefik.http.routers.web.tls=true
+        - traefik.http.services.web.loadbalancer.server.port=8000
+        # Adicione esta label para servir arquivos estáticos
+        - traefik.http.middlewares.test-compress.compress=true
+        - traefik.http.routers.web.middlewares=test-compress
+
+networks:
+  traefik_public:
+    external: true
+
+volumes:
+  static_data:

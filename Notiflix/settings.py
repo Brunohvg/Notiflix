@@ -47,6 +47,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
+
 ROOT_URLCONF = "Notiflix.urls"
 
 TEMPLATES = [
@@ -114,15 +115,33 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "/static/"
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "templates/static"),)
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+#STATIC_URL = "/static/"
+#STATICFILES_DIRS = (os.path.join(BASE_DIR, "templates/static"),)
+#STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "templates/media")
 MEDIA_URL = "/media/"
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "templates/static"),)
+
+
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+
+
+
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
+
+
 
 # Logging configuration
 LOGGING = {
@@ -167,3 +186,6 @@ LOGGING = {
         },
     },
 }
+
+
+
