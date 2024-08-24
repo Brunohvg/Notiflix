@@ -5,20 +5,14 @@ from decouple import config, Csv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", cast=bool, default=False)
+DEBUG = config("DEBUG", cast=bool, default=True)
 
-#ALLOWED_HOSTS = ["*"]  # Permitir todos os hosts (não recomendado para produção)
-#ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
+# ALLOWED_HOSTS configuration
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default=[])
-
-APPEND_SLASH = True
 
 # Application definition
 INSTALLED_APPS = [
@@ -46,7 +40,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
-
 
 ROOT_URLCONF = "Notiflix.urls"
 
@@ -76,15 +69,16 @@ DATABASES = {
     }
 }
 
-# Dtabase Postgresql
-"""DATABASES = {
+# PostgreSQL configuration (commented out)
+"""
+DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": config("POSTGRES_DB"),
         "USER": config("POSTGRES_USER"),
         "PASSWORD": config("POSTGRES_PASSWORD"),
         "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT", 5431, cast=int),
+        "PORT": config("DB_PORT", 5432, cast=int),
     }
 }
 """
@@ -115,33 +109,27 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-#STATIC_URL = "/static/"
-#STATICFILES_DIRS = (os.path.join(BASE_DIR, "templates/static"),)
-#STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "templates/static")]
 
+# Media files
 MEDIA_ROOT = os.path.join(BASE_DIR, "templates/media")
 MEDIA_URL = "/media/"
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "templates/static"),)
-
-
-
+# Use WhiteNoise to serve static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
-
-
-
+# Security settings
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_SSL_REDIRECT = False  # Desative o redirecionamento para HTTPS no desenvolvimento
+CSRF_COOKIE_SECURE = False  # Desative em desenvolvimento, ative em produção
+SESSION_COOKIE_SECURE = False  # Desative em desenvolvimento, ative em produção
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
-
-
-
 
 # Logging configuration
 LOGGING = {
@@ -156,36 +144,27 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "standard",
         },
-        "file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "formatter": "standard",
-            "filename": os.path.join(os.path.dirname(__file__), "django.log"),
-        },
     },
     "loggers": {
         "": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
         },
         "django": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
         },
         "app_webhook": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "DEBUG",
             "propagate": False,
         },
         "app_integracao": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "DEBUG",
             "propagate": False,
         },
     },
 }
-
-
-
