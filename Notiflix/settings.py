@@ -118,9 +118,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "templates/media")
 MEDIA_URL = "/media/"
 
 # Use WhiteNoise to serve static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Temporariamente, para depuração
-#STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Security settings
 SECURE_BROWSER_XSS_FILTER = True
