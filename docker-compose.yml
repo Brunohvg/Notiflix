@@ -1,9 +1,7 @@
 version: "3.8"
 services:
   web:
-    image: notiflix
-    build:
-      context: .
+    image: brunobh51/notiflix:latest
     ports:
       - "5000:8000"
     environment:

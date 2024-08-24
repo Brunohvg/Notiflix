@@ -6,7 +6,7 @@
 local_settings.py
 
 # Static files #
-staticfiles/
+#staticfiles/
 
 # Test database #
 #db.sqlite3

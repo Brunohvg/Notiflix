@@ -3,18 +3,19 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
+# Copiar e instalar dependências
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copiar o código do projeto
 COPY . .
 
-# Coletar arquivos estáticos
-RUN python manage.py collectstatic --noinput
-
+# Expor a porta 8000 no contêiner
 EXPOSE 8000
 
-# Usar um script de entrada para inicializar a aplicação
+# Copiar o script de entrada e garantir permissões
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+# Usar o script de entrada para iniciar a aplicação
 ENTRYPOINT ["/entrypoint.sh"]
