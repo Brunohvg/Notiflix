@@ -1,42 +1,47 @@
-version: "3.7"
+version: '3.8'
+
 services:
-  django:
-    image: brunobh51/notiflix_v1.0.1:latest
+  app:
+    build:
+      context: ./django
+      dockerfile: Dockerfile
     container_name: django_app
     command: gunicorn your_project.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - "8000"
     volumes:
       - static_data:/app/staticfiles
-      - media_volume:/app/templates/media
-    expose:
-      - "5000:8000"
+      - media_data:/app/media
     networks:
       - traefik_public
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`cp.lojabibelo.com.br`)"
-      - "traefik.http.services.django.loadbalancer.server.port=8000"
+      - "traefik.http.routers.app.rule=Host(`cp.lojabibelo.com.br`)"
+      - "traefik.http.services.app.loadbalancer.server.port=8000"
 
   nginx:
-    image: nginx/nginx-ingress:latest-alpine
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     container_name: nginx_static
     volumes:
-      - static_data:/usr/share/nginx/html/static
-      - media_volume:/usr/share/nginx/html/media
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static_data:/static
+      - media_data:/media
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - traefik_public
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nginx_static.rule=Host(`static.cp.lojabibelo.com.br`)"
+      - "traefik.http.routers.nginx_static.entrypoints=web"
       - "traefik.http.services.nginx_static.loadbalancer.server.port=80"
+    depends_on:
+      - app
 
 volumes:
   static_data:
-  media_volume:
+  media_data:
 
 networks:
   traefik_public:
     external: true
-
-
-

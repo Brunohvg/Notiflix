@@ -1,7 +1,11 @@
 FROM python:3.12.3
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
+
+# Criar um usuário não root
+RUN useradd -ms /bin/sh appuser
+USER appuser
 
 # Copiar e instalar dependências
 COPY requirements.txt ./
