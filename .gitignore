@@ -67,14 +67,14 @@ atlassian-ide-plugin.xml
 # Distribution / packaging 
 .Python build/ 
 develop-eggs/ 
-dist/ 
+#dist/ 
 downloads/ 
 eggs/ 
 .eggs/ 
 lib/ 
 lib64/ 
 parts/ 
-sdist/ 
+#sdist/ 
 var/ 
 wheels/ 
 *.whl
