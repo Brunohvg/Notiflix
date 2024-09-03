@@ -11,8 +11,8 @@ class Whatsapp:
     """
     Classe para integração com o serviço de WhatsApp.
     """
-
-    URL = "https://zap.lojabibelo.com.br"
+#TODO TROCAR A URL DA API POR UMA VARIAVEL 
+    URL = "https://api.lojabibelo.com.br"
 
     def __init__(self) -> None:
         """

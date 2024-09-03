@@ -70,6 +70,7 @@ DATABASES = {
 }
 
 # PostgreSQL configuration (commented out)
+#TODO TORCAR AS REFERENCIAS DO BANCO DE DADOS
 """
 DATABASES = {
     "default": {
