@@ -11,16 +11,57 @@ class Whatsapp:
     """
     Classe para integração com o serviço de WhatsApp.
     """
-#TODO TROCAR A URL DA API POR UMA VARIAVEL 
-    URL = "https://api.lojabibelo.com.br"
 
     def __init__(self) -> None:
         """
-        Inicializa a classe Whatsapp e configura a APIKEY.
+        Inicializa a classe Whatsapp e configura a APIKEY e URL da API.
         """
         self.APIKEY = config("APIKEYS")
+        self.URL = config("WHATSAPP_API_URL", default="https://api.lojabibelo.com.br")
+
         if not self.APIKEY:
             raise ValueError("APIKEY não configurada")
+        if not self.URL:
+            raise ValueError("URL da API não configurada")
+        
+    def _verificar_instancia_logada(self, instance_name):
+        """
+        Verifica se uma instância do WhatsApp está logada.
+
+        Args:
+            instance_name (str): Nome da instância do WhatsApp.
+
+        Returns:
+            bool: True se a instância estiver logada, False caso contrário.
+        """
+        url = f"{self.URL}/instance/{instance_name}/status"
+        headers = {
+            "accept": "application/json",
+            "apikey": self.APIKEY,
+            "Content-Type": "application/json",
+        }
+
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            response_data = response.json()
+            status = response_data.get("status")
+            
+            if status == "logged_in":
+                return True
+            return False
+
+        except requests.exceptions.HTTPError as e:
+            logger.error(
+                f"Erro na solicitação HTTP ao verificar status da instância: {e.response.status_code} - {e.response.text}"
+            )
+            return False
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro na solicitação ao verificar status da instância: {e}")
+            return False
+        except Exception as e:
+            logger.error(f"Erro inesperado ao verificar status da instância: {e}")
+            return False
 
     def _create_instancia(self, instanceName, instanceId):
         """
@@ -40,30 +81,26 @@ class Whatsapp:
             "Content-Type": "application/json",
         }
 
-        # Gerar um token aleatório de 8 caracteres alfanuméricos
-        #token = str(uuid.uuid4()).upper()
-
         data = {
             "instanceId": instanceId,
             "instanceName": instanceName,
             "qrcode": True,
-            
         }
 
         try:
             response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
             response_data = response.json()
-            instanceName = response_data.get("instance", {}).get("instanceName")
-            instanceId = response_data.get("instance", {}).get("instanceId")
+            instance_name = response_data.get("instance", {}).get("instanceName")
+            instance_id = response_data.get("instance", {}).get("instanceId")
             token = response_data.get("hash", {}).get("apikey")
             qr_code_data = response_data.get("qrcode", {}).get("base64")
             status = response_data.get("instance", {}).get("status")
 
-            if instanceId and instanceName:
-                webhook_url = f"{self.URL}/webhook/set/{instanceName}"
+            if instance_id and instance_name:
+                webhook_url = f"{self.URL}/webhook/set/{instance_name}"
                 webhook_data = {
-                    "url": f"https://goblin-romantic-imp.ngrok-free.app/zapi/{instanceId}/",
+                    "url": f"https://cp.lojabibelo.com.br/zapi/{instance_id}/",
                     "webhook_by_events": False,
                     "webhook_base64": False,
                     "events": ["QRCODE_UPDATED", "CONNECTION_UPDATE"],
@@ -77,19 +114,15 @@ class Whatsapp:
                     return (
                         qr_code_data,
                         token,
-                        instanceId,
+                        instance_id,
                         status,
                     )
             else:
-                logger.warning(
-                    "instanceId ou instanceName não encontrado na resposta da API."
-                )
+                logger.warning("instanceId ou instanceName não encontrado na resposta da API.")
                 return None, None, None, None
 
         except requests.exceptions.HTTPError as e:
-            logger.error(
-                f"Erro na solicitação HTTP: {e.response.status_code} - {e.response.text}"
-            )
+            logger.error(f"Erro na solicitação HTTP: {e.response.status_code} - {e.response.text}")
             return None, None, None, None
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro na solicitação: {e}")
@@ -130,31 +163,17 @@ class Whatsapp:
             response = requests.post(url, headers=headers, json=data)
             if response.status_code == 401:
                 error_response = response.json()
-                logger.error(
-                    f"Erro 401 Unauthorized: {error_response['response']['message']}"
-                )
+                logger.error(f"Erro 401 Unauthorized: {error_response['response']['message']}")
                 return None
             response.raise_for_status()
             response_data = response.json()
-            return response_data, {"status_code": 200}
+            return response_data, {"status_code": response.status_code}
         except requests.exceptions.HTTPError as e:
-            logger.error(
-                f"Erro na solicitação HTTP: {e.response.status_code} - {e.response.text}"
-            )
-            return {"status_code": 400}
+            logger.error(f"Erro na solicitação HTTP: {e.response.status_code} - {e.response.text}")
+            return {"status_code": e.response.status_code}
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro na solicitação: {e}")
-            return None
+            return {"status_code": 400}
         except Exception as e:
             logger.error(f"Erro inesperado: {e}")
             return {"status_code": 400}
-
-"""# Exemplo de uso
-if __name__ == "__main__":
-    WHATSAPP = Whatsapp()
-    result = WHATSAPP._enviar_msg('31973121650', '5721C91E-D2DC-4563-B8D7-3E64CBEF33CE', '5531973121650', 'esse é um teste')
-    if result is None:
-        print("Falha ao enviar a mensagem")
-    else:
-        print(result)
-"""
