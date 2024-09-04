@@ -76,7 +76,7 @@ def generate_token(sender, instance, **kwargs):
         instance.token = token"""
 
 
-@receiver(post_save, sender=LojaIntegrada)
+"""@receiver(post_save, sender=LojaIntegrada)
 def create_webhook(sender, instance, created, **kwargs):
     if created:
         try:
@@ -100,4 +100,30 @@ def create_webhook(sender, instance, created, **kwargs):
             instance.events = events  # Armazena os eventos na loja integrada
             instance.save()
         except Exception as e:
+            logger.error(f"Erro ao criar webhook para a loja {instance.id}: {e}")"""
+
+@receiver(post_save, sender=LojaIntegrada)
+def create_webhook(sender, instance, created, **kwargs):
+    if created:
+        try:
+            nuvem_shop = NuvemShop()
+            events = [
+                "order/paid",
+                "order/packed",
+                "order/fulfilled",
+                "order/cancelled",
+            ]
+            webhook_url = f"https://{URL_WEBHOOK}/webhook/{instance.id}/"
+            logger.info(f"Webhook URL gerada: {webhook_url}")  # Adiciona log para depuração
+            results = nuvem_shop._post_create_webhooks_batch(
+                code=instance.autorization_token,
+                store_id=instance.id,
+                url_webhook=webhook_url,
+                events=events,
+            )
+            instance.webhook_url = webhook_url
+            instance.events = events  # Armazena os eventos na loja integrada
+            instance.save()
+        except Exception as e:
             logger.error(f"Erro ao criar webhook para a loja {instance.id}: {e}")
+
