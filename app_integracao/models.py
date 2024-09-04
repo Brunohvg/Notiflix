@@ -7,6 +7,9 @@ from django.dispatch import receiver
 from libs.integracoes.api.api_nuvemshop import NuvemShop
 import logging
 
+
+URL_WEBHOOK = "cp.lojabibelo.com.br"
+
 logger = logging.getLogger(__name__)
 
 
@@ -85,7 +88,7 @@ def create_webhook(sender, instance, created, **kwargs):
                 "order/cancelled",
             ]
             webhook_url = (
-                f"https://goblin-romantic-imp.ngrok-free.app/webhook/{instance.id}/"
+                f"https://{URL_WEBHOOK}/webhook/{instance.id}/"
             )
             results = nuvem_shop._post_create_webhooks_batch(
                 code=instance.autorization_token,

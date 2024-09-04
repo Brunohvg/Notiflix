@@ -245,9 +245,9 @@ class NuvemShop:
 """
 nuvem_shop = NuvemShop()
 
-store_id = "2386568"
-results = nuvem_shop.store_nuvem(
-    code="84b3e93d7569e8a85ac7b24b79831ef7ea7f614d",
+store_id = "2686287"
+results = nuvem_shop._get_webhook(
+    code="ad55304698ac45970237fd9d3bca1eb39deb8fb9",
     store_id=store_id,
 )
 print(results)
