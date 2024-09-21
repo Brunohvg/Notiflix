@@ -181,9 +181,10 @@ def integra_whatsapp(request, instanceId=None):
         return render(request, "app_integracao/base_integracao_whatsapp.html")
 
     if request.method == "POST":
-        name = request.POST.get("name")
-        instanceName = request.POST.get("id_telefone")
-        instanceName = re.sub(r'\D', '', instanceName)  # Remove non-numeric characters
+        instanceName = request.POST.get("name")
+        instanceId = request.POST.get("id_telefone")
+        instanceId = request.POST.get("id_telefone")
+        instanceId = re.sub(r'\D', '', instanceName)  # Remove non-numeric characters
         number = re.sub(r'\D', '', "55" + instanceName)
         loja = request.user.loja
 

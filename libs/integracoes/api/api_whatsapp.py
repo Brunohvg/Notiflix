@@ -108,7 +108,7 @@ class Whatsapp:
                     webhook_data = {
                         "webhook": {
                             "enabled": True,
-                            "url": "https://webhook-test.com/9c89855f732fa68ebd872395541fd0a0",
+                            "url": f"http://127.0.0.1:8000/zapi/{instance_id}/",
                             "headers": {
                                 "Authorization": f"Bearer {token}",
                                 "Content-Type": "application/json"
@@ -202,6 +202,4 @@ class Whatsapp:
 # Exemplo de uso da classe Whatsapp
 WHATSAPP = Whatsapp()
 # print(WHATSAPP._verificar_instancia_logada(instance_name='bibelo'))
-print(WHATSAPP._create_instancia('BRUNO2', 'BRUNO2', "553192430001"))
-
-
+#print(WHATSAPP._create_instancia('BRUNO1', 'BRUNO1', "553192430001"))
