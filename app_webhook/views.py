@@ -58,11 +58,9 @@ def webhook_zap(request, id):
                 print(f"PRINTANDO A base64_qrcode {base64_qrcode}")
                 instance_id = data.get("instance")
                 print(f"PRINTANDO A instance_id {instance_id}")
-                print(instance_id)
-
+                
                 if base64_qrcode and instance_id:
                     data_response = {"qrcode": base64_qrcode, "instancia": instance_id}
-                    print(f"PRINTANDO A data_response {data_response}")
                     return check_instance(request, data=data_response, id=id)
 
             logger.info(f"Dados recebidos: {event}")
