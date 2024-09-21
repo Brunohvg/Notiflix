@@ -13,11 +13,11 @@ from django.db import IntegrityError
 
 from .models import LojaIntegrada, WhatsappIntegrado
 from libs.integracoes.api.api_nuvemshop import NuvemShop
-from libs.integracoes.api.api_whatsapp import Whatsapp
+from libs.integracoes.api.api_whatsapp import WhatsApp
 
 logger = logging.getLogger(__name__)
 
-WHATSAPP = Whatsapp()
+WHATSAPP = WhatsApp()
 NUVEMSHOP = NuvemShop()
 PARAMETRO_CODE = "code"
 
@@ -205,7 +205,7 @@ def integra_whatsapp(request, instanceId=None):
                 return redirect("app_integracao:integracao")
 
             # Create new WhatsApp instance
-            qr_code_base64, token, instanceId, status = WHATSAPP._create_instancia(
+            qr_code_base64, token, instanceId, status = WHATSAPP.create_instance(
                 instanceName, instanceId, number    
             )
             if not qr_code_base64:

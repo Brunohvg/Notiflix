@@ -243,11 +243,11 @@ class NuvemShop:
 
 # Exemplo de uso
 
-nuvem_shop = NuvemShop()
+"""nuvem_shop = NuvemShop()
 
 store_id = "2686287"
 results = nuvem_shop._get_webhook(
     code="f99079b572da305cb060f47d6cd98f5b3a6d160e",
     store_id=store_id,
 )
-print(results)
+print(results)"""

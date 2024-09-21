@@ -1,13 +1,13 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import Pedido
-from libs.integracoes.api.api_whatsapp import Whatsapp
+from libs.integracoes.api.api_whatsapp import WhatsApp
 from app_mensagem.models import MensagemPadrao
 
-WHATSAPP = Whatsapp()
+WHATSAPP = WhatsApp()
 
 @receiver(post_save, sender=Pedido)
-def _enviar_msg(sender, instance, created, **kwargs):
+def send_message(sender, instance, created, **kwargs):
     # Obtém os dados necessários do pedido
     phone = instance.cliente.contact_phone
     nome = instance.cliente.contact_name
@@ -30,7 +30,7 @@ def _enviar_msg(sender, instance, created, **kwargs):
     # Verifica se há uma instância do WhatsApp logada
     try:
         # Verifica a lista de instâncias logadas
-        instancia_logada = WHATSAPP._verificar_instancia_logada(instance_name)
+        instancia_logada = WHATSAPP.is_instance_logged_in(instance_name)
         if not instancia_logada:
             print(f"Nenhuma instância do WhatsApp logada com o nome '{instance_name}'. Mensagem não enviada.")
             return

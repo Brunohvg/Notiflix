@@ -6,24 +6,27 @@ from decouple import config
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class Whatsapp:
+class WhatsApp:
     """
     Classe para integração com o serviço de WhatsApp.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         """
-        Inicializa a classe Whatsapp e configura a APIKEY e URL da API.
+        Inicializa a classe WhatsApp e configura a API_KEY e API_URL.
         """
-        self.APIKEY = config("APIKEYS")
-        self.URL = config("WHATSAPP_API_URL", default="https://api.lojabibelo.com.br")
+        self.API_KEY = config("API_KEY")  # Renomeado para API_KEY
+        self.API_URL = config("WHATSAPP_API_URL", default="https://api.lojabibelo.com.br")  # Renomeado para API_URL
+        self.WEBHOOk_URL = config("WEBHOOK_URL", default="https://goblin-romantic-imp.ngrok-free.app" )
 
-        if not self.APIKEY:
-            raise ValueError("APIKEY não configurada")
-        if not self.URL:
+        if not self.API_KEY:
+            raise ValueError("API_KEY não configurada")
+        if not self.API_URL:
             raise ValueError("URL da API não configurada")
+        if not self.WEBHOOk_URL:
+            raise ValueError("URL de WEBHOOK Padrão não configurada")
         
-    def _verificar_instancia_logada(self, instance_name):
+    def is_instance_logged_in(self, instance_name):  # Renomeado para is_instance_logged_in
         """
         Verifica se uma instância do WhatsApp está logada.
 
@@ -33,10 +36,10 @@ class Whatsapp:
         Returns:
             bool: True se a instância estiver logada, False caso contrário.
         """
-        url = f"{self.URL}/instance/connectionState/{instance_name}"
+        url = f"{self.API_URL}/instance/connectionState/{instance_name}"
         headers = {
             "accept": "application/json",
-            "apikey": self.APIKEY,
+            "apikey": self.API_KEY,
             "Content-Type": "application/json",
         }
 
@@ -48,11 +51,6 @@ class Whatsapp:
             
             return status == "open"
 
-        except requests.exceptions.HTTPError as e:
-            logger.error(
-                f"Erro na solicitação HTTP ao verificar status da instância: {e.response.status_code} - {e.response.text}"
-            )
-            return False
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro na solicitação ao verificar status da instância: {e}")
             return False
@@ -60,28 +58,28 @@ class Whatsapp:
             logger.error(f"Erro inesperado ao verificar status da instância: {e}")
             return False
 
-    def _create_instancia(self, instanceName, instanceId, number):
+    def create_instance(self, instance_name, instance_id, number):  # Renomeado para create_instance
         """
         Cria uma nova instância de WhatsApp e obtém o QR Code para configuração.
 
         Args:
-            instanceName (str): Nome da instância do WhatsApp.
-            instanceId (str): ID da instância do WhatsApp.
+            instance_name (str): Nome da instância do WhatsApp.
+            instance_id (str): ID da instância do WhatsApp.
             number (str): Número do WhatsApp.
 
         Returns:
-            tuple: Contendo QR Code em base64, token, instanceId e status.
+            tuple: Contendo QR Code em base64, token, instance_id e status.
         """
-        url = f"{self.URL}/instance/create"
+        url = f"{self.API_URL}/instance/create"
         headers = {
             "accept": "application/json",
-            "apikey": self.APIKEY,
+            "apikey": self.API_KEY,
             "Content-Type": "application/json",
         }
 
         data = {
-            "instanceName": instanceName,
-            "instanceId": instanceId,
+            "instanceName": instance_name,
+            "instanceId": instance_id,
             "integration": "WHATSAPP-BAILEYS",
             "qrcode": True,
             "number": number,
@@ -94,57 +92,21 @@ class Whatsapp:
             logger.info(f"Resposta da API: {response_data}")
 
             if isinstance(response_data, dict):
-                instance_name = response_data.get("instance", {}).get("instanceName")
-                
-                instance_id = response_data.get("instance", {}).get("instanceId")
-                
+                instance = response_data.get("instance", {})
+                instance_name = instance.get("instanceName")
+                instance_id = instance.get("instanceId")
                 token = response_data.get("hash")
-                
                 qr_code_data = response_data.get("qrcode", {}).get("base64")
-                status = response_data.get("instance", {}).get("status")
+                status = instance.get("status")
                 
                 if instance_id and instance_name:
-                    webhook_url = f"{self.URL}/webhook/set/{instance_name}"
-                    webhook_data = {
-                        "webhook": {
-                            "enabled": True,
-                            "url": f"http://127.0.0.1:8000/zapi/{instance_id}/",
-                            "headers": {
-                                "Authorization": f"Bearer {token}",
-                                "Content-Type": "application/json"
-                            },
-                            "byEvents": False,
-                            "base64": False,
-                            "events": [
-                                "QRCODE_UPDATED",
-                                "CONNECTION_UPDATE",
-                            ]
-                        }
-                    }
-                    webhook_response = requests.post(
-                        webhook_url, headers=headers, json=webhook_data
-                    )
-                    print(webhook_response)
-                    webhook_response.raise_for_status()
+                    self._set_webhook(instance_name, instance_id, token)
                     if qr_code_data:
-                        return (
-                            qr_code_data,
-                            token,
-                            instance_id,
-                            status,
-                        )
+                        return qr_code_data, token, instance_id, status
 
-
-                else:
-                    logger.warning("instanceId ou instanceName não encontrado na resposta da API.")
-                    return None, None, None, None
-            else:
-                logger.error("A resposta da API não é um dicionário.")
-                return None, None, None, None
-
-        except requests.exceptions.HTTPError as e:
-            logger.error(f"Erro na solicitação HTTP: {e.response.status_code} - {e.response.text}")
+            logger.error("Dados inválidos na resposta da API.")
             return None, None, None, None
+
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro na solicitação: {e}")
             return None, None, None, None
@@ -152,54 +114,78 @@ class Whatsapp:
             logger.error(f"Erro inesperado: {e}")
             return None, None, None, None
 
-    def _enviar_msg(self, instance_name, apikey, number_phone, texto):
+    def _set_webhook(self, instance_name, instance_id, token):
+        """
+        Configura o webhook para a instância criada.
+        """
+        webhook_url = f"{self.API_URL}/webhook/set/{instance_name}"
+        webhook_data = {
+            "webhook": {
+                "enabled": True,
+                "url": f"{self.WEBHOOk_URL}/zapi/{instance_id}/",
+                "headers": {
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json"
+                },
+                "byEvents": False,
+                "base64": False,
+                "events": [
+                    "QRCODE_UPDATED",
+                    "CONNECTION_UPDATE",
+                ]
+            }
+        }
+        headers = {
+            "accept": "application/json",
+            "apikey": self.API_KEY,
+            "Content-Type": "application/json",
+        }
+        try:
+            webhook_response = requests.post(webhook_url, headers=headers, json=webhook_data)
+            webhook_response.raise_for_status()
+            logger.info(f"Webhook configurado com sucesso para {instance_name}")
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro ao configurar webhook: {e}")
+
+    def send_message(self, instance_name, number_phone, text):  # Renomeado para send_message
         """
         Envia uma mensagem de texto para um número especificado usando a API de mensagens.
 
         Args:
             instance_name (str): O nome da instância da API.
-            apikey (str): A chave da API para autenticação.
             number_phone (str): O número de telefone para o qual enviar a mensagem.
-            texto (str): O texto da mensagem a ser enviada.
+            text (str): O texto da mensagem a ser enviada.
 
         Returns:
             dict: A resposta da API em formato JSON, se a solicitação for bem-sucedida.
-            None: Se ocorrer um erro na solicitação HTTP ou se a resposta for 401 Unauthorized.
+            dict: Um dicionário contendo o status_code em caso de erro.
         """
-        url = f"{self.URL}/message/sendText/{instance_name}"
+        url = f"{self.API_URL}/message/sendText/{instance_name}"
 
         headers = {
             "accept": "application/json",
-            "apikey": apikey,
+            "apikey": self.API_KEY,
             "Content-Type": "application/json",
         }
 
         data = {
             "number": number_phone,
             "options": {"delay": 1200, "presence": "composing", "linkPreview": False},
-            "textMessage": {"text": texto},
+            "textMessage": {"text": text},
         }
 
         try:
             response = requests.post(url, headers=headers, json=data)
-            if response.status_code == 401:
-                error_response = response.json()
-                logger.error(f"Erro 401 Unauthorized: {error_response['response']['message']}")
-                return None
             response.raise_for_status()
-            response_data = response.json()
-            return response_data, {"status_code": response.status_code}
-        except requests.exceptions.HTTPError as e:
-            logger.error(f"Erro na solicitação HTTP: {e.response.status_code} - {e.response.text}")
-            return {"status_code": e.response.status_code}
+            return response.json(), {"status_code": response.status_code}
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro na solicitação: {e}")
-            return {"status_code": 400}
+            return {"status_code": e.response.status_code if hasattr(e, 'response') else 400}
         except Exception as e:
             logger.error(f"Erro inesperado: {e}")
-            return {"status_code": 400}
+            return {"status_code": 500}
 
-# Exemplo de uso da classe Whatsapp
-WHATSAPP = Whatsapp()
-# print(WHATSAPP._verificar_instancia_logada(instance_name='bibelo'))
-#print(WHATSAPP._create_instancia('BRUNO1', 'BRUNO1', "553192430001"))
+# Exemplo de uso da classe WhatsApp
+whatsapp = WhatsApp()  # Instância com nome em minúsculo
+# print(whatsapp.is_instance_logged_in(instance_name='bibelo'))
+# print(whatsapp.create_instance('BRUNO1', 'BRUNO1', "553192430001"))
