@@ -1,7 +1,6 @@
 import requests
 import logging
 from decouple import config
-import uuid
 
 # Configuração do logger
 logging.basicConfig(level=logging.INFO)
@@ -34,7 +33,7 @@ class Whatsapp:
         Returns:
             bool: True se a instância estiver logada, False caso contrário.
         """
-        url = f"{self.URL}/instance/{instance_name}/status"
+        url = f"{self.URL}/instance/connectionState/{instance_name}"
         headers = {
             "accept": "application/json",
             "apikey": self.APIKEY,
@@ -45,11 +44,9 @@ class Whatsapp:
             response = requests.get(url, headers=headers)
             response.raise_for_status()
             response_data = response.json()
-            status = response_data.get("status")
+            status = response_data.get("instance", {}).get("state")
             
-            if status == "logged_in":
-                return True
-            return False
+            return status == "open"
 
         except requests.exceptions.HTTPError as e:
             logger.error(
@@ -63,13 +60,14 @@ class Whatsapp:
             logger.error(f"Erro inesperado ao verificar status da instância: {e}")
             return False
 
-    def _create_instancia(self, instanceName, instanceId):
+    def _create_instancia(self, instanceName, instanceId, number):
         """
         Cria uma nova instância de WhatsApp e obtém o QR Code para configuração.
 
         Args:
             instanceName (str): Nome da instância do WhatsApp.
             instanceId (str): ID da instância do WhatsApp.
+            number (str): Número do WhatsApp.
 
         Returns:
             tuple: Contendo QR Code em base64, token, instanceId e status.
@@ -82,43 +80,66 @@ class Whatsapp:
         }
 
         data = {
-            "instanceId": instanceId,
             "instanceName": instanceName,
+            "instanceId": instanceId,
+            "integration": "WHATSAPP-BAILEYS",
             "qrcode": True,
+            "number": number,
         }
 
         try:
             response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
             response_data = response.json()
-            instance_name = response_data.get("instance", {}).get("instanceName")
-            instance_id = response_data.get("instance", {}).get("instanceId")
-            token = response_data.get("hash", {}).get("apikey")
-            qr_code_data = response_data.get("qrcode", {}).get("base64")
-            status = response_data.get("instance", {}).get("status")
+            logger.info(f"Resposta da API: {response_data}")
 
-            if instance_id and instance_name:
-                webhook_url = f"{self.URL}/webhook/set/{instance_name}"
-                webhook_data = {
-                    "url": f"https://cp.lojabibelo.com.br/zapi/{instance_id}/",
-                    "webhook_by_events": False,
-                    "webhook_base64": False,
-                    "events": ["QRCODE_UPDATED", "CONNECTION_UPDATE"],
-                }
-                webhook_response = requests.post(
-                    webhook_url, headers=headers, json=webhook_data
-                )
-                webhook_response.raise_for_status()
-
-                if qr_code_data:
-                    return (
-                        qr_code_data,
-                        token,
-                        instance_id,
-                        status,
+            if isinstance(response_data, dict):
+                instance_name = response_data.get("instance", {}).get("instanceName")
+                
+                instance_id = response_data.get("instance", {}).get("instanceId")
+                
+                token = response_data.get("hash")
+                
+                qr_code_data = response_data.get("qrcode", {}).get("base64")
+                status = response_data.get("instance", {}).get("status")
+                
+                if instance_id and instance_name:
+                    webhook_url = f"{self.URL}/webhook/set/{instance_name}"
+                    webhook_data = {
+                        "webhook": {
+                            "enabled": True,
+                            "url": "https://webhook-test.com/9c89855f732fa68ebd872395541fd0a0",
+                            "headers": {
+                                "Authorization": f"Bearer {token}",
+                                "Content-Type": "application/json"
+                            },
+                            "byEvents": False,
+                            "base64": False,
+                            "events": [
+                                "QRCODE_UPDATED",
+                                "CONNECTION_UPDATE",
+                            ]
+                        }
+                    }
+                    webhook_response = requests.post(
+                        webhook_url, headers=headers, json=webhook_data
                     )
+                    print(webhook_response)
+                    webhook_response.raise_for_status()
+                    if qr_code_data:
+                        return (
+                            qr_code_data,
+                            token,
+                            instance_id,
+                            status,
+                        )
+
+
+                else:
+                    logger.warning("instanceId ou instanceName não encontrado na resposta da API.")
+                    return None, None, None, None
             else:
-                logger.warning("instanceId ou instanceName não encontrado na resposta da API.")
+                logger.error("A resposta da API não é um dicionário.")
                 return None, None, None, None
 
         except requests.exceptions.HTTPError as e:
@@ -135,15 +156,15 @@ class Whatsapp:
         """
         Envia uma mensagem de texto para um número especificado usando a API de mensagens.
 
-        Parameters:
-        instance_name (str): O nome da instância da API.
-        apikey (str): A chave da API para autenticação.
-        number_phone (str): O número de telefone para o qual enviar a mensagem.
-        texto (str): O texto da mensagem a ser enviada.
+        Args:
+            instance_name (str): O nome da instância da API.
+            apikey (str): A chave da API para autenticação.
+            number_phone (str): O número de telefone para o qual enviar a mensagem.
+            texto (str): O texto da mensagem a ser enviada.
 
         Returns:
-        dict: A resposta da API em formato JSON, se a solicitação for bem-sucedida.
-        None: Se ocorrer um erro na solicitação HTTP ou se a resposta for 401 Unauthorized.
+            dict: A resposta da API em formato JSON, se a solicitação for bem-sucedida.
+            None: Se ocorrer um erro na solicitação HTTP ou se a resposta for 401 Unauthorized.
         """
         url = f"{self.URL}/message/sendText/{instance_name}"
 
@@ -177,3 +198,10 @@ class Whatsapp:
         except Exception as e:
             logger.error(f"Erro inesperado: {e}")
             return {"status_code": 400}
+
+# Exemplo de uso da classe Whatsapp
+WHATSAPP = Whatsapp()
+# print(WHATSAPP._verificar_instancia_logada(instance_name='bibelo'))
+print(WHATSAPP._create_instancia('BRUNO2', 'BRUNO2', "553192430001"))
+
+

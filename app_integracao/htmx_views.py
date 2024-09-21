@@ -4,15 +4,16 @@ from app_integracao.models import WhatsappIntegrado
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+import json
 import logging
 
 logger = logging.getLogger(__name__)
 
-
 @csrf_exempt
-def check_instance(request, data, id):
+def check_instance(request, id):
     if request.method == "POST":
         try:
+            data = json.loads(request.body)  # Carrega o JSON do corpo da requisição
             instance = data.get("instancia")
             if not instance:
                 return HttpResponse(
@@ -23,6 +24,8 @@ def check_instance(request, data, id):
                 instanceName=instance
             )
             return check_qrcode(request, data, whatsapp_instance, id)
+        except json.JSONDecodeError:
+            return HttpResponse("Erro ao decodificar JSON", status=400)
         except Exception as e:
             logger.error(f"Erro ao processar check_instance: {e}")
             return HttpResponse(f"Erro interno: {e}", status=500)
@@ -31,12 +34,12 @@ def check_instance(request, data, id):
 
 
 @csrf_exempt
-def update_instance_status(request, data, id):
+def update_instance_status(request, id):
     if request.method == "POST":
         try:
+            data = json.loads(request.body)
             instance = data.get("instancia")
             state = data.get("state")
-            print(state)
             if not instance:
                 return HttpResponse(
                     "Campo 'instância' ausente nos dados recebidos", status=400
@@ -52,6 +55,8 @@ def update_instance_status(request, data, id):
             return JsonResponse(
                 {"message": "Status atualizado com sucesso"}, status=200
             )
+        except json.JSONDecodeError:
+            return HttpResponse("Erro ao decodificar JSON", status=400)
         except Exception as e:
             logger.error(f"Erro ao atualizar o status da instância: {e}")
             return HttpResponse(f"Erro interno: {e}", status=500)
@@ -60,9 +65,10 @@ def update_instance_status(request, data, id):
 
 
 @csrf_exempt
-def check_qrcode(request, data, whatsapp_instance, id):
+def check_qrcode(request, whatsapp_instance, id):
     if request.method == "POST":
         try:
+            data = json.loads(request.body)
             qr = data.get("qrcode")
             if not qr:
                 return HttpResponse(
@@ -72,9 +78,9 @@ def check_qrcode(request, data, whatsapp_instance, id):
             whatsapp_instance.qr_code_image = qr
             whatsapp_instance.save()
 
-            # request.session["base64_qrcode"] = whatsapp_instance.qr_code_image
-
             return views_qrcode(request, id)
+        except json.JSONDecodeError:
+            return HttpResponse("Erro ao decodificar JSON", status=400)
         except Exception as e:
             logger.error(f"Erro ao atualizar instância: {e}")
             return HttpResponse(f"Erro interno: {e}", status=500)
