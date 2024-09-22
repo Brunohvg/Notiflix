@@ -19,9 +19,9 @@ class WhatsApp:
         """
         self.API_KEY = config("API_KEY")  # Renomeado para API_KEY
         self.API_URL = config(
-            "WHATSAPP_API_URL", default="https://api.lojabibelo.com.br"
+            "API_URL", default="https://api.lojabibelo.com.br"
         )  # Renomeado para API_URL
-        self.WEBHOOk_URL = config(
+        self.WEBHOOK_URL = config(
             "WEBHOOK_URL", default="https://goblin-romantic-imp.ngrok-free.app"
         )
 
