@@ -29,7 +29,7 @@ class WhatsApp:
             raise ValueError("API_KEY não configurada")
         if not self.API_URL:
             raise ValueError("URL da API não configurada")
-        if not self.WEBHOOk_URL:
+        if not self.WEBHOOK_URL:
             raise ValueError("URL de WEBHOOK Padrão não configurada")
 
     def is_instance_logged_in(
