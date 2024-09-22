@@ -1,10 +1,12 @@
 import requests
 import logging
 from decouple import config
+from django.http import JsonResponse, HttpResponse
 
 # Configuração do logger
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 class WhatsApp:
     """
@@ -16,8 +18,12 @@ class WhatsApp:
         Inicializa a classe WhatsApp e configura a API_KEY e API_URL.
         """
         self.API_KEY = config("API_KEY")  # Renomeado para API_KEY
-        self.API_URL = config("WHATSAPP_API_URL", default="https://api.lojabibelo.com.br")  # Renomeado para API_URL
-        self.WEBHOOk_URL = config("WEBHOOK_URL", default="https://goblin-romantic-imp.ngrok-free.app" )
+        self.API_URL = config(
+            "WHATSAPP_API_URL", default="https://api.lojabibelo.com.br"
+        )  # Renomeado para API_URL
+        self.WEBHOOk_URL = config(
+            "WEBHOOK_URL", default="https://goblin-romantic-imp.ngrok-free.app"
+        )
 
         if not self.API_KEY:
             raise ValueError("API_KEY não configurada")
@@ -25,8 +31,10 @@ class WhatsApp:
             raise ValueError("URL da API não configurada")
         if not self.WEBHOOk_URL:
             raise ValueError("URL de WEBHOOK Padrão não configurada")
-        
-    def is_instance_logged_in(self, instance_name):  # Renomeado para is_instance_logged_in
+
+    def is_instance_logged_in(
+        self, instance_name
+    ):  # Renomeado para is_instance_logged_in
         """
         Verifica se uma instância do WhatsApp está logada.
 
@@ -48,7 +56,7 @@ class WhatsApp:
             response.raise_for_status()
             response_data = response.json()
             status = response_data.get("instance", {}).get("state")
-            
+
             return status == "open"
 
         except requests.exceptions.RequestException as e:
@@ -58,7 +66,9 @@ class WhatsApp:
             logger.error(f"Erro inesperado ao verificar status da instância: {e}")
             return False
 
-    def create_instance(self, instance_name, instance_id, number):  # Renomeado para create_instance
+    def create_instance(
+        self, instance_name, instance_id, #number=''
+    ):  # Renomeado para create_instance
         """
         Cria uma nova instância de WhatsApp e obtém o QR Code para configuração.
 
@@ -82,7 +92,7 @@ class WhatsApp:
             "instanceId": instance_id,
             "integration": "WHATSAPP-BAILEYS",
             "qrcode": True,
-            "number": number,
+            #"number": number,
         }
 
         try:
@@ -98,7 +108,7 @@ class WhatsApp:
                 token = response_data.get("hash")
                 qr_code_data = response_data.get("qrcode", {}).get("base64")
                 status = instance.get("status")
-                
+
                 if instance_id and instance_name:
                     self._set_webhook(instance_name, instance_id, token)
                     if qr_code_data:
@@ -125,14 +135,14 @@ class WhatsApp:
                 "url": f"{self.WEBHOOk_URL}/zapi/{instance_id}/",
                 "headers": {
                     "Authorization": f"Bearer {token}",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
                 "byEvents": False,
                 "base64": False,
                 "events": [
                     "QRCODE_UPDATED",
                     "CONNECTION_UPDATE",
-                ]
+                ],
             }
         }
         headers = {
@@ -141,13 +151,34 @@ class WhatsApp:
             "Content-Type": "application/json",
         }
         try:
-            webhook_response = requests.post(webhook_url, headers=headers, json=webhook_data)
+            webhook_response = requests.post(
+                webhook_url, headers=headers, json=webhook_data
+            )
             webhook_response.raise_for_status()
             logger.info(f"Webhook configurado com sucesso para {instance_name}")
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro ao configurar webhook: {e}")
 
-    def send_message(self, instance_name, number_phone, text):  # Renomeado para send_message
+    def _logout_instance(self, instance_name, token):
+
+        logout_url = f"{self.API_URL}/instance/logout/{instance_name}"
+        headers = {"apikey": token}
+        try:
+            logout_response = requests.post(logout_url, headers=headers)
+            logout_response.raise_for_status()
+            logger.info(f"logout efetuado com sucesso para {instance_name}")
+            return JsonResponse({"message": "Success"}, status=200)
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro na solicitação: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"Erro inesperado: {e}")
+            return None
+
+    def send_message(
+        self, instance_name, number_phone, text
+    ):  # Renomeado para send_message
         """
         Envia uma mensagem de texto para um número especificado usando a API de mensagens.
 
@@ -180,10 +211,13 @@ class WhatsApp:
             return response.json(), {"status_code": response.status_code}
         except requests.exceptions.RequestException as e:
             logger.error(f"Erro na solicitação: {e}")
-            return {"status_code": e.response.status_code if hasattr(e, 'response') else 400}
+            return {
+                "status_code": e.response.status_code if hasattr(e, "response") else 400
+            }
         except Exception as e:
             logger.error(f"Erro inesperado: {e}")
             return {"status_code": 500}
+
 
 # Exemplo de uso da classe WhatsApp
 whatsapp = WhatsApp()  # Instância com nome em minúsculo

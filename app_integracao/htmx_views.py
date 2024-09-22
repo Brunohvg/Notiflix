@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 @csrf_exempt
-def check_instance(request, id):
+def check_instance(request, data, id):
     if request.method == "POST":
         try:
             data = json.loads(request.body)  # Carrega o JSON do corpo da requisição
@@ -20,10 +20,20 @@ def check_instance(request, id):
                     "Campo 'instância' ausente nos dados recebidos", status=400
                 )
 
+            # Tenta obter a instância ou criar uma nova
             whatsapp_instance, created = WhatsappIntegrado.objects.get_or_create(
                 instanceName=instance
             )
-            return check_qrcode(request, data, whatsapp_instance, id)
+            
+            # Se a instância já existe e foi criada anteriormente
+            if not created and whatsapp_instance.qr_code_image:
+                # Chama a função check_qrcode se a instância já existe e tem QR code
+                return check_qrcode(request, whatsapp_instance, data, id)
+
+            # Se uma nova instância foi criada, você pode adicionar lógica adicional aqui
+
+            return JsonResponse({"message": "Instância criada ou atualizada com sucesso"}, status=200)
+
         except json.JSONDecodeError:
             return HttpResponse("Erro ao decodificar JSON", status=400)
         except Exception as e:
@@ -34,7 +44,7 @@ def check_instance(request, id):
 
 
 @csrf_exempt
-def update_instance_status(request, id):
+def update_instance_status(request, data, id):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
@@ -65,16 +75,16 @@ def update_instance_status(request, id):
 
 
 @csrf_exempt
-def check_qrcode(request, whatsapp_instance, id):
+def check_qrcode(request, whatsapp_instance, data, id):
     if request.method == "POST":
         try:
-            data = json.loads(request.body)
             qr = data.get("qrcode")
             if not qr:
                 return HttpResponse(
                     "Campo 'qrcode' ausente nos dados recebidos", status=400
                 )
 
+            # Atualiza o QR code da instância
             whatsapp_instance.qr_code_image = qr
             whatsapp_instance.save()
 
@@ -100,6 +110,6 @@ def views_qrcode(request, id):
         request, "app_integracao/page_whatsapp/blocos/qrcode_fragment.html", context
     )
 
-
+"""
 def teste(request):
-    return render(request, "app_integracao/page_whatsapp/blocos/qrcode_fragment.html")
+    return render(request, "app_integracao/page_whatsapp/blocos/qrcode_fragment.html")"""

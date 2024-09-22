@@ -10,11 +10,11 @@
               {% csrf_token %}
               <div class="col-md-8">
                 <label for="name_whatsapp" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="name_whatsapp" name="name_whatsapp" value="{{ whatsapp_integrado.name }}" />
+                <input type="text" class="form-control" id="name_whatsapp" name="name_whatsapp" value="{{ whatsapp_integrado.instanceName }}" />
               </div>
               <div class="col-md-4">
                 <label for="inputWhatsapp-number" class="form-label">WhatsApp</label>
-                <input type="tel" class="form-control" id="inputWhatsapp-number" value="{{ whatsapp_integrado.instanceName }}" disabled />
+                <input type="tel" class="form-control" id="inputWhatsapp-number" value="{{ whatsapp_integrado.numero }}" disabled />
               </div>
               <div class="col-6">
                 <label for="inputstatus" class="form-label">WhatsApp Conectado</label>

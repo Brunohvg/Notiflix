@@ -52,11 +52,8 @@ class LojaIntegrada(models.Model):
 
 class WhatsappIntegrado(models.Model):
     instanceId = models.CharField(max_length=200, primary_key=True)
-    name = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True,
-        verbose_name="Identificação WhatsApp",
+    numero = models.CharField(
+        max_length=200, blank=True, null=True, verbose_name="Identificação WhatsApp"
     )
     instanceName = models.CharField(max_length=200)
     token = models.CharField(max_length=200, blank=True)
@@ -102,6 +99,7 @@ def create_webhook(sender, instance, created, **kwargs):
         except Exception as e:
             logger.error(f"Erro ao criar webhook para a loja {instance.id}: {e}")"""
 
+
 @receiver(post_save, sender=LojaIntegrada)
 def create_webhook(sender, instance, created, **kwargs):
     if created:
@@ -114,7 +112,9 @@ def create_webhook(sender, instance, created, **kwargs):
                 "order/cancelled",
             ]
             webhook_url = f"https://{URL_WEBHOOK}/webhook/{instance.id}/"
-            logger.info(f"Webhook URL gerada: {webhook_url}")  # Adiciona log para depuração
+            logger.info(
+                f"Webhook URL gerada: {webhook_url}"
+            )  # Adiciona log para depuração
             results = nuvem_shop._post_create_webhooks_batch(
                 code=instance.autorization_token,
                 store_id=instance.id,
@@ -126,4 +126,3 @@ def create_webhook(sender, instance, created, **kwargs):
             instance.save()
         except Exception as e:
             logger.error(f"Erro ao criar webhook para a loja {instance.id}: {e}")
-
