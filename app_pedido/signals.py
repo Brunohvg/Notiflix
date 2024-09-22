@@ -51,7 +51,7 @@ def send_message(sender, instance, created, **kwargs):
                     # Envia cada mensagem via WhatsApp
                     if msg.ativado:
                         try:
-                            enviado = WHATSAPP._enviar_msg(
+                            enviado = WHATSAPP.send_message(
                                 instance_name=instance_name,
                                 apikey=token,
                                 number_phone=f"55{phone}",
