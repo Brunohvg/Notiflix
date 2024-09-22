@@ -16,6 +16,7 @@ def send_message(sender, instance, created, **kwargs):
     user = instance.loja.usuario
     rastreio = instance.codigo_rastreio
     instance_name = instance.loja.whatsapp.instanceName 
+    
     token = instance.loja.whatsapp.token
 
     tipo_mensagem = {
@@ -52,8 +53,8 @@ def send_message(sender, instance, created, **kwargs):
                     if msg.ativado:
                         try:
                             enviado = WHATSAPP.send_message(
-                                instance_name=instance_name,
-                                apikey=token,
+                                instance_name=instancia_logada.instance_name,
+                                apikey=instancia_logada.token,
                                 number_phone=f"55{phone}",
                                 texto=texto_formatado,
                             )
