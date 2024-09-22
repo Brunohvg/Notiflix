@@ -4,20 +4,19 @@ from .models import Pedido
 from libs.integracoes.api.api_whatsapp import WhatsApp
 from app_mensagem.models import MensagemPadrao
 
-WHATSAPP = WhatsApp()
 
 @receiver(post_save, sender=Pedido)
 def send_message(sender, instance, created, **kwargs):
+    WHATSAPP = WhatsApp()  # Inicialize aqui
+
     # Obtém os dados necessários do pedido
     phone = instance.cliente.contact_phone
     nome = instance.cliente.contact_name
-    status = instance.status_envio
+    status = instance.status_envio.lower()  # Converte para minúsculo para comparação
     loja = instance.loja.nome
     user = instance.loja.usuario
     rastreio = instance.codigo_rastreio
-    instance_name = instance.loja.whatsapp.instanceName 
-    
-    token = instance.loja.whatsapp.token
+    instance_name = instance.loja.whatsapp.instanceName
 
     tipo_mensagem = {
         "processando": "Pedido Pago",
@@ -26,52 +25,46 @@ def send_message(sender, instance, created, **kwargs):
         "devolvido": "Pedido Cancelado",
     }
 
-    tipo_pedido = tipo_mensagem.get(status.lower())
-    
+    # Verifica se o status do pedido é um dos desejados
+    if status not in tipo_mensagem:
+        print(f"Status do envio não é reconhecido: {status}")
+        return
+
     # Verifica se há uma instância do WhatsApp logada
     try:
-        # Verifica a lista de instâncias logadas
         instancia_logada = WHATSAPP.is_instance_logged_in(instance_name)
         if not instancia_logada:
             print(f"Nenhuma instância do WhatsApp logada com o nome '{instance_name}'. Mensagem não enviada.")
             return
 
-        if tipo_pedido:
-            try:
-                # Obtém todas as mensagens padrão para o tipo de pedido e usuário específico
-                msgs = MensagemPadrao.objects.filter(tipo_pedido=tipo_pedido, usuario=user)
-                for msg in msgs:
-                    # Substitui as variáveis nas mensagens padrão
-                    texto_formatado = msg.mensagem_padrao.replace("[nome_cliente]", nome)
-                    texto_formatado = texto_formatado.replace(
-                        "[numero_pedido]", str(instance.id_pedido)
-                    )
-                    texto_formatado = texto_formatado.replace("[nome_loja]", loja)
-                    texto_formatado = texto_formatado.replace("[link_rastreio]", rastreio)
-                    
-                    # Envia cada mensagem via WhatsApp
-                    if msg.ativado:
-                        try:
-                            enviado = WHATSAPP.send_message(
-                                instance_name=instancia_logada.instance_name,
-                                apikey=instancia_logada.token,
-                                number_phone=f"55{phone}",
-                                texto=texto_formatado,
-                            )
-                            
-                            status_code = enviado[1].get('status_code', 'No status_code found')
-                            if status_code == 200:
-                                return None
-                        except KeyError:
-                            print("Mensagem não pode ser enviada")
-                    else:
-                        print("Mensagem não pode ser enviada")
-            except MensagemPadrao.DoesNotExist:
-                print(
-                    f"Nenhuma mensagem padrão encontrada para o tipo de pedido '{tipo_pedido}' e usuário {user}"
-                )
-        else:
-            print(f"Status do envio não é reconhecido: {status}")
+        # Obtém a mensagem padrão para o status do pedido
+        tipo_pedido = tipo_mensagem[status]
+
+        # Obtém a mensagem padrão ativada para o tipo de pedido e usuário específico
+        try:
+            msg = MensagemPadrao.objects.get(tipo_pedido=tipo_pedido, usuario=user, ativado=True)
+            
+            # Formata a mensagem substituindo as variáveis
+            texto_formatado = msg.mensagem_padrao.replace("[nome_cliente]", nome)
+            texto_formatado = texto_formatado.replace("[numero_pedido]", str(instance.id_pedido))
+            texto_formatado = texto_formatado.replace("[nome_loja]", loja)
+            texto_formatado = texto_formatado.replace("[link_rastreio]", rastreio)
+
+            # Envia a mensagem via WhatsApp
+            enviado = WHATSAPP.send_message(
+                instance_name=instance_name,
+                number_phone=f"55{phone}",
+                text=texto_formatado,
+            )
+
+            status_code = enviado[1].get('status_code', 'No status_code found')
+            if status_code == 200:
+                print("Mensagem enviada com sucesso.")
+            else:
+                print(f"Falha ao enviar mensagem, status code: {status_code}")
+
+        except MensagemPadrao.DoesNotExist:
+            print(f"Nenhuma mensagem padrão encontrada para o tipo de pedido '{tipo_pedido}' e usuário {user}")
 
     except Exception as e:
         print(f"Erro ao verificar instância do WhatsApp: {e}")
