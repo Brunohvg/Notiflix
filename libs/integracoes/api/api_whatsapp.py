@@ -132,7 +132,7 @@ class WhatsApp:
         webhook_data = {
             "webhook": {
                 "enabled": True,
-                "url": f"{self.WEBHOOk_URL}/zapi/{instance_id}/",
+                "url": f"{self.WEBHOOK_URL}/zapi/{instance_id}/",
                 "headers": {
                     "Authorization": f"Bearer {token}",
                     "Content-Type": "application/json",
