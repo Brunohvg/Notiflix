@@ -4,15 +4,14 @@ from .models import Pedido
 from libs.integracoes.api.api_whatsapp import WhatsApp
 from app_mensagem.models import MensagemPadrao
 
-
 @receiver(post_save, sender=Pedido)
 def send_message(sender, instance, created, **kwargs):
-    WHATSAPP = WhatsApp()  # Inicialize aqui
+    WHATSAPP = WhatsApp()  # Inicializa a API do WhatsApp
 
     # Obtém os dados necessários do pedido
     phone = instance.cliente.contact_phone
     nome = instance.cliente.contact_name
-    status = instance.status_envio.lower()  # Converte para minúsculo para comparação
+    status = instance.status_envio.lower()  # Converte o status para minúsculo
     loja = instance.loja.nome
     user = instance.loja.usuario
     rastreio = instance.codigo_rastreio
@@ -27,13 +26,12 @@ def send_message(sender, instance, created, **kwargs):
 
     # Verifica se o status do pedido é um dos desejados
     if status not in tipo_mensagem:
-        print(f"Status do envio não é reconhecido: {status}")
+        print(f"Status do envio não reconhecido: {status}")
         return
 
     # Verifica se há uma instância do WhatsApp logada
     try:
-        instancia_logada = WHATSAPP.is_instance_logged_in(instance_name)
-        if not instancia_logada:
+        if not WHATSAPP.is_instance_logged_in(instance_name):
             print(f"Nenhuma instância do WhatsApp logada com o nome '{instance_name}'. Mensagem não enviada.")
             return
 
@@ -43,7 +41,7 @@ def send_message(sender, instance, created, **kwargs):
         # Obtém a mensagem padrão ativada para o tipo de pedido e usuário específico
         try:
             msg = MensagemPadrao.objects.get(tipo_pedido=tipo_pedido, usuario=user, ativado=True)
-            
+
             # Formata a mensagem substituindo as variáveis
             texto_formatado = msg.mensagem_padrao.replace("[nome_cliente]", nome)
             texto_formatado = texto_formatado.replace("[numero_pedido]", str(instance.id_pedido))
@@ -64,7 +62,7 @@ def send_message(sender, instance, created, **kwargs):
                 print(f"Falha ao enviar mensagem, status code: {status_code}")
 
         except MensagemPadrao.DoesNotExist:
-            print(f"Nenhuma mensagem padrão encontrada para o tipo de pedido '{tipo_pedido}' e usuário {user}")
+            print(f"Nenhuma mensagem padrão encontrada para o tipo de pedido '{tipo_pedido}' e usuário {user}.")
 
     except Exception as e:
         print(f"Erro ao verificar instância do WhatsApp: {e}")
