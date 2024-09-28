@@ -9,6 +9,7 @@ urlpatterns = [
         "integracao/<str:id>/", views.config_integracao, name="config_integracao"
     ),  #  str:id = Id da instancia do whatsapp
     path("remover/", views.desativar_integracao, name="desativar_integracao"),
+    path("remover_whatsapp/", views.deslogar_whatsapp, name="deslogar_whatsapp"),
     path("integra_whatsapp/", views.integra_whatsapp, name="integra_whatsapp"),
 ]
 
@@ -18,6 +19,7 @@ htmx_urlpatterns = [
         "views_qrcode/<str:id>/", htmx_views.views_qrcode, name="views_qrcode"
     )  #  str:id = Id da instancia do whatsapp
     #path("teste/", htmx_views.teste, name="teste"),
+    
 ]
 
 urlpatterns += htmx_urlpatterns

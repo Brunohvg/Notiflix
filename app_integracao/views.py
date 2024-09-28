@@ -255,3 +255,20 @@ def integra_whatsapp(request, instanceId=None):
             )
 
     return render(request, "app_integracao/base_integracao_whatsapp.html")
+
+def deslogar_whatsapp(request):
+    
+    loja = get_object_or_404(LojaIntegrada, id=request.user.loja.id)
+
+    if loja.usuario == request.user:
+
+        loja.whatsapp.delete() 
+        messages.info(request, "Sua loja foi desinstalada com sucesso")
+    else:
+        messages.error(request, "Você não tem permissão para desinstalar esta loja")
+
+    #return redirect("app_integracao:integracao")
+    return render(request, "app_integracao/base_integracao_whatsapp.html")
+    
+    
+    
