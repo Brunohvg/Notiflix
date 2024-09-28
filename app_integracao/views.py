@@ -261,9 +261,15 @@ def deslogar_whatsapp(request):
     loja = get_object_or_404(LojaIntegrada, id=request.user.loja.id)
 
     if loja.usuario == request.user:
-
-        loja.whatsapp.delete() 
-        messages.info(request, "Sua loja foi desinstalada com sucesso")
+        instance_name = loja.whatsapp.instanceName
+        instance_token = loja.whatsapp.token
+        print(instance_name)
+        print(instance_token)
+        result = WHATSAPP._delete_instance(instance_name, instance_token)
+        if result.status_code == 200:
+            loja.whatsapp.delete() 
+            messages.info(request, "Sua loja foi desinstalada com sucesso")
+            
     else:
         messages.error(request, "Você não tem permissão para desinstalar esta loja")
 

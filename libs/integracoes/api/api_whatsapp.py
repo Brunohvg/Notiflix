@@ -175,6 +175,23 @@ class WhatsApp:
         except Exception as e:
             logger.error(f"Erro inesperado: {e}")
             return None
+        
+    def _delete_instance(self, instance_name, token):
+
+        logout_url = f"{self.API_URL}/instance/delete/{instance_name}"
+        headers = {"apikey": token}
+        try:
+            logout_response = requests.delete(logout_url, headers=headers)
+            logout_response.raise_for_status()
+            logger.info(f"delete efetuado com sucesso para {instance_name}")
+            return JsonResponse({"message": "Success"}, status=200)
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro na solicitação: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"Erro inesperado: {e}")
+            return None
 
     def send_message(
         self, instance_name, number_phone, text
