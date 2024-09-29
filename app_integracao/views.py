@@ -257,24 +257,42 @@ def integra_whatsapp(request, instanceId=None):
     return render(request, "app_integracao/base_integracao_whatsapp.html")
 
 def deslogar_whatsapp(request):
-    
-    loja = get_object_or_404(LojaIntegrada, id=request.user.loja.id)
+    """
+    Desinstala o WhatsApp integrado da loja do usuário.
+    """
+    try:
+        loja = get_object_or_404(LojaIntegrada, id=request.user.loja.id)
 
-    if loja.usuario == request.user:
-        instance_name = loja.whatsapp.instanceName
-        instance_token = loja.whatsapp.token
-        print(instance_name)
-        print(instance_token)
-        result = WHATSAPP._delete_instance(instance_name, instance_token)
-        if result.status_code == 200:
-            loja.whatsapp.delete() 
-            messages.info(request, "Sua loja foi desinstalada com sucesso")
-            
-    else:
-        messages.error(request, "Você não tem permissão para desinstalar esta loja")
+        if loja.usuario == request.user:
+            # Verifica se a loja tem uma instância de WhatsApp vinculada
+            if hasattr(loja, 'whatsapp') and loja.whatsapp:
+                instance_name = loja.whatsapp.instanceName
+                instance_token = loja.whatsapp.token
+                
+                # Usa o método público para deletar a instância do WhatsApp (substituir se necessário)
+                result = WHATSAPP._delete_instance(instance_name, instance_token)
 
-    #return redirect("app_integracao:integracao")
-    return render(request, "app_integracao/base_integracao_whatsapp.html")
+
+                # Verifica o status da resposta
+                if result.status_code == 200:
+                    loja.whatsapp.delete()  # Remove a instância do banco de dados
+                    messages.info(request, "Sua loja foi desinstalada com sucesso.")
+                else:
+                    messages.error(request, "Falha ao desinstalar o WhatsApp. Tente novamente.")
+            else:
+                messages.error(request, "Nenhuma conta de WhatsApp está associada a esta loja.")
+        else:
+            messages.error(request, "Você não tem permissão para desinstalar esta loja.")
+        
+    except LojaIntegrada.DoesNotExist:
+        messages.error(request, "Loja não encontrada.")
+    except Exception as e:
+        loja.whatsapp.delete()
+        logger.error(f"Erro ao deslogar WhatsApp: {str(e)}")
+        messages.error(request, "Ocorreu um erro ao desinstalar o WhatsApp. Tente novamente.")
+
+    return redirect("app_integracao:integracao")
+
     
     
     

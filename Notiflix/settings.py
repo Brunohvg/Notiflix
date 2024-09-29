@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "app_pedido",
     "app_webhook",
     "app_mensagem",
+    "app_cupom",
 ]
 
 MIDDLEWARE = [

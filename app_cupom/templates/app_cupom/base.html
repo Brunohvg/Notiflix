@@ -1,0 +1,140 @@
+{% extends 'pages/base/base.html' %}
+
+{% block Dashboard %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
+            <div class="card fade-in">
+                <div class="card-body">
+                    <h5 class="card-title">Cupons Ativos</h5>
+                    <h2 class="card-text">15</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
+            <div class="card fade-in">
+                <div class="card-body">
+                    <h5 class="card-title">Usos Totais</h5>
+                    <h2 class="card-text">237</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
+            <div class="card fade-in">
+                <div class="card-body">
+                    <h5 class="card-title">Economia Gerada</h5>
+                    <h2 class="card-text">R$ 3.450,00</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card fade-in">
+                <div class="card-body">
+                    <h5 class="card-title">Taxa de Conversão</h5>
+                    <h2 class="card-text">8.5%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card fade-in">
+                <div class="card-header">
+                    Criar Novo Cupom
+                </div>
+                <div class="card-body">
+                    <form id="newCouponForm">
+                        <div class="mb-3">
+                            <label for="couponCode" class="form-label">Código do Cupom</label>
+                            <input type="text" class="form-control" id="couponCode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="discountType" class="form-label">Tipo de Desconto</label>
+                            <select class="form-select" id="discountType" required>
+                                <option value="percentage">Porcentagem</option>
+                                <option value="fixed">Valor Fixo</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="discountValue" class="form-label">Valor do Desconto</label>
+                            <input type="number" class="form-control" id="discountValue" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="expirationDate" class="form-label">Data de Expiração</label>
+                            <input type="date" class="form-control" id="expirationDate" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Criar Cupom</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card fade-in">
+                <div class="card-header">
+                    Envio de Cupons
+                </div>
+                <div class="card-body">
+                    <form id="sendCouponForm">
+                        <div class="mb-3">
+                            <label for="customerCriteria" class="form-label">Critério de Clientes</label>
+                            <select class="form-select" id="customerCriteria" required>
+                                <option value="">Selecione um critério</option>
+                                <option value="all">Todos os clientes</option>
+                                <option value="purchased">Clientes que já compraram</option>
+                                <option value="notPurchased">Clientes que nunca compraram</option>
+                                <option value="recentPurchase">Compra nos últimos 30 dias</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="couponSelect" class="form-label">Cupom a Enviar</label>
+                            <select class="form-select" id="couponSelect" required>
+                                <option value="">Selecione um cupom</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customMessage" class="form-label">Mensagem Personalizada</label>
+                            <textarea class="form-control" id="customMessage" rows="3" placeholder="Digite uma mensagem para acompanhar o cupom..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Pré-visualização de Clientes Selecionados</label>
+                            <div id="customerPreview" class="border rounded p-2" style="max-height: 100px; overflow-y: auto;">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Enviar Cupons</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card fade-in">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    Cupons Ativos
+                    <button class="btn btn-sm btn-light" id="refreshCoupons">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Desconto</th>
+                                    <th>Usos</th>
+                                    <th>Expiração</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="couponTableBody">
+                                <!-- Cupons serão inseridos aqui dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

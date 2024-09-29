@@ -11,6 +11,7 @@ urlpatterns = [
     path("", include("app_pedido.urls")),
     path("", include("app_webhook.urls")),
     path("", include("app_mensagem.urls")),
+    path("", include("app_cupom.urls"))
 ]
 
 # Add static and media URL patterns only if in DEBUG mode

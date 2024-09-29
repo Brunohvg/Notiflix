@@ -49,13 +49,14 @@ def send_message(sender, instance, created, **kwargs):
             texto_formatado = texto_formatado.replace("[link_rastreio]", rastreio)
 
             # Envia a mensagem via WhatsApp
-            enviado = WHATSAPP.send_message(
+            enviado, response = WHATSAPP.send_message(
                 instance_name=instance_name,
                 number_phone=f"55{phone}",
                 text=texto_formatado,
             )
 
-            status_code = enviado[1].get('status_code', 'No status_code found')
+            # Checa o código de status da resposta
+            status_code = response.get('status_code', 'No status_code found')
             if status_code == 200:
                 print("Mensagem enviada com sucesso.")
             else:
