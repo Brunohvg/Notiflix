@@ -216,10 +216,11 @@ class WhatsApp:
             "Content-Type": "application/json",
         }
 
+
         data = {
             "number": number_phone,
-            "options": {"delay": 1200, "presence": "composing", "linkPreview": False},
-            "textMessage": {"text": text},
+            "text": text,
+            "delay": 1200
         }
 
         try:
@@ -236,7 +237,8 @@ class WhatsApp:
             return {"status_code": 500}
 
 
-# Exemplo de uso da classe WhatsApp
+"""# Exemplo de uso da classe WhatsApp
 whatsapp = WhatsApp()  # Instância com nome em minúsculo
-print(whatsapp.is_instance_logged_in(instance_name='Bruno'))
-# print(whatsapp.create_instance('BRUNO1', 'BRUNO1', "553192430001"))
+print(whatsapp.is_instance_logged_in(instance_name='Bruno Vidal'))
+print(whatsapp.send_message(instance_name="Bruno Vidal",number_phone='5531973121650',text='OLA'))
+"""
