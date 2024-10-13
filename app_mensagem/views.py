@@ -10,27 +10,33 @@ def lista_mensagens(request):
     mensagens = MensagemPadrao.objects.filter(usuario=usuario)
     return render(request, "app_mensagem/base.html", {"mensagens": mensagens})
 
+
+
 @login_required
-def edita_mensagem(request, pk):
-    """Edita uma mensagem padrão do usuário."""
+def edita_mensagem(request):
+    """Edita várias mensagens padrão do usuário de uma vez."""
     usuario = request.user
-    msg_padrao = get_object_or_404(MensagemPadrao, pk=pk, usuario=usuario)
+    mensagens = MensagemPadrao.objects.filter(usuario=usuario)
 
     if request.method == "POST":
-        text = request.POST.get("mensagem_edit")
-        ative_id = request.POST.get("ative_id")
-        ativado = bool(ative_id)
+        for idx, mensagem in enumerate(mensagens, start=1):
+            text = request.POST.get(f"mensagem_edit_{idx}")
+            ative_id = request.POST.get(f"ative_id_{idx}")
+            ativado = bool(ative_id)
 
-        # Atualiza a mensagem padrão
-        msg_padrao.mensagem_padrao = text
-        msg_padrao.ativado = ativado
-        msg_padrao.save()
+            # Verifica se o texto ou o estado de ativação foi alterado
+            if mensagem.mensagem_padrao != text or mensagem.ativado != ativado:
+                mensagem.mensagem_padrao = text
+                mensagem.ativado = ativado
+                mensagem.save()  # Salva apenas se houver alterações
 
-        messages.success(request, "Mensagem atualizada com sucesso.")
+                messages.success(request, "Mensagens atualizadas com sucesso.")
+        
         return redirect("app_mensagem:lista_mensagens")
     
-    # Se o método não for POST, apenas renderiza a página de edição
-    return render(request, "app_mensagem/edita_mensagem.html", {"mensagem": msg_padrao})
+    # Se o método não for POST, renderiza a lista
+    return render(request, "app_mensagem/edita_mensagem.html", {"mensagens": mensagens})
+
 
 @login_required
 def criar_mensagem(request):

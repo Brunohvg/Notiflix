@@ -3,12 +3,18 @@
 {% block Dashboard %}
   <div class="container-fluid">
     {% block TituloConteudoFluidoDashboard %}
-      <!-- Título do conteúdo fluido -->
       <h6 class="card-title fw-semibold mb-4">Mensagens preconfiguradas</h6>
       
+      <!-- Loop pelas mensagens -->
+      {% include "pages/blocos/alert.html" %}
+      
+      <!-- Seus blocos e outros elementos -->
       {% include 'app_mensagem/blocos/cards_variaveis.html' %}
       {% include 'app_mensagem/blocos/cards_mensagens.html' %}
       {% include 'app_mensagem/blocos/modal_criar_msg.html' %}
+      
     {% endblock %}
   </div>
+
+ 
 {% endblock %}

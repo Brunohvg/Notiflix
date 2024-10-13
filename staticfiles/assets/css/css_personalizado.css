@@ -1,0 +1,120 @@
+/* CSS para ajustar o estilo dos textareas */
+textarea.form-control {
+    resize: none;
+    min-height: 150px;
+    max-height: 300px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+/* Estilo para o textarea quando estiver focado */
+textarea.form-control:focus {
+    border: 1px solid #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Estilo para o botão de atualizar */
+.btn-atualizar {
+    position: fixed;
+    top: 10px;
+    right: 600px;
+    z-index: 1000;
+}
+
+/* Estilo para o botão */
+.btn {
+    margin-top: 10px;
+}
+
+/* Estilo para a imagem de cliente */
+.school-img.cliente {
+    position: absolute;
+    bottom: 0px;
+    right: 20px;
+    max-width: 140px;
+    width: 100%;
+}
+
+/* Estilo para a imagem de perfil */
+.school-img.integracao {
+    position: absolute;
+    bottom: 9px;
+    right: 20px;
+    max-width: 190px;
+    width: 100%;
+}
+
+.school-img.profile {
+    position: absolute;
+    bottom: 9px;
+    right: 20px;
+    max-width: 150px;
+    width: 100%;
+  }
+
+.nimbus--link--base {
+    font-family: Geist, -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', arial, sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.nimbus--link--primary {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: rgba(0, 0, 0, 0);
+    -webkit-column-gap: .25rem;
+    -moz-column-gap: .25rem;
+    column-gap: .25rem;
+    cursor: pointer;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    text-align: left;
+    -webkit-transition: 150ms ease;
+    transition: 150ms ease;
+    vertical-align: baseline;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: .5rem;
+    color: #0059d5;
+    text-decoration: none;
+}
+
+.nimbus--tooltip-trigger {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: rgba(0, 0, 0, 0);
+    -webkit-column-gap: .25rem;
+    -moz-column-gap: .25rem;
+    column-gap: .25rem;
+    cursor: pointer;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    text-align: left;
+    -webkit-transition: 150ms ease;
+    transition: 150ms ease;
+    vertical-align: baseline;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: .5rem;
+    color: #0059d5;
+    font-family: Geist, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", arial, sans-serif;
+    margin: -0.5rem;
+    padding: .5rem;
+}

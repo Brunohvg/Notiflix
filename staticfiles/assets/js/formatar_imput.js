@@ -1,8 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Script carregado e executado')
-
+document.addEventListener('DOMContentLoaded', (event) => {
     function formatField(inputElement, format) {
-        if (inputElement) {
+        if (inputElement !== null) {
             inputElement.addEventListener('input', function () {
                 let value = this.value.replace(/\D/g, '') // Remove todos os caracteres não numéricos
                 let formattedValue = ''
@@ -21,8 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Usando a função formatField para formatar os campos
+    // Usando a função formatField para formatar o campo "cep"
     formatField(document.getElementById('cep'), '#####-####')
-    formatField(document.getElementById('id_cep'), '#####-####')
-    formatField(document.getElementById('id_telefone'), '(##) #####-####')
+
+    // Usando a função formatField para formatar o campo "id_cep"
+    formatField(document.querySelector('#id_cep'), '#####-####')
+
+    // Usando a função formatField para formatar o campo "id_telefone"
+    formatField(document.querySelector('#id_telefone'), '(##) #####-####')
 })

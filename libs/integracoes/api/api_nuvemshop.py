@@ -240,14 +240,27 @@ class NuvemShop:
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/orders/"
         return self._make_api_request(url, code, store_id, method="GET")
 
+    def _get_checkout(self, code, store_id):
+        """
+        Obtém uma lista de pedidos na Nuvem Shop.
 
+        Args:
+            code (str): Código de autenticação.
+            store_id (str): ID da loja.
+
+        Returns:
+            dict: Resposta da API, ou None em caso de erro.
+        """
+        url = f"https://api.nuvemshop.com.br/v1/{store_id}/checkouts/"
+        return self._make_api_request(url, code, store_id, method="GET")
 # Exemplo de uso
 
 """nuvem_shop = NuvemShop()
 
 store_id = "2686287"
-results = nuvem_shop._get_webhook(
-    code="f99079b572da305cb060f47d6cd98f5b3a6d160e",
+results = nuvem_shop._get_checkout(
+    code="dc8e4d40cf2cfa8512d8784d53ecc4b394f168ec",
     store_id=store_id,
 )
-print(results)"""
+print(results)
+"""

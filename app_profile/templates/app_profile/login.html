@@ -1,6 +1,7 @@
 {% extends 'pages/base/authentication-login.html' %}
 {% block Alerta %}
-  {% include 'app_profile/blocos/alerta.html' %}
+  <!-- Loop pelas mensagens -->
+  {% include 'pages/blocos/alert.html' %}
 {% endblock %}
 {% block Formulario %}
   {% include 'app_profile/blocos/form-login.html' %}

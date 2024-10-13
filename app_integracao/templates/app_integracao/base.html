@@ -6,9 +6,8 @@
     {% block TituloConteudoFluidoDashboard %}
       <!-- Título do conteúdo fluido -->
       <h5 class="card-title fw-semibold mb-4">Central de Integrações</h5>
-      {% for message in messages %}
-        <div class="alert alert-success" role="alert">{{ message }}</div>
-      {% endfor %}
+      <!-- Loop pelas mensagens -->
+      {% include 'pages/blocos/alert.html' %}
     {% endblock %}
     <div class="row p-3">
       <!-- Inclusão dos blocos -->

@@ -82,6 +82,8 @@ def processar_pedido(store_id, order_id):
             total=novo_pedido["total"],
             status_pagamento="pago",
             ultimo_status_notificado="Processando",
+            token_pedido = novo_pedido['token'],
+            
         )
 
         logger.info("Pedido processado com sucesso: %s", novo_pedido_obj)
