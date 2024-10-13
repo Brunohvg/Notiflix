@@ -15,7 +15,12 @@ def send_message(sender, instance, created, **kwargs):
     loja = instance.loja.nome
     user = instance.loja.usuario
     rastreio = instance.codigo_rastreio
-    instance_name = instance.loja.whatsapp.instanceName
+    instance_name = getattr(instance.loja.whatsapp, "instanceName", None)
+
+    # Validação do nome da instância
+    if not instance_name:
+        print("Nome da instância do WhatsApp não encontrado.")
+        return
 
     tipo_mensagem = {
         "processando": "Pedido Pago",
@@ -29,8 +34,8 @@ def send_message(sender, instance, created, **kwargs):
         print(f"Status do envio não reconhecido: {status}")
         return
 
-    # Verifica se há uma instância do WhatsApp logada
     try:
+        # Verifica se há uma instância do WhatsApp logada
         if not WHATSAPP.is_instance_logged_in(instance_name):
             print(f"Nenhuma instância do WhatsApp logada com o nome '{instance_name}'. Mensagem não enviada.")
             return
@@ -49,14 +54,14 @@ def send_message(sender, instance, created, **kwargs):
             texto_formatado = texto_formatado.replace("[link_rastreio]", rastreio)
 
             # Envia a mensagem via WhatsApp
-            enviado, response = WHATSAPP.send_message(
+            response, status = WHATSAPP.send_message(
                 instance_name=instance_name,
                 number_phone=f"55{phone}",
                 text=texto_formatado,
             )
 
             # Checa o código de status da resposta
-            status_code = response.get('status_code', 'No status_code found')
+            status_code = status.get('status_code', 'No status_code found')
             if status_code == 200:
                 print("Mensagem enviada com sucesso.")
             else:
