@@ -257,7 +257,7 @@ class NuvemShop:
         url = f"https://api.nuvemshop.com.br/v1/{store_id}/checkouts/"
         return self._make_api_request(url, code, store_id, method="GET")
 # Exemplo de uso
-
+"""
 nuvem_shop = NuvemShop()
 
 store_id = "2686287"
@@ -266,3 +266,4 @@ results = nuvem_shop._get_pedidos(
     store_id=store_id,id_pedido=1580208956
 )
 print(results)
+"""

@@ -1,6 +1,6 @@
 from app_integracao.api.nuvemshop import NuvemShop
 from app_integracao.models import LojaIntegrada
-from app_pedido.models import Cliente, Pedido, Endereco
+from app_pedido.models import Cliente, Pedido
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 import logging
