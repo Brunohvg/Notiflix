@@ -1,6 +1,6 @@
 from app_integracao.api.nuvemshop import NuvemShop
 from app_integracao.models import LojaIntegrada
-from app_pedido.models import Cliente, Pedido
+from app_pedido.models import Cliente, Pedido, Endereco
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 import logging
@@ -61,29 +61,50 @@ def processar_pedido(store_id, order_id):
         cliente_dados = {
             "contact_name": novo_pedido.get("customer", {}).get("name", ""),
             "contact_email": novo_pedido.get("customer", {}).get("email", ""),
-            "contact_identification": novo_pedido.get("customer", {}).get(
-                "identification", ""
-            ),
-            "contact_phone": formatar_numero(
-                novo_pedido.get("customer", {}).get("phone", "")
-            ),
+            "contact_identification": novo_pedido.get("customer", {}).get("identification", ""),
+            "contact_phone": formatar_numero(novo_pedido.get("customer", {}).get("phone", "")),
+            "billing_name": novo_pedido.get("customer", {}).get("billing_name", ""),
+            "total_spent": novo_pedido.get("customer", {}).get("total_spent", ""),
+            "accepts_marketing": novo_pedido.get("customer", {}).get("accepts_marketing")
         }
 
         cliente, created = Cliente.objects.get_or_create(
             contact_email=cliente_dados["contact_email"], defaults=cliente_dados
         )
+        
+        cliente_end = {
+            "billing_address": novo_pedido.get("customer", {}).get("billing_address", ""),
+            "billing_number": novo_pedido.get("customer", {}).get("billing_number", ""),
+            "billing_floor": novo_pedido.get("customer", {}).get("billing_floor", ""),
+            "billing_locality": novo_pedido.get("customer", {}).get("billing_locality", ""),
+            "billing_zipcode": novo_pedido.get("customer", {}).get("billing_zipcode", ""),
+            "billing_city": novo_pedido.get("customer", {}).get("billing_city", ""),
+            "billing_province": novo_pedido.get("customer", {}).get("billing_province", ""),
+        }
+        if not cliente.enderecos.exists():
+            Endereco.objects.create(
+                cliente=cliente,
+                **cliente_end
+            )
+
 
         novo_pedido_obj = Pedido.objects.create(
             cliente=cliente,
             loja=LojaIntegrada.objects.get(id=store_id),
             id_pedido=novo_pedido["number"],
             id_venda=f'#{novo_pedido["id"]}',
-            data_pedido=timezone.now(),
+            data_pedido=novo_pedido['created_at'],
             total=novo_pedido["total"],
             status_pagamento="pago",
             ultimo_status_notificado="Processando",
             token_pedido = novo_pedido['token'],
-            
+            shipping_option_code=novo_pedido['shipping_option_code'],
+            shipping_tracking_url=novo_pedido['shipping_tracking_url'],
+            shipping_cost_customer=novo_pedido['shipping_cost_customer'],
+            shipping_cost_owner=novo_pedido['shipping_cost_owner'],
+            discount_coupon_code = novo_pedido.get("coupon", [])[0].get("code", "") if novo_pedido.get("coupon") else ""
+
+
         )
 
         logger.info("Pedido processado com sucesso: %s", novo_pedido_obj)

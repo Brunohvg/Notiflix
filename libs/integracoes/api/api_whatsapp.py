@@ -238,7 +238,8 @@ class WhatsApp:
             return {"status_code": 500}
 
 
-# Exemplo de uso da classe WhatsApp
+"""# Exemplo de uso da classe WhatsApp
 whatsapp = WhatsApp()  # Instância com nome em minúsculo
 print(whatsapp.is_instance_logged_in(instance_name='brunovidal'))
 print(whatsapp.send_message(instance_name="brunovidal",number_phone='5531973121650',text='OLA'))
+"""

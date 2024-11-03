@@ -1,6 +1,7 @@
 import requests
 from decouple import config
 import logging
+import json
 
 # Configuração do logger
 logging.basicConfig(level=logging.INFO)
@@ -114,7 +115,9 @@ class NuvemShop:
             elif method == "DELETE":
                 response = requests.delete(url, headers=headers)
             response.raise_for_status()
-            return response.json()
+            r = response.json()
+            e = json.dumps(r)
+            return r
         except requests.exceptions.HTTPError as http_err:
             logger.error(f"Erro HTTP: {http_err}")
         except requests.exceptions.RequestException as req_err:
@@ -258,9 +261,9 @@ class NuvemShop:
 """nuvem_shop = NuvemShop()
 
 store_id = "2686287"
-results = nuvem_shop._get_checkout(
-    code="dc8e4d40cf2cfa8512d8784d53ecc4b394f168ec",
-    store_id=store_id,
+results = nuvem_shop._get_pedidos(
+    code="4d26571b375b231fa171680ea3f7433b976e66cf",
+    store_id=store_id,id_pedido=1576026674
 )
 print(results)
 """
