@@ -258,12 +258,11 @@ class NuvemShop:
         return self._make_api_request(url, code, store_id, method="GET")
 # Exemplo de uso
 
-"""nuvem_shop = NuvemShop()
+nuvem_shop = NuvemShop()
 
 store_id = "2686287"
 results = nuvem_shop._get_pedidos(
     code="4d26571b375b231fa171680ea3f7433b976e66cf",
-    store_id=store_id,id_pedido=1576026674
+    store_id=store_id,id_pedido=1580208956
 )
 print(results)
-"""

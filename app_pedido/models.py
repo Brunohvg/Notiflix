@@ -15,24 +15,17 @@ class Cliente(models.Model):
     accepts_marketing = models.BooleanField(default=False)
     last_order_id = models.IntegerField(null=True, blank=True)
 
-    def __str__(self):
-        return self.contact_name
-
-
-class Endereco(models.Model):
-    cliente = models.ForeignKey(
-        Cliente, on_delete=models.CASCADE, related_name="enderecos"
-    )
+    # Campos de endereço
     billing_address = models.CharField(max_length=255, blank=True, null=True)
     billing_number = models.CharField(max_length=10, blank=True, null=True)
     billing_floor = models.CharField(max_length=10, blank=True, null=True)
     billing_locality = models.CharField(max_length=100, blank=True, null=True)
     billing_zipcode = models.CharField(max_length=10, blank=True, null=True)
-    billing_city = models.CharField(max_length=100,blank=True, null=True)
+    billing_city = models.CharField(max_length=100, blank=True, null=True)
     billing_province = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.billing_address}, {self.billing_number}, {self.billing_city} - {self.billing_province}"
+        return self.contact_name
 
 
 class Pedido(models.Model):
