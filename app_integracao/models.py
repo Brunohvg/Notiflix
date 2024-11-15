@@ -1,8 +1,6 @@
-import secrets
-import string
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from libs.integracoes.api.api_nuvemshop import NuvemShop
 import logging
@@ -25,9 +23,7 @@ class LojaIntegrada(models.Model):
     ativa = models.BooleanField(default=True)
     url = models.CharField(max_length=100)
     webhook_url = models.CharField(max_length=200, blank=True, null=True)
-    webhook_status = models.CharField(
-        max_length=20, blank=True, null=True
-    )  # Adiciona campo de status do webhook
+    webhook_status = models.CharField(max_length=20, blank=True, null=True)  # Adiciona campo de status do webhook
     events = models.JSONField(default=list)  # Armazena os eventos como uma lista
 
     def __str__(self) -> str:
@@ -52,53 +48,12 @@ class LojaIntegrada(models.Model):
 
 class WhatsappIntegrado(models.Model):
     instanceId = models.CharField(max_length=200, primary_key=True)
-    numero = models.CharField(
-        max_length=200, blank=True, null=True, verbose_name="Identificação WhatsApp"
-    )
+    numero = models.CharField(max_length=200, blank=True, null=True, verbose_name="Identificação WhatsApp")
     instanceName = models.CharField(max_length=200)
     token = models.CharField(max_length=200, blank=True)
     status = models.CharField(max_length=20, blank=True, null=True)
     qr_code_image = models.TextField(blank=True, null=True)
-    loja = models.OneToOneField(
-        LojaIntegrada, related_name="whatsapp", on_delete=models.CASCADE
-    )
-
-
-# Gerar token instancia whatsapp automaticamente
-"""@receiver(pre_save, sender=WhatsappIntegrado)
-def generate_token(sender, instance, **kwargs):
-    if not instance.token:
-        alphabet = string.ascii_letters + string.digits
-        token = "".join(secrets.choice(alphabet) for _ in range(20))
-        instance.token = token"""
-
-
-"""@receiver(post_save, sender=LojaIntegrada)
-def create_webhook(sender, instance, created, **kwargs):
-    if created:
-        try:
-            nuvem_shop = NuvemShop()
-            events = [
-                "order/paid",
-                "order/packed",
-                "order/fulfilled",
-                "order/cancelled",
-            ]
-            webhook_url = (
-                f"https://{URL_WEBHOOK}/webhook/{instance.id}/"
-            )
-            results = nuvem_shop._post_create_webhooks_batch(
-                code=instance.autorization_token,
-                store_id=instance.id,
-                url_webhook=webhook_url,
-                events=events,
-            )
-            instance.webhook_url = webhook_url
-            instance.events = events  # Armazena os eventos na loja integrada
-            instance.save()
-        except Exception as e:
-            logger.error(f"Erro ao criar webhook para a loja {instance.id}: {e}")"""
-
+    loja = models.OneToOneField(LojaIntegrada, related_name="whatsapp", on_delete=models.CASCADE)
 
 @receiver(post_save, sender=LojaIntegrada)
 def create_webhook(sender, instance, created, **kwargs):
@@ -123,6 +78,9 @@ def create_webhook(sender, instance, created, **kwargs):
             )
             instance.webhook_url = webhook_url
             instance.events = events  # Armazena os eventos na loja integrada
+            instance.webhook_status = "Webhook criado com sucesso !"
             instance.save()
         except Exception as e:
+            instance.webhook_status = "Erro ao criar Webhook"
+            instance.save()
             logger.error(f"Erro ao criar webhook para a loja {instance.id}: {e}")
