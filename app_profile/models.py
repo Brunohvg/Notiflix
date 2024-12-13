@@ -9,13 +9,6 @@ class Profile(models.Model):
     notificacao_whatsapp = models.BooleanField(default=True)
     notificacao_email = models.BooleanField(default=True)
 
-    # email financeiro
-    # cep
-    # Endereço
-    # cidade
-    # estado
-    # documento
-
     def __str__(self) -> str:
 
         return self.nome

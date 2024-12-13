@@ -239,6 +239,7 @@ class WhatsApp:
 
 
 # Exemplo de uso da classe WhatsApp
-whatsapp = WhatsApp()  # Instância com nome em minúsculo
-print(whatsapp.is_instance_logged_in(instance_name='brunovidal'))
-print(whatsapp.send_message(instance_name="brunovidal",number_phone='5531973121650',text='OLA'))
+"""whatsapp = WhatsApp()  # Instância com nome em minúsculo
+print(whatsapp.is_instance_logged_in(instance_name='Bruno'))
+print(whatsapp.send_message(instance_name="Bruno",number_phone='5531973121650',text='OLA'))
+"""

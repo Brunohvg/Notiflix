@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from .api import api
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -11,7 +13,8 @@ urlpatterns = [
     path("", include("app_pedido.urls")),
     path("", include("app_webhook.urls")),
     path("", include("app_mensagem.urls")),
-    path("", include("app_cupom.urls"))
+    path("", include("app_cupom.urls")),
+    path("api/", api.urls),
 ]
 
 # Add static and media URL patterns only if in DEBUG mode

@@ -1,4 +1,5 @@
-from app_integracao.api.nuvemshop import NuvemShop
+#from app_integracao.api_teste.nuvemshop import NuvemShop
+from libs.integracoes.api.api_nuvemshop import NuvemShop
 from app_integracao.models import LojaIntegrada
 from app_pedido.models import Cliente, Pedido
 from django.utils import timezone
